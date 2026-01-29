@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ever.est | Gestão que Eleva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-everest { background-color: #003366; } /* Azul que combinamos para o ERP */
+        .text-everest { color: #003366; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav class="bg-everest p-4 text-white sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tighter italic">Ever.est</h1>
+            <div class="space-x-4 text-sm uppercase">
+                <a href="#pilares" class="hover:underline">Serviços</a>
+                <a href="#contato" class="bg-white text-everest px-4 py-2 rounded-full font-bold">Seja Beta</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="py-20 bg-everest text-white text-center">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">Chegou a hora de elevar o nível da sua gestão.</h2>
+            <p class="text-xl mb-8 opacity-90">Consultoria, Treinamento e Tecnologia para pequenos negócios.</p>
+            <a href="#pilares" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-bold transition">Conheça os Pilares</a>
+        </div>
+    </header>
+
+    <section id="pilares" class="py-20 container mx-auto px-6">
+        <h3 class="text-3xl font-bold text-center mb-16 underline decoration-blue-500">Nossa Atuação</h3>
+        
+        <div class="grid md:grid-cols-3 gap-10">
+            <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-blue-500">
+                <div class="text-4xl mb-4 text-blue-500">📊</div>
+                <h4 class="text-xl font-bold mb-3 text-everest uppercase">Consultoria Técnica</h4>
+                <p class="text-gray-600">Diagnóstico preciso e soluções práticas para organizar os processos do seu negócio.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-blue-500">
+                <div class="text-4xl mb-4 text-blue-500">🎓</div>
+                <h4 class="text-xl font-bold mb-3 text-everest uppercase">Treinamento & Desenv.</h4>
+                <p class="text-gray-600">Capacitação presencial e online (gravada ou ao vivo) para você e sua equipe dominarem a administração.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-blue-500">
+                <div class="text-4xl mb-4 text-blue-500">💻</div>
+                <h4 class="text-xl font-bold mb-3 text-everest uppercase">ERP Financeiro</h4>
+                <p class="text-gray-600">A tecnologia que você precisa, sem a complexidade que você odeia. (Em desenvolvimento/Beta).</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato" class="bg-gray-200 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-2xl font-bold mb-4">Acesso Exclusivo para Beta Testers</h3>
+            <p class="mb-8 max-w-2xl mx-auto">Se você recebeu nosso convite, clique abaixo para acessar o sistema ou reportar um feedback diretamente para o nosso time.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="https://wa.me/SEU_NUMERO" class="bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition">Falar no WhatsApp</a>
+                <a href="#" class="bg-everest text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition">Acessar ERP (v1.2)</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center text-gray-500 text-sm">
+        <p>© 2026 Ever.est - Consultoria e Gestão. Elevando o seu negócio.</p>
+    </footer>
+
+</body>
+</html>
