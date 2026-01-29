@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ever.est | Gestão no Topo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; }
         
-        /* Configuração da imagem de fundo do Hero */
+        /* Hero com Overlay Gradiente */
         .hero-bg {
-            /* Substituí a imagem do Unsplash pela sua 'Imagem o vale.jpg' */
-            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.3)), url('Imagem o vale.png');
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4)), url('Imagem o vale.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
+        
+        /* Efeito sutil nos cards do blog */
+        .blog-card:hover { transform: translateY(-5px); }
     </style>
     <script>
         tailwind.config = {
@@ -24,10 +26,11 @@
                 extend: {
                     colors: {
                         everest: {
-                            dark: '#0f172a', /* Azul Noite */
+                            dark: '#0f172a',
                             blue: '#1e293b',
-                            orange: '#f97316', /* Laranja Ação */
+                            orange: '#f97316',
                             orangehover: '#ea580c',
+                            light: '#f8fafc'
                         }
                     }
                 }
@@ -35,123 +38,254 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 text-slate-800 antialiased">
+<body class="bg-slate-50 text-slate-800 antialiased">
 
-    <nav class="absolute w-full z-50 px-6 py-4">
+    <nav class="absolute w-full z-50 px-6 py-6">
         <div class="container mx-auto flex justify-between items-center text-white">
             <a href="#" class="flex items-center">
-                <img src="Ever.est Branco 2 (sem fundo).png" alt="Ever.est Consultoria" class="h-16 md:h-24 w-auto object-contain hover:opacity-90 transition">
+                <img src="Ever.est Branco 2 (sem fundo).png" alt="Ever.est Consultoria" class="h-14 md:h-20 w-auto hover:opacity-90 transition">
             </a>
 
-            <div class="hidden md:flex space-x-8 font-semibold text-sm uppercase tracking-wider items-center">
-                <a href="#sobre" class="hover:text-everest-orange transition">Sobre</a>
-                <a href="#pilares" class="hover:text-everest-orange transition">Soluções</a>
-                <a href="#contato" class="bg-everest-orange px-6 py-3 rounded shadow-lg hover:bg-everest-orangehover transition transform hover:-translate-y-0.5">Área Beta</a>
+            <div class="hidden md:flex space-x-8 font-medium text-sm uppercase tracking-widest items-center">
+                <a href="#sobre" class="hover:text-everest-orange transition duration-300">A Ever.est</a>
+                <a href="#pilares" class="hover:text-everest-orange transition duration-300">Soluções</a>
+                <a href="#blog" class="hover:text-everest-orange transition duration-300">O Adm Explica</a>
+                <a href="#contato" class="bg-everest-orange text-white px-6 py-3 rounded font-bold shadow-lg hover:bg-everest-orangehover transition transform hover:-translate-y-0.5">
+                    Falar com Consultor
+                </a>
             </div>
         </div>
     </nav>
 
     <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative">
-        <div class="container mx-auto max-w-5xl text-white mt-20">
-            <span class="bg-everest-orange/20 text-everest-orange border border-everest-orange px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block">Lançamento Beta</span>
+        <div class="container mx-auto max-w-5xl text-white mt-16">
+            <span class="bg-everest-orange/20 text-everest-orange border border-everest-orange px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block">Gestão para Pequenos Negócios</span>
             
-            <h1 class="text-4xl md:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                Chegou a hora de elevar o nível da sua <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">gestão.</span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight drop-shadow-2xl">
+                Sua empresa não precisa ser grande para ter uma <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">gestão gigante.</span>
             </h1>
             
-            <p class="text-lg md:text-2xl mb-10 text-gray-100 font-light max-w-2xl mx-auto drop-shadow-md">
-                Consultoria, tecnologia e treinamento para pequenos negócios que pensam grande.
+            <p class="text-lg md:text-2xl mb-10 text-gray-200 font-light max-w-3xl mx-auto drop-shadow-md leading-relaxed">
+                Transformamos caos operacional em lucro previsível através de consultoria especializada, treinamento e tecnologia própria.
             </p>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#pilares" class="bg-everest-orange text-white px-8 py-4 rounded-lg font-bold text-lg shadow-xl hover:bg-everest-orangehover transition transform hover:-translate-y-1">
-                    Conhecer Soluções
+                <a href="#contato" class="bg-everest-orange text-white px-8 py-4 rounded-lg font-bold text-lg shadow-xl hover:bg-everest-orangehover transition transform hover:-translate-y-1">
+                    Quero Profissionalizar Minha Gestão
                 </a>
-                <a href="#contato" class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/20 transition">
-                    Já sou Beta Tester
+                <a href="#sobre" class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/20 transition">
+                    Conhecer a Metodologia
                 </a>
             </div>
         </div>
         
-        <div class="absolute bottom-10 animate-bounce text-white/50">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        <div class="absolute bottom-8 animate-bounce text-white/50">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </div>
     </header>
 
-    <section id="pilares" class="py-24 bg-gray-50">
+    <section id="sobre" class="py-20 bg-white overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="w-full md:w-1/2 relative">
+                    <div class="absolute -top-4 -left-4 w-24 h-24 bg-everest-orange rounded-tl-3xl -z-10"></div>
+                    <img src="Imagem alinista_topo_montanha.png" alt="Alpinista no topo da montanha" class="rounded-xl shadow-2xl w-full object-cover h-[500px]">
+                    <div class="absolute -bottom-6 -right-6 bg-everest-dark p-6 rounded-xl shadow-xl hidden md:block max-w-xs">
+                        <p class="text-white text-sm italic">"O topo não é sorte. É preparação, técnica e o guia certo."</p>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-everest-orange font-bold uppercase tracking-widest text-sm mb-2">Sobre Nós</h2>
+                    <h3 class="text-3xl md:text-4xl font-bold text-everest-dark mb-6 leading-tight">Nascemos para elevar o padrão administrativo do Brasil.</h3>
+                    <div class="space-y-4 text-gray-600 text-lg leading-relaxed">
+                        <p>
+                            Muitos pequenos empreendedores possuem produtos incríveis, mas sofrem com a falta de processos, descontrole financeiro e gestão intuitiva.
+                        </p>
+                        <p>
+                            A <strong>Ever.est</strong> não é apenas uma consultoria. Somos seus parceiros de escalada. Utilizamos metodologia própria, testada no campo de batalha, para implementar organização e tecnologia no seu negócio.
+                        </p>
+                        <ul class="space-y-3 mt-4">
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Foco em resultado prático, não apenas teoria.</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Tecnologia acessível (Sistema ERP Próprio).</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Acompanhamento próximo e humano.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pilares" class="py-24 bg-slate-50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-everest-dark mb-4">Nossa Atuação</h2>
-                <div class="w-24 h-1 bg-everest-orange mx-auto rounded"></div>
-                <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Três pilares fundamentais para estruturar, capacitar e automatizar o seu negócio.</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-everest-dark">Como te levamos ao topo?</h2>
+                <div class="w-24 h-1 bg-everest-orange mx-auto mt-4 rounded"></div>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8 relative">
-                <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-everest-dark group">
-                    <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-dark transition duration-300">
-                        <svg class="w-8 h-8 text-everest-dark group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-everest-dark mb-3">Consultoria Técnica</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">
-                        Diagnóstico preciso e soluções práticas. Transformamos a desorganização em processos claros e lucrativos.
-                    </p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-10 rounded-2xl shadow-lg border-b-4 border-everest-dark hover:shadow-2xl transition duration-300 group">
+                    <div class="w-14 h-14 bg-slate-100 text-everest-dark rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-everest-dark group-hover:text-white transition">📊</div>
+                    <h3 class="text-xl font-bold text-everest-dark mb-4">1. Consultoria Técnica</h3>
+                    <p class="text-gray-500 leading-relaxed">Mapeamos seus gargalos e redesenhamos seus processos. Do fluxo de caixa ao estoque, organizamos a casa para o crescimento.</p>
                 </div>
 
-                <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-everest-orange group relative transform md:-translate-y-4">
-                    <div class="absolute top-0 right-0 bg-everest-orange text-white text-xs font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wide">Destaque</div>
-                    <div class="w-16 h-16 bg-orange-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-orange transition duration-300">
-                        <svg class="w-8 h-8 text-everest-orange group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-everest-dark mb-3">Treinamento & Desenv.</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">
-                        Mentorias presenciais, ao vivo e gravadas. Capacitamos você e sua equipe para pensar como grandes gestores.
-                    </p>
+                <div class="bg-white p-10 rounded-2xl shadow-lg border-b-4 border-everest-orange hover:shadow-2xl transition duration-300 group relative transform md:-translate-y-4 z-10">
+                    <div class="absolute top-0 right-0 bg-everest-orange text-white text-xs font-bold px-3 py-1 rounded-bl-lg">CORE</div>
+                    <div class="w-14 h-14 bg-orange-50 text-everest-orange rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-everest-orange group-hover:text-white transition">🎓</div>
+                    <h3 class="text-xl font-bold text-everest-dark mb-4">2. Treinamento & Desenv.</h3>
+                    <p class="text-gray-500 leading-relaxed">Não adianta ter ferramentas se a equipe não sabe usar. Treinamentos presenciais e online para formar times de alta performance.</p>
                 </div>
 
-                <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-everest-dark group">
-                    <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-dark transition duration-300">
-                        <svg class="w-8 h-8 text-everest-dark group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-everest-dark mb-3">ERP Financeiro</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">
-                        Sistema próprio de gestão financeira. Simples, direto e eficiente. Atualmente em fase de testes Beta com usuários selecionados.
-                    </p>
+                <div class="bg-white p-10 rounded-2xl shadow-lg border-b-4 border-everest-dark hover:shadow-2xl transition duration-300 group">
+                    <div class="w-14 h-14 bg-slate-100 text-everest-dark rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-everest-dark group-hover:text-white transition">💻</div>
+                    <h3 class="text-xl font-bold text-everest-dark mb-4">3. ERP Financeiro</h3>
+                    <p class="text-gray-500 leading-relaxed">Adeus, planilhas quebradas. Nosso sistema próprio centraliza suas finanças com simplicidade e precisão. (Versão Beta).</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 relative bg-everest-dark flex items-center justify-center bg-[url('Imagem mapa.png')] bg-cover bg-center bg-fixed">
-        <div class="absolute inset-0 bg-slate-900/60"></div> <div class="container mx-auto px-6 relative z-10 text-center">
-            <h3 class="text-2xl md:text-5xl text-white font-serif italic leading-relaxed drop-shadow-lg">
-                "Sua empresa pode chegar ao topo.<br>Nós mostramos o caminho."
-            </h3>
+    <section class="py-20 relative bg-fixed bg-cover bg-center" style="background-image: url('Imagem mapa.png');">
+        <div class="absolute inset-0 bg-slate-900/70"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h2 class="text-3xl md:text-5xl font-serif text-white italic mb-8">"Quem não mede, não gerencia.<br>Quem não gerencia, não melhora."</h2>
+            <a href="#contato" class="inline-block border-2 border-white text-white px-10 py-4 rounded-full font-bold hover:bg-white hover:text-everest-dark transition duration-300">
+                Agendar Diagnóstico Gratuito
+            </a>
         </div>
     </section>
 
-    <section id="contato" class="bg-everest-dark text-white py-16 border-t border-gray-800">
+    <section id="blog" class="py-24 bg-white">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-                <div class="text-center md:text-left">
-                    <div class="flex items-center justify-center md:justify-start gap-3 mb-4">
-                        <h4 class="text-3xl font-bold tracking-tight">Ever.est</h4>
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-everest-dark">O Adm Explica</h2>
+                    <p class="text-gray-500 mt-2">Insights práticos sobre finanças e gestão.</p>
+                </div>
+                <a href="#" class="text-everest-orange font-bold hover:underline hidden md:block">Ver todos os artigos →</a>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <article class="blog-card bg-slate-50 rounded-xl overflow-hidden shadow-md cursor-pointer group">
+                    <div class="h-48 bg-slate-200 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-everest-blue/10 group-hover:bg-everest-blue/0 transition"></div>
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Finanças" class="w-full h-full object-cover">
                     </div>
-                    <p class="text-gray-400 text-sm max-w-md">Liderando a transformação administrativa de pequenos negócios através de consultoria e tecnologia.</p>
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-everest-orange uppercase">Finanças</span>
+                        <h3 class="text-lg font-bold text-everest-dark mt-2 mb-3 group-hover:text-everest-orange transition">5 Erros que matam o caixa da pequena empresa</h3>
+                        <p class="text-sm text-gray-500">Misturar contas pessoais com as da empresa é apenas o começo. Veja como evitar...</p>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-slate-50 rounded-xl overflow-hidden shadow-md cursor-pointer group">
+                    <div class="h-48 bg-slate-200 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Planejamento" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-everest-orange uppercase">Estratégia</span>
+                        <h3 class="text-lg font-bold text-everest-dark mt-2 mb-3 group-hover:text-everest-orange transition">Planejamento 2026: Por onde começar?</h3>
+                        <p class="text-sm text-gray-500">Metas SMART e indicadores claros são o segredo para um ano de crescimento real.</p>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-slate-50 rounded-xl overflow-hidden shadow-md cursor-pointer group">
+                    <div class="h-48 bg-slate-200 overflow-hidden">
+                         <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Tecnologia" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-everest-orange uppercase">Tecnologia</span>
+                        <h3 class="text-lg font-bold text-everest-dark mt-2 mb-3 group-hover:text-everest-orange transition">Por que sua empresa precisa de um ERP hoje?</h3>
+                        <p class="text-sm text-gray-500">Centralizar dados não é luxo, é sobrevivência. Entenda os benefícios da automação.</p>
+                    </div>
+                </article>
+            </div>
+            <div class="mt-8 text-center md:hidden">
+                 <a href="#" class="text-everest-orange font-bold hover:underline">Ver todos os artigos →</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato" class="py-20 bg-everest-dark text-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row gap-12">
+                
+                <div class="md:w-1/2">
+                    <h2 class="text-4xl font-bold mb-6">Pronto para dar o próximo passo?</h2>
+                    <p class="text-gray-300 text-lg mb-8">
+                        Entre em contato para agendar uma conversa inicial. Vamos entender o momento do seu negócio e desenhar a melhor trilha para o topo.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-everest-blue rounded-lg flex items-center justify-center text-everest-orange">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.463 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">WhatsApp Comercial</p>
+                                <p class="text-lg font-bold hover:text-everest-orange transition"><a href="https://wa.me/55SEUNUMERO">(31) 98765-4321</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-everest-blue rounded-lg flex items-center justify-center text-everest-orange">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Email Corporativo</p>
+                                <p class="text-lg font-bold">contato@everestconsultoria.com</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                    <a href="https://wa.me/55SEUNUMERO" target="_blank" class="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-bold transition w-full md:w-auto shadow-lg hover:-translate-y-1">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.463 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                        Falar no WhatsApp
-                    </a>
-                    <a href="#" class="flex items-center justify-center gap-2 bg-everest-orange hover:bg-everest-orangehover text-white px-8 py-4 rounded-lg font-bold transition w-full md:w-auto shadow-lg hover:-translate-y-1">
-                        Acesso ao ERP (Beta)
-                    </a>
+                <div class="md:w-1/2 bg-white rounded-2xl p-8 text-gray-800 shadow-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-everest-dark">Solicite uma Proposta</h3>
+                    <form action="#" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-600 mb-1">Seu Nome</label>
+                            <input type="text" placeholder="Como gosta de ser chamado?" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-600 mb-1">WhatsApp</label>
+                            <input type="tel" placeholder="(31) 9 9484-3607" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-600 mb-1">Seu Desafio Principal</label>
+                            <select class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
+                                <option>Organizar Finanças</option>
+                                <option>Treinar Equipe</option>
+                                <option>Implementar Sistema (ERP)</option>
+                                <option>Diagnóstico Geral</option>
+                            </select>
+                        </div>
+                        <button class="w-full bg-everest-orange text-white font-bold py-4 rounded-lg hover:bg-everest-orangehover transition transform hover:-translate-y-1 shadow-lg mt-2">
+                            Enviar Solicitação
+                        </button>
+                    </form>
                 </div>
             </div>
             
-            <hr class="border-gray-800 my-8">
-            <p class="text-center text-gray-600 text-xs">© 2026 Ever.est Consultoria. Belo Horizonte/MG. Todos os direitos reservados.</p>
+            <hr class="border-gray-800 my-12">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <p>© 2026 Ever.est Consultoria. Todos os direitos reservados.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white">Instagram</a>
+                    <a href="#" class="hover:text-white">LinkedIn</a>
+                    <a href="#" class="hover:text-white">Área Beta</a>
+                </div>
+            </div>
         </div>
     </section>
 
