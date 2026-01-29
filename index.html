@@ -8,12 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; }
-        /* Configuração da imagem de fundo cinemática */
+        
+        /* Configuração da imagem de fundo do Hero */
         .hero-bg {
-            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            /* Substituí a imagem do Unsplash pela sua 'Imagem o vale.jpg' */
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.3)), url('Imagem o vale.png');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* Efeito parallax ao rolar */
+            background-attachment: fixed;
         }
     </style>
     <script>
@@ -38,37 +40,41 @@
     <nav class="absolute w-full z-50 px-6 py-4">
         <div class="container mx-auto flex justify-between items-center text-white">
             <a href="#" class="flex items-center">
-                <img src="Ever.est Branco 2 (sem fundo).png" alt="Ever.est Consultoria Logo" class="h-10 md:h-12 w-auto hover:opacity-90 transition">
+                <img src="Logo Branca.png" alt="Ever.est Consultoria" class="h-16 md:h-24 w-auto object-contain hover:opacity-90 transition">
             </a>
-            <div class="hidden md:flex space-x-8 font-semibold text-sm uppercase tracking-wider">
+
+            <div class="hidden md:flex space-x-8 font-semibold text-sm uppercase tracking-wider items-center">
                 <a href="#sobre" class="hover:text-everest-orange transition">Sobre</a>
                 <a href="#pilares" class="hover:text-everest-orange transition">Soluções</a>
-                <a href="#contato" class="bg-everest-orange px-5 py-2 rounded shadow-lg hover:bg-everest-orangehover transition">Área Beta</a>
+                <a href="#contato" class="bg-everest-orange px-6 py-3 rounded shadow-lg hover:bg-everest-orangehover transition transform hover:-translate-y-0.5">Área Beta</a>
             </div>
         </div>
     </nav>
 
     <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative">
-        <div class="container mx-auto max-w-4xl text-white mt-16">
+        <div class="container mx-auto max-w-5xl text-white mt-20">
             <span class="bg-everest-orange/20 text-everest-orange border border-everest-orange px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block">Lançamento Beta</span>
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+            
+            <h1 class="text-4xl md:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
                 Chegou a hora de elevar o nível da sua <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">gestão.</span>
             </h1>
-            <p class="text-lg md:text-2xl mb-10 text-gray-200 font-light max-w-2xl mx-auto">
+            
+            <p class="text-lg md:text-2xl mb-10 text-gray-100 font-light max-w-2xl mx-auto drop-shadow-md">
                 Consultoria, tecnologia e treinamento para pequenos negócios que pensam grande.
             </p>
+            
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#pilares" class="bg-everest-orange text-white px-8 py-4 rounded-lg font-bold text-lg shadow-xl hover:bg-everest-orangehover transition transform hover:-translate-y-1">
                     Conhecer Soluções
                 </a>
-                <a href="#contato" class="bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/20 transition">
+                <a href="#contato" class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/20 transition">
                     Já sou Beta Tester
                 </a>
             </div>
         </div>
         
         <div class="absolute bottom-10 animate-bounce text-white/50">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </div>
     </header>
 
@@ -76,24 +82,24 @@
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-everest-dark mb-4">Nossa Atuação</h2>
-                <div class="w-20 h-1 bg-everest-orange mx-auto"></div>
+                <div class="w-24 h-1 bg-everest-orange mx-auto rounded"></div>
                 <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Três pilares fundamentais para estruturar, capacitar e automatizar o seu negócio.</p>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8 relative -mt-10 md:-mt-0">
-                <div class="bg-white p-8 rounded-xl shadow-2xl hover:shadow-3xl transition border-t-4 border-everest-dark group">
-                    <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-dark transition duration-300">
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-everest-dark group">
+                    <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-dark transition duration-300">
                         <svg class="w-8 h-8 text-everest-dark group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-everest-dark mb-3">Consultoria Técnica</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
-                        Análise profunda dos seus processos atuais e implementação de melhorias focadas em resultado e organização.
+                        Diagnóstico preciso e soluções práticas. Transformamos a desorganização em processos claros e lucrativos.
                     </p>
                 </div>
 
-                <div class="bg-white p-8 rounded-xl shadow-2xl hover:shadow-3xl transition border-t-4 border-everest-orange group relative transform md:-translate-y-6">
-                    <div class="absolute top-0 right-0 bg-everest-orange text-white text-xs font-bold px-3 py-1 rounded-bl-lg">Destaque</div>
-                    <div class="w-14 h-14 bg-orange-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-orange transition duration-300">
+                <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-everest-orange group relative transform md:-translate-y-4">
+                    <div class="absolute top-0 right-0 bg-everest-orange text-white text-xs font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wide">Destaque</div>
+                    <div class="w-16 h-16 bg-orange-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-orange transition duration-300">
                         <svg class="w-8 h-8 text-everest-orange group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-everest-dark mb-3">Treinamento & Desenv.</h3>
@@ -102,23 +108,22 @@
                     </p>
                 </div>
 
-                <div class="bg-white p-8 rounded-xl shadow-2xl hover:shadow-3xl transition border-t-4 border-everest-dark group">
-                    <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-dark transition duration-300">
+                <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-everest-dark group">
+                    <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-everest-dark transition duration-300">
                         <svg class="w-8 h-8 text-everest-dark group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-everest-dark mb-3">ERP Financeiro</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">
-                        Sistema próprio de gestão financeira. Simples, direto e eficiente. Atualmente em fase de testes Beta.
+                        Sistema próprio de gestão financeira. Simples, direto e eficiente. Atualmente em fase de testes Beta com usuários selecionados.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-20 relative bg-everest-dark flex items-center justify-center">
-        <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center"></div>
-        <div class="container mx-auto px-6 relative z-10 text-center">
-            <h3 class="text-2xl md:text-4xl text-white font-serif italic leading-relaxed">
+    <section class="py-24 relative bg-everest-dark flex items-center justify-center bg-[url('Imagem mapa.png')] bg-cover bg-center bg-fixed">
+        <div class="absolute inset-0 bg-slate-900/60"></div> <div class="container mx-auto px-6 relative z-10 text-center">
+            <h3 class="text-2xl md:text-5xl text-white font-serif italic leading-relaxed drop-shadow-lg">
                 "Sua empresa pode chegar ao topo.<br>Nós mostramos o caminho."
             </h3>
         </div>
@@ -126,12 +131,29 @@
 
     <section id="contato" class="bg-everest-dark text-white py-16 border-t border-gray-800">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-10">
                 <div class="text-center md:text-left">
-                    <h4 class="text-2xl font-bold mb-2">Ever.est</h4>
-                    <p class="text-gray-400 text-sm max-w-md">Liderando a transformação administrativa de pequenos negócios.</p>
+                    <div class="flex items-center justify-center md:justify-start gap-3 mb-4">
+                        <h4 class="text-3xl font-bold tracking-tight">Ever.est</h4>
+                    </div>
+                    <p class="text-gray-400 text-sm max-w-md">Liderando a transformação administrativa de pequenos negócios através de consultoria e tecnologia.</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                    <a href="https://wa.me/5531SEUNUMERO" class="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold transition w-full md:w-auto">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.17
+                    <a href="https://wa.me/55SEUNUMERO" target="_blank" class="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-bold transition w-full md:w-auto shadow-lg hover:-translate-y-1">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.463 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                        Falar no WhatsApp
+                    </a>
+                    <a href="#" class="flex items-center justify-center gap-2 bg-everest-orange hover:bg-everest-orangehover text-white px-8 py-4 rounded-lg font-bold transition w-full md:w-auto shadow-lg hover:-translate-y-1">
+                        Acesso ao ERP (Beta)
+                    </a>
+                </div>
+            </div>
+            
+            <hr class="border-gray-800 my-8">
+            <p class="text-center text-gray-600 text-xs">© 2026 Ever.est Consultoria. Belo Horizonte/MG. Todos os direitos reservados.</p>
+        </div>
+    </section>
+
+</body>
+</html>
