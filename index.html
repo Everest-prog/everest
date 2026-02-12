@@ -266,28 +266,33 @@
 
                 <div class="md:w-1/2 bg-white rounded-2xl p-8 text-gray-800 shadow-2xl">
                     <h3 class="text-2xl font-bold mb-6 text-everest-dark">Solicite uma Proposta</h3>
-                    <form action="#" class="space-y-4">
+                    
+                    <form action="https://formspree.io/f/mkovjgoe" method="POST" class="space-y-4">
                         <div>
                             <label class="block text-sm font-bold text-gray-600 mb-1">Seu Nome</label>
-                            <input type="text" placeholder="Como gosta de ser chamado?" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
+                            <input type="text" name="nome" required placeholder="Como gosta de ser chamado?" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
                         </div>
+
                         <div>
                             <label class="block text-sm font-bold text-gray-600 mb-1">WhatsApp</label>
-                            <input type="tel" placeholder="(31) 9 9484-3607" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
+                            <input type="tel" name="whatsapp" required placeholder="(31) 9 9999-9999" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
                         </div>
+
                         <div>
                             <label class="block text-sm font-bold text-gray-600 mb-1">Seu Desafio Principal</label>
-                            <select class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
-                                <option>Organizar Finanças</option>
-                                <option>Treinar Equipe</option>
-                                <option>Implementar Sistema (ERP)</option>
-                                <option>Diagnóstico Geral</option>
+                            <select name="desafio" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
+                                <option value="Financeiro">Organizar Finanças</option>
+                                <option value="Equipe">Treinar Equipe</option>
+                                <option value="ERP">Implementar Sistema (ERP)</option>
+                                <option value="Diagnostico">Diagnóstico Geral</option>
                             </select>
                         </div>
-                        <button class="w-full bg-everest-orange text-white font-bold py-4 rounded-lg hover:bg-everest-orangehover transition transform hover:-translate-y-1 shadow-lg mt-2">
+
+                        <button type="submit" class="w-full bg-everest-orange text-white font-bold py-4 rounded-lg hover:bg-everest-orangehover transition transform hover:-translate-y-1 shadow-lg mt-2">
                             Enviar Solicitação
                         </button>
                     </form>
+                    
                 </div>
             </div>
             
