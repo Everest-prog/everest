@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensagem Enviada! | Ever.est</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        everest: { dark: '#0f172a', orange: '#f97316', orangehover: '#ea580c' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased h-screen flex flex-col">
+
+    <nav class="bg-everest-dark w-full px-6 py-4">
+        <div class="container mx-auto flex justify-between items-center text-white">
+            <a href="index.html" class="flex items-center">
+                <img src="Ever.est Branco 2 (sem fundo).png" alt="Ever.est" class="h-12 w-auto">
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center px-6">
+        <div class="text-center max-w-2xl">
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+                <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+
+            <h1 class="text-3xl md:text-5xl font-bold text-everest-dark mb-6">Recebemos sua mensagem!</h1>
+            
+            <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                Obrigado pelo contato. Um de nossos consultores analisará seu perfil e entrará em contato pelo WhatsApp em até <strong>24 horas úteis</strong>.
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="index.html" class="bg-everest-dark text-white px-8 py-4 rounded-lg font-bold hover:bg-slate-800 transition">
+                    Voltar para o Início
+                </a>
+                <a href="https://instagram.com/sou.everest" class="bg-transparent border-2 border-everest-orange text-everest-orange px-8 py-4 rounded-lg font-bold hover:bg-everest-orange hover:text-white transition">
+                    Acompanhar no Instagram
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-6 text-gray-400 text-sm">
+        © 2026 Ever.est Consultoria.
+    </footer>
+
+</body>
+</html>
