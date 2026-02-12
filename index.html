@@ -266,8 +266,11 @@
 
                 <div class="md:w-1/2 bg-white rounded-2xl p-8 text-gray-800 shadow-2xl">
                     <h3 class="text-2xl font-bold mb-6 text-everest-dark">Solicite uma Proposta</h3>
-                    
                     <form action="https://formspree.io/f/mkovjgoe" method="POST" class="space-y-4">
+                        
+                        <input type="hidden" name="_next" value="https://soueverest.com.br/obrigado.html">
+                        <input type="text" name="_gotcha" style="display:none">
+
                         <div>
                             <label class="block text-sm font-bold text-gray-600 mb-1">Seu Nome</label>
                             <input type="text" name="nome" required placeholder="Como gosta de ser chamado?" class="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-everest-orange focus:bg-white transition">
@@ -292,7 +295,6 @@
                             Enviar Solicitação
                         </button>
                     </form>
-                    
                 </div>
             </div>
             
