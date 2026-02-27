@@ -2,7 +2,6 @@
 <html lang="pt-br" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="o7n3WHld-iMkSGNddjENEEu6y-szhpG5evriW2UAW_U" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ever.est | Gestão no Topo</title>
     <link rel="icon" href="favicon.png" type="image/png">
@@ -21,6 +20,10 @@
         
         /* Efeito sutil nos cards do blog */
         .blog-card:hover { transform: translateY(-5px); }
+
+        /* Ocultar barra de rolagem do carrossel ERP */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
     <script>
         tailwind.config = {
@@ -52,6 +55,12 @@
                 <a href="#sobre" class="hover:text-everest-orange transition duration-300">A Ever.est</a>
                 <a href="#pilares" class="hover:text-everest-orange transition duration-300">Soluções</a>
                 <a href="#blog" class="hover:text-everest-orange transition duration-300">O Adm Explica</a>
+                
+                <a href="https://app.soueverest.com.br" target="_blank" class="flex items-center gap-2 text-gray-300 hover:text-white transition duration-300 border-l border-gray-600 pl-8">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                    Login ERP
+                </a>
+
                 <a href="#contato" class="bg-everest-orange text-white px-6 py-3 rounded font-bold shadow-lg hover:bg-everest-orangehover transition transform hover:-translate-y-0.5">
                     Falar com Consultor
                 </a>
@@ -151,8 +160,77 @@
                 <div class="bg-white p-10 rounded-2xl shadow-lg border-b-4 border-everest-dark hover:shadow-2xl transition duration-300 group">
                     <div class="w-14 h-14 bg-slate-100 text-everest-dark rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-everest-dark group-hover:text-white transition">💻</div>
                     <h3 class="text-xl font-bold text-everest-dark mb-4">3. ERP Financeiro</h3>
-                    <p class="text-gray-500 leading-relaxed">Adeus, planilhas quebradas. Nosso sistema próprio centraliza suas finanças com simplicidade e precisão. (Versão Beta).</p>
+                    <p class="text-gray-500 leading-relaxed">Adeus, planilhas quebradas. Nosso sistema centraliza suas finanças com simplicidade e precisão.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="erp" class="py-24 bg-everest-dark text-white overflow-hidden relative">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-10 pointer-events-none">
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-everest-orange rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                
+                <div class="w-full lg:w-1/2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-everest-orange/20 text-everest-orange border border-everest-orange/30 text-xs font-bold uppercase tracking-widest mb-6">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        Tecnologia Própria
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Conheça o <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-everest-orange">Ever.Finance</span></h2>
+                    <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+                        Esqueça planilhas quebradas e sistemas complexos. Desenvolvemos um ERP financeiro exclusivo e intuitivo, feito sob medida para o pequeno empreendedor ter clareza total do seu lucro.
+                    </p>
+                    
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 text-green-400">✓</div>
+                            <p class="text-gray-300"><strong>Dashboard Inteligente:</strong> Visão clara de receitas, despesas e margem de lucro.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 text-green-400">✓</div>
+                            <p class="text-gray-300"><strong>Precificação Automática:</strong> Calcule o markup e o preço de venda ideal com nossa calculadora integrada.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 text-green-400">✓</div>
+                            <p class="text-gray-300"><strong>Gestão Simplificada:</strong> Controle contas bancárias e concilie transações de forma visual e rápida.</p>
+                        </li>
+                    </ul>
+                    
+                    <a href="https://app.soueverest.com.br" target="_blank" class="inline-flex items-center gap-2 bg-everest-orange text-white px-8 py-4 rounded-lg font-bold shadow-lg hover:bg-everest-orangehover transition transform hover:-translate-y-1">
+                        Acessar o Sistema
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+
+                <div class="w-full lg:w-1/2 relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-everest-orange to-red-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-1 md:p-2">
+                        
+                        <div id="erp-carousel" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar rounded-xl">
+                            <img src="Dashboard.jpg" class="w-full flex-shrink-0 snap-center object-cover rounded-xl" alt="Dashboard Ever.Finance">
+                            <img src="Transacao.jpg" class="w-full flex-shrink-0 snap-center object-cover rounded-xl" alt="Transações Ever.Finance">
+                            <img src="Contas.jpg" class="w-full flex-shrink-0 snap-center object-cover rounded-xl" alt="Contas Ever.Finance">
+                            <img src="Produtos.jpg" class="w-full flex-shrink-0 snap-center object-cover rounded-xl" alt="Precificação Ever.Finance">
+                            <img src="Login.jpg" class="w-full flex-shrink-0 snap-center object-cover rounded-xl" alt="Login Ever.Finance">
+                        </div>
+                        
+                        <button onclick="const c = document.getElementById('erp-carousel'); c.scrollBy({left: -c.clientWidth, behavior: 'smooth'})" class="absolute left-4 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-everest-orange text-white p-3 rounded-full backdrop-blur-sm transition opacity-0 group-hover:opacity-100 shadow-lg border border-white/10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+                        
+                        <button onclick="const c = document.getElementById('erp-carousel'); c.scrollBy({left: c.clientWidth, behavior: 'smooth'})" class="absolute right-4 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-everest-orange text-white p-3 rounded-full backdrop-blur-sm transition opacity-0 group-hover:opacity-100 shadow-lg border border-white/10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                        
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-sm text-xs text-white px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none">
+                            Deslize para ver mais
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -267,9 +345,10 @@
 
                 <div class="md:w-1/2 bg-white rounded-2xl p-8 text-gray-800 shadow-2xl">
                     <h3 class="text-2xl font-bold mb-6 text-everest-dark">Solicite uma Proposta</h3>
+                    
                     <form action="https://formspree.io/f/mkovjgoe" method="POST" class="space-y-4">
                         
-                        <input type="hidden" name="_next" value="https://soueverest.com.br/obrigado.html">
+                        <input type="hidden" name="_next" value="http://soueverest.com.br/obrigado.html">
                         <input type="text" name="_gotcha" style="display:none">
 
                         <div>
@@ -306,7 +385,7 @@
                 <div class="flex gap-4 mt-4 md:mt-0">
                     <a href="https://instagram.com/sou.everest" class="hover:text-white">Instagram</a>
                     <a href="#" class="hover:text-white">LinkedIn</a>
-                    <a href="#" class="hover:text-white">Área Beta</a>
+                    <a href="https://app.soueverest.com.br" class="hover:text-white">Área Beta</a>
                 </div>
             </div>
         </div>
