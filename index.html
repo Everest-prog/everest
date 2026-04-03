@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; }
+        body { font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
         
         /* Hero com Overlay Gradiente */
         .hero-bg {
@@ -45,10 +45,11 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
 
-    <nav class="absolute w-full z-50 px-6 py-6">
-        <div class="container mx-auto flex justify-between items-center text-white">
-            <a href="#" class="flex items-center">
-                <img src="Ever.est topo branco.png" alt="Ever.est Consultoria" class="h-24 md:h-40 w-auto hover:opacity-90 transition">
+    <nav class="absolute w-full z-50 px-4 md:px-6 py-4 md:py-6">
+        <div class="container mx-auto flex justify-between items-center text-white relative">
+            
+            <a href="#" class="flex items-center relative z-50">
+                <img src="Ever.est topo branco.png" alt="Ever.est Consultoria" class="h-12 sm:h-16 md:h-32 w-auto hover:opacity-90 transition">
             </a>
 
             <div class="hidden md:flex space-x-8 font-medium text-sm uppercase tracking-widest items-center">
@@ -65,11 +66,29 @@
                     Falar com Consultor
                 </a>
             </div>
+
+            <button id="mobile-menu-btn" class="md:hidden relative z-50 text-white focus:outline-none">
+                <svg id="menu-icon-open" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <svg id="menu-icon-close" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="fixed inset-0 bg-everest-dark/95 backdrop-blur-lg z-40 hidden flex-col items-center justify-center space-y-8 text-white font-medium text-lg uppercase tracking-widest opacity-0 transition-opacity duration-300">
+            <a href="#sobre" class="hover:text-everest-orange transition duration-300 mobile-link">A Ever.est</a>
+            <a href="#pilares" class="hover:text-everest-orange transition duration-300 mobile-link">Soluções</a>
+            <a href="#erp" class="hover:text-everest-orange transition duration-300 mobile-link">O Sistema</a>
+            <a href="#blog" class="hover:text-everest-orange transition duration-300 mobile-link">Blog</a>
+            <a href="https://app.soueverest.com.br" target="_blank" class="flex items-center gap-2 text-everest-orange hover:text-white transition duration-300 mobile-link">
+                Login ERP
+            </a>
+            <a href="#contato" class="bg-everest-orange text-white px-8 py-4 rounded-lg font-bold shadow-lg hover:bg-everest-orangehover transition mobile-link">
+                Falar com Consultor
+            </a>
         </div>
     </nav>
 
-    <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative">
-        <div class="container mx-auto max-w-5xl text-white mt-16">
+    <header class="hero-bg min-h-screen flex items-center justify-center text-center px-4 relative pt-20">
+        <div class="container mx-auto max-w-5xl text-white mt-24 md:mt-16">
             <span class="bg-everest-orange/20 text-everest-orange border border-everest-orange px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block">Gestão para Pequenos Negócios</span>
             
             <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight drop-shadow-2xl">
@@ -100,7 +119,7 @@
             <div class="flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-1/2 relative">
                     <div class="absolute -top-4 -left-4 w-24 h-24 bg-everest-orange rounded-tl-3xl -z-10"></div>
-                    <img src="Imagem alinista_topo_montanha.png" alt="Alpinista no topo da montanha" class="rounded-xl shadow-2xl w-full object-cover h-[500px]">
+                    <img src="Imagem alinista_topo_montanha.png" alt="Alpinista no topo da montanha" class="rounded-xl shadow-2xl w-full object-cover h-64 md:h-[500px]">
                     <div class="absolute -bottom-6 -right-6 bg-everest-dark p-6 rounded-xl shadow-xl hidden md:block max-w-xs">
                         <p class="text-white text-sm italic">"O topo não é sorte. É preparação, técnica e o guia certo."</p>
                     </div>
@@ -118,15 +137,15 @@
                         </p>
                         <ul class="space-y-3 mt-4">
                             <li class="flex items-center gap-3">
-                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 <span>Foco em resultado prático, não apenas teoria.</span>
                             </li>
                             <li class="flex items-center gap-3">
-                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 <span>Tecnologia acessível (Sistema ERP Próprio).</span>
                             </li>
                             <li class="flex items-center gap-3">
-                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 <span>Acompanhamento próximo e humano.</span>
                             </li>
                         </ul>
@@ -143,7 +162,7 @@
                 <div class="w-24 h-1 bg-everest-orange mx-auto mt-4 rounded"></div>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white p-10 rounded-2xl shadow-lg border-b-4 border-everest-dark hover:shadow-2xl transition duration-300 group">
                     <div class="w-14 h-14 bg-slate-100 text-everest-dark rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-everest-dark group-hover:text-white transition">📊</div>
                     <h3 class="text-xl font-bold text-everest-dark mb-4">1. Consultoria Técnica</h3>
@@ -199,7 +218,7 @@
                         </li>
                     </ul>
                     
-                    <a href="https://app.soueverest.com.br" target="_blank" class="inline-flex items-center gap-2 bg-everest-orange text-white px-8 py-4 rounded-lg font-bold shadow-lg hover:bg-everest-orangehover transition transform hover:-translate-y-1">
+                    <a href="https://app.soueverest.com.br" target="_blank" class="inline-flex items-center justify-center w-full md:w-auto gap-2 bg-everest-orange text-white px-8 py-4 rounded-lg font-bold shadow-lg hover:bg-everest-orangehover transition transform hover:-translate-y-1">
                         Acessar o Sistema
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
@@ -217,15 +236,15 @@
                             <img src="Login.jpg" class="w-full flex-shrink-0 snap-center object-cover rounded-xl" alt="Login Ever.Finance">
                         </div>
                         
-                        <button onclick="const c = document.getElementById('erp-carousel'); c.scrollBy({left: -c.clientWidth, behavior: 'smooth'})" class="absolute left-4 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-everest-orange text-white p-3 rounded-full backdrop-blur-sm transition opacity-0 group-hover:opacity-100 shadow-lg border border-white/10">
+                        <button onclick="const c = document.getElementById('erp-carousel'); c.scrollBy({left: -c.clientWidth, behavior: 'smooth'})" class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-everest-orange text-white p-3 rounded-full backdrop-blur-sm transition opacity-0 group-hover:opacity-100 shadow-lg border border-white/10">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
                         
-                        <button onclick="const c = document.getElementById('erp-carousel'); c.scrollBy({left: c.clientWidth, behavior: 'smooth'})" class="absolute right-4 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-everest-orange text-white p-3 rounded-full backdrop-blur-sm transition opacity-0 group-hover:opacity-100 shadow-lg border border-white/10">
+                        <button onclick="const c = document.getElementById('erp-carousel'); c.scrollBy({left: c.clientWidth, behavior: 'smooth'})" class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-everest-orange text-white p-3 rounded-full backdrop-blur-sm transition opacity-0 group-hover:opacity-100 shadow-lg border border-white/10">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </button>
                         
-                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-sm text-xs text-white px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none">
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-sm text-xs text-white px-3 py-1 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition duration-300 pointer-events-none">
                             Deslize para ver mais
                         </div>
                     </div>
@@ -255,7 +274,7 @@
                 <a href="#" class="text-everest-orange font-bold hover:underline hidden md:block">Ver todos os artigos →</a>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
                 <a href="artigo-fluxo-caixa.html" class="block h-full">
                     <article class="blog-card bg-slate-50 rounded-xl overflow-hidden shadow-md cursor-pointer group h-full hover:shadow-xl transition duration-300">
@@ -322,7 +341,7 @@
                     
                     <div class="space-y-6">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-everest-blue rounded-lg flex items-center justify-center text-everest-orange">
+                            <div class="w-12 h-12 bg-everest-blue rounded-lg flex items-center justify-center text-everest-orange flex-shrink-0">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.463 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                             </div>
                             <div>
@@ -331,13 +350,13 @@
                             </div>
                         </div>
                         
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-everest-blue rounded-lg flex items-center justify-center text-everest-orange">
+                        <div class="flex items-center gap-4 break-words">
+                            <div class="w-12 h-12 bg-everest-blue rounded-lg flex items-center justify-center text-everest-orange flex-shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                             </div>
-                            <div>
+                            <div class="overflow-hidden">
                                 <p class="text-xs text-gray-400 uppercase">Email Corporativo</p>
-                                <p class="text-lg font-bold">contato@soueverest.com.br</p>
+                                <p class="text-base md:text-lg font-bold">contato@soueverest.com.br</p>
                             </div>
                         </div>
                     </div>
@@ -381,15 +400,51 @@
             <hr class="border-gray-800 my-12">
             
             <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-                <p>© 2026 Ever.est Consultoria. Todos os direitos reservados.</p>
-                <div class="flex gap-4 mt-4 md:mt-0">
-                    <a href="https://instagram.com/souever.est" class="hover:text-white">Instagram</a>
+                <p class="mb-4 md:mb-0">© 2026 Ever.est Consultoria. Todos os direitos reservados.</p>
+                <div class="flex gap-4">
+                    <a href="https://instagram.com/sou.everest" target="_blank" class="hover:text-white">Instagram</a>
                     <a href="#" class="hover:text-white">LinkedIn</a>
-                    <a href="https://app.soueverest.com.br" class="hover:text-white">Área Beta</a>
+                    <a href="https://app.soueverest.com.br" target="_blank" class="hover:text-white">Área Beta</a>
                 </div>
             </div>
         </div>
     </section>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('menu-icon-open');
+            const iconClose = document.getElementById('menu-icon-close');
+            const links = document.querySelectorAll('.mobile-link');
+            
+            function toggleMenu() {
+                const isHidden = menu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    menu.classList.remove('hidden');
+                    // Pequeno delay para a animação de opacidade funcionar
+                    setTimeout(() => menu.classList.remove('opacity-0'), 10);
+                    iconOpen.classList.add('hidden');
+                    iconClose.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; // Impede rolagem do fundo
+                } else {
+                    menu.classList.add('opacity-0');
+                    setTimeout(() => {
+                        menu.classList.add('hidden');
+                    }, 300); // Tempo da animação
+                    iconOpen.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                    document.body.style.overflow = ''; // Restaura rolagem
+                }
+            }
+
+            btn.addEventListener('click', toggleMenu);
+
+            links.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+        });
+    </script>
 </body>
 </html>
