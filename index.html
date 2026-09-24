@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ever.est | Gestão no Topo</title>
+    <title>Ever.Est | Gestão para Pequenos Negócios</title>
+    <meta name="description" content="Consultoria, ferramentas e tecnologia para pequenos negócios ganharem clareza, controle e estrutura para crescer.">
+    <link rel="canonical" href="https://soueverest.com.br/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ever.Est | Gestão para Pequenos Negócios">
+    <meta property="og:description" content="Clareza para decidir. Estrutura para crescer.">
+    <meta property="og:url" content="https://soueverest.com.br/">
+    <meta name="twitter:card" content="summary">
     <link rel="icon" href="favicon.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="assets/js/analytics.js" defer></script>
     <style>
         body { font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
         
@@ -55,6 +63,7 @@
             <div class="hidden md:flex space-x-8 font-medium text-sm uppercase tracking-widest items-center">
                 <a href="#sobre" class="hover:text-everest-orange transition duration-300">A Ever.est</a>
                 <a href="#pilares" class="hover:text-everest-orange transition duration-300">Soluções</a>
+                <a href="ferramentas/" data-track="tools_hub_click" data-track-item="nav_desktop" class="hover:text-everest-orange transition duration-300">Ferramentas</a>
                 <a href="#blog" class="hover:text-everest-orange transition duration-300">O Adm Explica</a>
                 
                 <a href="https://app.soueverest.com.br" target="_blank" class="flex items-center gap-2 text-gray-300 hover:text-white transition duration-300 border-l border-gray-600 pl-8">
@@ -76,6 +85,7 @@
         <div id="mobile-menu" class="fixed inset-0 bg-everest-dark/95 backdrop-blur-lg z-40 hidden flex-col items-center justify-center space-y-8 text-white font-medium text-lg uppercase tracking-widest opacity-0 transition-opacity duration-300">
             <a href="#sobre" class="hover:text-everest-orange transition duration-300 mobile-link">A Ever.est</a>
             <a href="#pilares" class="hover:text-everest-orange transition duration-300 mobile-link">Soluções</a>
+            <a href="ferramentas/" data-track="tools_hub_click" data-track-item="nav_mobile" class="hover:text-everest-orange transition duration-300 mobile-link">Ferramentas</a>
             <a href="#erp" class="hover:text-everest-orange transition duration-300 mobile-link">O Sistema</a>
             <a href="#blog" class="hover:text-everest-orange transition duration-300 mobile-link">Blog</a>
             <a href="https://app.soueverest.com.br" target="_blank" class="flex items-center gap-2 text-everest-orange hover:text-white transition duration-300 mobile-link">
@@ -103,8 +113,8 @@
                 <a href="#contato" class="bg-everest-orange text-white px-8 py-4 rounded-lg font-bold text-lg shadow-xl hover:bg-everest-orangehover transition transform hover:-translate-y-1">
                     Quero Profissionalizar Minha Gestão
                 </a>
-                <a href="#sobre" class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/20 transition">
-                    Conhecer a Metodologia
+                <a href="ferramentas/" data-track="tools_hub_click" data-track-item="hero" class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/20 transition">
+                    Conhecer as Ferramentas
                 </a>
             </div>
         </div>
@@ -181,6 +191,36 @@
                     <h3 class="text-xl font-bold text-everest-dark mb-4">3. ERP Financeiro</h3>
                     <p class="text-gray-500 leading-relaxed">Adeus, planilhas quebradas. Nosso sistema centraliza suas finanças com simplicidade e precisão.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ferramentas" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-14">
+                <h2 class="text-everest-orange font-bold uppercase tracking-widest text-sm mb-2">Ferramentas Ever.Est</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-everest-dark">Decisões melhores, sem depender do achômetro.</h3>
+                <p class="text-gray-600 text-lg mt-5">Precificação, metas, caixa e organização financeira em soluções pontuais, simples e orientadas à decisão.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                    <div class="text-everest-orange font-bold text-sm uppercase tracking-wider">Gratuito</div>
+                    <h4 class="text-2xl font-bold text-everest-dark mt-3">Ever.Raio-X</h4>
+                    <p class="text-gray-600 mt-3">Descubra onde está seu principal gargalo financeiro e qual decisão priorizar.</p>
+                </div>
+                <div class="bg-slate-50 border-2 border-everest-orange rounded-2xl p-8">
+                    <div class="text-everest-orange font-bold text-sm uppercase tracking-wider">Produto hero</div>
+                    <h4 class="text-2xl font-bold text-everest-dark mt-3">Ever.Precifica</h4>
+                    <p class="text-gray-600 mt-3">Calcule preço, margem, markup e limite de desconto com lógica financeira clara.</p>
+                </div>
+                <div class="bg-everest-dark text-white rounded-2xl p-8">
+                    <div class="text-everest-orange font-bold text-sm uppercase tracking-wider">Ecossistema</div>
+                    <h4 class="text-2xl font-bold mt-3">Ferramentas de gestão</h4>
+                    <p class="text-gray-300 mt-3">Uma linha de soluções para responder perguntas específicas antes de você precisar de um sistema completo.</p>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="ferramentas/" data-track="tools_hub_click" data-track-item="home_section" class="inline-flex bg-everest-orange text-white px-8 py-4 rounded-lg font-bold hover:bg-everest-orangehover transition">Explorar Ferramentas</a>
             </div>
         </div>
     </section>
@@ -365,9 +405,9 @@
                 <div class="md:w-1/2 bg-white rounded-2xl p-8 text-gray-800 shadow-2xl">
                     <h3 class="text-2xl font-bold mb-6 text-everest-dark">Solicite uma Proposta</h3>
                     
-                    <form action="https://formspree.io/f/mkovjgoe" method="POST" class="space-y-4">
+                    <form name="contato-comercial" data-track-form="commercial_lead_submit" action="https://formspree.io/f/mkovjgoe" method="POST" class="space-y-4">
                         
-                        <input type="hidden" name="_next" value="http://soueverest.com.br/obrigado.html">
+                        <input type="hidden" name="_next" value="https://soueverest.com.br/obrigado.html">
                         <input type="text" name="_gotcha" style="display:none">
 
                         <div>
@@ -390,6 +430,11 @@
                             </select>
                         </div>
 
+                        <label class="flex items-start gap-3 text-sm text-gray-600">
+                            <input type="checkbox" name="aceite_privacidade" value="sim" required class="mt-1">
+                            <span>Li a <a href="privacidade.html" target="_blank" class="text-everest-orange font-semibold hover:underline">Política de Privacidade</a> e concordo com o uso dos dados para responder esta solicitação.</span>
+                        </label>
+
                         <button type="submit" class="w-full bg-everest-orange text-white font-bold py-4 rounded-lg hover:bg-everest-orangehover transition transform hover:-translate-y-1 shadow-lg mt-2">
                             Enviar Solicitação
                         </button>
@@ -404,7 +449,8 @@
                 <div class="flex gap-4">
                     <a href="https://instagram.com/sou.everest" target="_blank" class="hover:text-white">Instagram</a>
                     <a href="#" class="hover:text-white">LinkedIn</a>
-                    <a href="https://app.soueverest.com.br" target="_blank" class="hover:text-white">Área Beta</a>
+                    <a href="privacidade.html" class="hover:text-white">Privacidade</a>
+                    <a href="https://app.soueverest.com.br" target="_blank" rel="noopener" data-track="everfinance_click" data-track-item="footer" class="hover:text-white">Ever.Finance</a>
                 </div>
             </div>
         </div>
