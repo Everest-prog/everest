@@ -1,0 +1,14 @@
+name = "ever-tools-automation-staging"
+main = "src/index.js"
+compatibility_date = "2026-09-25"
+
+[vars]
+ENVIRONMENT = "staging"
+RESEND_FROM_EMAIL = "Ever.Est <noreply@mail.soueverest.com.br>"
+SUPPORT_EMAIL = "contato@soueverest.com.br"
+SITE_URL = "https://soueverest.com.br"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ever_tools_staging"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
