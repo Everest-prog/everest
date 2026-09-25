@@ -1,0 +1,14 @@
+{
+  "name": "ever-tools-automation",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy:staging": "wrangler deploy",
+    "db:apply:local": "wrangler d1 execute ever_tools_staging --local --file=./schema.sql",
+    "db:apply:remote": "wrangler d1 execute ever_tools_staging --remote --file=./schema.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
