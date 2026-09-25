@@ -1,0 +1,6 @@
+# Never commit real values.
+# Configure these as Cloudflare Secrets instead.
+RESEND_API_KEY=
+RESEND_WEBHOOK_SECRET=
+KIWIFY_WEBHOOK_VERIFICATION_CONFIG=
+INTERNAL_EVENT_SECRET=
