@@ -8,6 +8,10 @@ export default {
       return handleHealth(env);
     }
 
+    if (request.method === "GET" && url.pathname === "/internal/test-resend") {
+      return handleResendSendTest(env);
+    }
+
     if (request.method === "POST" && url.pathname === "/webhooks/resend") {
       return handleResendWebhook(request, env);
     }
@@ -49,6 +53,40 @@ async function handleHealth(env) {
       resend_webhook_configured: Boolean(env.RESEND_WEBHOOK_SECRET)
     }, 503);
   }
+}
+
+async function handleResendSendTest(env) {
+  if (env.ENVIRONMENT !== "staging") {
+    return json({ error: "not_found" }, 404);
+  }
+
+  if (!env.RESEND_API_KEY) {
+    return json({ error: "resend_api_not_configured" }, 503);
+  }
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "authorization": "Bearer " + env.RESEND_API_KEY,
+      "content-type": "application/json",
+      "idempotency-key": "et0d-worker-resend-test-001"
+    },
+    body: JSON.stringify({
+      from: env.RESEND_FROM_EMAIL || "Ever.Est <noreply@mail.soueverest.com.br>",
+      to: ["delivered@resend.dev"],
+      subject: "ET-0D — Worker → Resend",
+      text: "Teste técnico enviado pelo Cloudflare Worker de staging da Ever.Est."
+    })
+  });
+
+  const result = await response.json().catch(() => ({}));
+
+  return json({
+    ok: response.ok,
+    provider: "resend",
+    status: response.status,
+    email_id: result?.id || null
+  }, response.ok ? 200 : 502);
 }
 
 async function handleResendWebhook(request, env) {
