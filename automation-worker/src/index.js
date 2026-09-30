@@ -1,3 +1,5 @@
+import { Webhook } from "standardwebhooks";
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -55,12 +57,21 @@ async function handleResendWebhook(request, env) {
 
   let payload;
   try {
-    payload = JSON.parse(rawBody);
+    const verifier = new Webhook(env.RESEND_WEBHOOK_SECRET);
+    payload = verifier.verify(rawBody, {
+      "webhook-id": request.headers.get("svix-id") || "",
+      "webhook-timestamp": request.headers.get("svix-timestamp") || "",
+      "webhook-signature": request.headers.get("svix-signature") || ""
+    });
   } catch {
-    return json({ error: "invalid_json" }, 400);
+    return json({ error: "invalid_resend_signature" }, 401);
   }
 
-  const eventId = payload?.data?.email_id || payload?.id || crypto.randomUUID();
+  const eventId =
+    request.headers.get("svix-id") ||
+    payload?.data?.email_id ||
+    payload?.id ||
+    crypto.randomUUID();
   const eventType = payload?.type || "unknown";
 
   const inserted = await recordWebhookEvent(env, {
