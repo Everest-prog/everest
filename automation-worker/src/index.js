@@ -43,7 +43,8 @@ async function handleHealth(env) {
       environment: env.ENVIRONMENT || "unknown",
       database: probe?.ok === 1 ? "connected" : "unexpected_response",
       resend_webhook_configured: Boolean(env.RESEND_WEBHOOK_SECRET),
-      resend_api_configured: Boolean(env.RESEND_API_KEY)
+      resend_api_configured: Boolean(env.RESEND_API_KEY),
+      kiwify_webhook_configured: Boolean(env.KIWIFY_WEBHOOK_TOKEN)
     }, probe?.ok === 1 ? 200 : 503);
   } catch {
     return json({
@@ -144,11 +145,27 @@ async function handleResendWebhook(request, env) {
 async function handleKiwifyWebhook(request, env) {
   const rawBody = await request.text();
 
-  // IMPORTANT: Kiwify authenticity verification must be implemented
-  // against the provider's current production specification before go-live.
-  // Never trust an unverified payload in production.
-  if (env.ENVIRONMENT === "production" && !env.KIWIFY_WEBHOOK_VERIFICATION_CONFIG) {
+  if (!env.KIWIFY_WEBHOOK_TOKEN) {
     return json({ error: "kiwify_webhook_not_configured" }, 503);
+  }
+
+  const url = new URL(request.url);
+  const suppliedSignature =
+    url.searchParams.get("signature") ||
+    request.headers.get("x-kiwify-signature") ||
+    request.headers.get("kiwify-signature");
+
+  if (!suppliedSignature) {
+    return json({ error: "missing_kiwify_signature" }, 401);
+  }
+
+  const expectedSignature = await hmacSha1Hex(
+    env.KIWIFY_WEBHOOK_TOKEN,
+    rawBody
+  );
+
+  if (!safeEqualHex(expectedSignature, suppliedSignature)) {
+    return json({ error: "invalid_kiwify_signature" }, 401);
   }
 
   let payload;
@@ -199,6 +216,39 @@ async function recordWebhookEvent(env, event) {
   ).run();
 
   return result.meta.changes > 0;
+}
+
+async function hmacSha1Hex(secret, value) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-1" },
+    false,
+    ["sign"]
+  );
+
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode(value)
+  );
+
+  return [...new Uint8Array(signature)]
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function safeEqualHex(expected, supplied) {
+  const a = String(expected || "").trim().toLowerCase();
+  const b = String(supplied || "").trim().toLowerCase();
+
+  if (a.length !== b.length) return false;
+
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
 }
 
 async function sha256(value) {
