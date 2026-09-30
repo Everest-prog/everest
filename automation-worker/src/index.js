@@ -3,7 +3,7 @@ export default {
     const url = new URL(request.url);
 
     if (request.method === "GET" && url.pathname === "/health") {
-      return json({ ok: true, environment: env.ENVIRONMENT || "unknown" });
+      return handleHealth(env);
     }
 
     if (request.method === "POST" && url.pathname === "/webhooks/resend") {
@@ -17,6 +17,32 @@ export default {
     return json({ error: "not_found" }, 404);
   }
 };
+
+async function handleHealth(env) {
+  if (!env.DB) {
+    return json({
+      ok: false,
+      environment: env.ENVIRONMENT || "unknown",
+      database: "missing_binding"
+    }, 503);
+  }
+
+  try {
+    const probe = await env.DB.prepare("SELECT 1 AS ok").first();
+
+    return json({
+      ok: probe?.ok === 1,
+      environment: env.ENVIRONMENT || "unknown",
+      database: probe?.ok === 1 ? "connected" : "unexpected_response"
+    }, probe?.ok === 1 ? 200 : 503);
+  } catch {
+    return json({
+      ok: false,
+      environment: env.ENVIRONMENT || "unknown",
+      database: "error"
+    }, 503);
+  }
+}
 
 async function handleResendWebhook(request, env) {
   const rawBody = await request.text();
