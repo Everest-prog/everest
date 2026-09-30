@@ -77,10 +77,20 @@ async function handleKiwifyStatus(env) {
     `SELECT COUNT(*) AS total FROM webhook_events WHERE provider = 'kiwify'`
   ).first();
 
+  const lastOrder = await env.DB.prepare(
+    `SELECT provider_order_id, product_code, status, gross_value, currency,
+            approved_at, refunded_at, updated_at
+     FROM orders
+     WHERE provider = 'kiwify'
+     ORDER BY id DESC
+     LIMIT 1`
+  ).first();
+
   return json({
     ok: true,
     kiwify_events: Number(count?.total || 0),
-    last_event: last || null
+    last_event: last || null,
+    last_order: lastOrder || null
   });
 }
 
@@ -205,15 +215,6 @@ async function handleKiwifyWebhook(request, env) {
     return json({ error: "invalid_json" }, 400);
   }
 
-  const providerEventId =
-    payload?.event_id ||
-    payload?.id ||
-    [payload?.order_id, payload?.event, payload?.updated_at].filter(Boolean).join(":");
-
-  if (!providerEventId) {
-    return json({ error: "missing_event_id" }, 422);
-  }
-
   const rawStatus =
     payload?.webhook_event_type ||
     payload?.event ||
@@ -222,6 +223,19 @@ async function handleKiwifyWebhook(request, env) {
     "unknown";
 
   const eventType = normalizeKiwifyEvent(rawStatus);
+
+  const providerEventId =
+    payload?.event_id ||
+    payload?.id ||
+    [
+      payload?.order_id,
+      rawStatus,
+      payload?.updated_at || payload?.approved_date || payload?.created_at
+    ].filter(Boolean).join(":");
+
+  if (!providerEventId) {
+    return json({ error: "missing_event_id" }, 422);
+  }
 
   const inserted = await recordWebhookEvent(env, {
     provider: "kiwify",
@@ -232,9 +246,262 @@ async function handleKiwifyWebhook(request, env) {
 
   if (!inserted) return json({ ok: true, duplicate: true });
 
-  // Product/order mapping is intentionally postponed until the real Kiwify
-  // payload has been captured in staging and validated against documentation.
-  return json({ ok: true, staged: true });
+  try {
+    const result = await processKiwifyBusinessEvent(
+      env,
+      payload,
+      eventType,
+      String(providerEventId)
+    );
+
+    await markWebhookProcessed(
+      env,
+      "kiwify",
+      String(providerEventId),
+      result.status || "processed",
+      result.errorCode || null
+    );
+
+    return json({
+      ok: true,
+      event_type: eventType,
+      order_status: result.orderStatus || null,
+      email_sent: Boolean(result.emailSent)
+    });
+  } catch {
+    await markWebhookProcessed(
+      env,
+      "kiwify",
+      String(providerEventId),
+      "failed",
+      "processing_error"
+    );
+    return json({ error: "kiwify_processing_failed" }, 500);
+  }
+}
+
+async function processKiwifyBusinessEvent(env, payload, eventType, providerEventId) {
+  const orderId = payload?.order_id ? String(payload.order_id) : null;
+  const productCode = mapKiwifyProductCode(payload, env);
+
+  if (!orderId) {
+    return {
+      status: "ignored",
+      errorCode: "missing_order_id",
+      orderStatus: null,
+      emailSent: false
+    };
+  }
+
+  if (!productCode) {
+    return {
+      status: "ignored",
+      errorCode: "unknown_product",
+      orderStatus: null,
+      emailSent: false
+    };
+  }
+
+  const rawEmail = String(
+    payload?.Customer?.email ||
+    payload?.customer?.email ||
+    ""
+  ).trim().toLowerCase();
+
+  const emailHash = rawEmail ? await sha256("email:" + rawEmail) : null;
+  const grossValue = parseIntegerCents(
+    payload?.Commissions?.charge_amount ??
+    payload?.commissions?.charge_amount
+  );
+  const currency = String(
+    payload?.Commissions?.currency ||
+    payload?.commissions?.currency ||
+    "BRL"
+  ).toUpperCase();
+
+  if (eventType === "purchase_approved") {
+    const approvedAt =
+      payload?.approved_date ||
+      payload?.updated_at ||
+      payload?.created_at ||
+      new Date().toISOString();
+
+    await env.DB.prepare(
+      `INSERT INTO orders
+        (provider, provider_order_id, product_code, status, gross_value, currency,
+         contact_ref, email_hash, approved_at, created_at, updated_at)
+       VALUES ('kiwify', ?1, ?2, 'approved', ?3, ?4, ?5, ?5, ?6,
+               datetime('now'), datetime('now'))
+       ON CONFLICT(provider, provider_order_id) DO UPDATE SET
+         product_code = excluded.product_code,
+         status = 'approved',
+         gross_value = COALESCE(excluded.gross_value, orders.gross_value),
+         currency = excluded.currency,
+         contact_ref = COALESCE(excluded.contact_ref, orders.contact_ref),
+         email_hash = COALESCE(excluded.email_hash, orders.email_hash),
+         approved_at = COALESCE(orders.approved_at, excluded.approved_at),
+         updated_at = datetime('now')`
+    ).bind(
+      orderId,
+      productCode,
+      grossValue,
+      currency,
+      emailHash,
+      approvedAt
+    ).run();
+
+    let emailSent = false;
+
+    if (rawEmail && env.RESEND_API_KEY) {
+      const firstName = String(
+        payload?.Customer?.first_name ||
+        payload?.customer?.first_name ||
+        ""
+      ).trim();
+
+      const response = await sendTransactionalEmail(env, {
+        to: rawEmail,
+        subject: "Ever.Precifica — compra de teste confirmada",
+        text:
+          (firstName ? "Olá, " + firstName + "!\n\n" : "Olá!\n\n") +
+          "Sua compra de teste do Ever.Precifica foi confirmada. " +
+          "Este e-mail valida o fluxo técnico Kiwify → Ever.Est → Resend.\n\n" +
+          "Nenhuma ação é necessária.",
+        idempotencyKey: "kiwify:" + orderId + ":purchase-approved:v1"
+      });
+
+      if (!response.ok) {
+        throw new Error("resend_send_failed");
+      }
+
+      emailSent = true;
+    }
+
+    return {
+      status: "processed",
+      errorCode: rawEmail ? null : "missing_customer_email",
+      orderStatus: "approved",
+      emailSent
+    };
+  }
+
+  if (eventType === "refund" || eventType === "chargeback") {
+    const nextStatus = eventType === "refund" ? "refunded" : "chargeback";
+    const refundedAt =
+      eventType === "refund"
+        ? (payload?.updated_at || new Date().toISOString())
+        : null;
+
+    await env.DB.prepare(
+      `INSERT INTO orders
+        (provider, provider_order_id, product_code, status, gross_value, currency,
+         contact_ref, email_hash, refunded_at, created_at, updated_at)
+       VALUES ('kiwify', ?1, ?2, ?3, ?4, ?5, ?6, ?6, ?7,
+               datetime('now'), datetime('now'))
+       ON CONFLICT(provider, provider_order_id) DO UPDATE SET
+         status = excluded.status,
+         gross_value = COALESCE(excluded.gross_value, orders.gross_value),
+         currency = excluded.currency,
+         contact_ref = COALESCE(excluded.contact_ref, orders.contact_ref),
+         email_hash = COALESCE(excluded.email_hash, orders.email_hash),
+         refunded_at = COALESCE(excluded.refunded_at, orders.refunded_at),
+         updated_at = datetime('now')`
+    ).bind(
+      orderId,
+      productCode,
+      nextStatus,
+      grossValue,
+      currency,
+      emailHash,
+      refundedAt
+    ).run();
+
+    return {
+      status: "processed",
+      errorCode: null,
+      orderStatus: nextStatus,
+      emailSent: false
+    };
+  }
+
+  return {
+    status: "ignored",
+    errorCode: "unsupported_event",
+    orderStatus: null,
+    emailSent: false
+  };
+}
+
+function mapKiwifyProductCode(payload, env) {
+  const productId = String(
+    payload?.Product?.product_id ||
+    payload?.product?.product_id ||
+    ""
+  ).trim();
+
+  const productName = String(
+    payload?.Product?.product_name ||
+    payload?.product?.product_name ||
+    ""
+  ).trim();
+
+  if (
+    env.KIWIFY_E2E_PRODUCT_ID &&
+    productId &&
+    productId === String(env.KIWIFY_E2E_PRODUCT_ID)
+  ) {
+    return "ever_precifica_e2e";
+  }
+
+  if (
+    env.ENVIRONMENT === "staging" &&
+    productName === "Ever.Precifica — E2E interno"
+  ) {
+    return "ever_precifica_e2e";
+  }
+
+  return null;
+}
+
+function parseIntegerCents(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const parsed = Number.parseInt(String(value), 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+async function sendTransactionalEmail(env, message) {
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "authorization": "Bearer " + env.RESEND_API_KEY,
+      "content-type": "application/json",
+      "idempotency-key": message.idempotencyKey
+    },
+    body: JSON.stringify({
+      from: env.RESEND_FROM_EMAIL || "Ever.Est <noreply@mail.soueverest.com.br>",
+      to: [message.to],
+      subject: message.subject,
+      text: message.text,
+      reply_to: env.SUPPORT_EMAIL || "contato@soueverest.com.br"
+    })
+  });
+
+  return response;
+}
+
+async function markWebhookProcessed(env, provider, providerEventId, status, errorCode) {
+  await env.DB.prepare(
+    `UPDATE webhook_events
+     SET status = ?1,
+         error_code = ?2,
+         processed_at = datetime('now')
+     WHERE provider = ?3 AND provider_event_id = ?4`
+  ).bind(
+    status,
+    errorCode,
+    provider,
+    providerEventId
+  ).run();
 }
 
 async function recordKiwifyDiagnostic(env, rawBody, reason) {
@@ -303,9 +570,13 @@ function normalizeKiwifyEvent(value) {
   const map = {
     paid: "purchase_approved",
     approved: "purchase_approved",
+    order_approved: "purchase_approved",
     refunded: "refund",
     refund: "refund",
-    chargeback: "chargeback"
+    order_refunded: "refund",
+    order_refund: "refund",
+    chargeback: "chargeback",
+    chargedback: "chargeback"
   };
 
   return map[status] || status || "unknown";
