@@ -8,3 +8,5 @@ Cloudflare Worker de staging da ET-0D.
 - Banco: D1 `ever_tools_staging`
 
 Este arquivo também serve como alteração segura para disparar o pipeline de implantação conectado ao GitHub.
+
+Resend runtime secrets validation: redeploy trigger after both production build secrets were configured.
