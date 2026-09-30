@@ -8,6 +8,9 @@
     "db:apply:local": "wrangler d1 execute ever_tools_staging --local --file=./schema.sql",
     "db:apply:remote": "wrangler d1 execute ever_tools_staging --remote --file=./schema.sql"
   },
+  "dependencies": {
+    "standardwebhooks": "^1.1.1"
+  },
   "devDependencies": {
     "wrangler": "^4.0.0"
   }
