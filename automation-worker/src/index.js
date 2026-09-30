@@ -12,6 +12,10 @@ export default {
       return handleResendSendTest(env);
     }
 
+    if (request.method === "GET" && url.pathname === "/internal/kiwify-status") {
+      return handleKiwifyStatus(env);
+    }
+
     if (request.method === "POST" && url.pathname === "/webhooks/resend") {
       return handleResendWebhook(request, env);
     }
@@ -54,6 +58,30 @@ async function handleHealth(env) {
       resend_webhook_configured: Boolean(env.RESEND_WEBHOOK_SECRET)
     }, 503);
   }
+}
+
+async function handleKiwifyStatus(env) {
+  if (env.ENVIRONMENT !== "staging") {
+    return json({ error: "not_found" }, 404);
+  }
+
+  const last = await env.DB.prepare(
+    `SELECT provider_event_id, event_type, received_at, status, error_code
+     FROM webhook_events
+     WHERE provider = 'kiwify'
+     ORDER BY id DESC
+     LIMIT 1`
+  ).first();
+
+  const count = await env.DB.prepare(
+    `SELECT COUNT(*) AS total FROM webhook_events WHERE provider = 'kiwify'`
+  ).first();
+
+  return json({
+    ok: true,
+    kiwify_events: Number(count?.total || 0),
+    last_event: last || null
+  });
 }
 
 async function handleResendSendTest(env) {
@@ -156,6 +184,7 @@ async function handleKiwifyWebhook(request, env) {
     request.headers.get("kiwify-signature");
 
   if (!suppliedSignature) {
+    await recordKiwifyDiagnostic(env, rawBody, "missing_signature");
     return json({ error: "missing_kiwify_signature" }, 401);
   }
 
@@ -165,6 +194,7 @@ async function handleKiwifyWebhook(request, env) {
   );
 
   if (!safeEqualHex(expectedSignature, suppliedSignature)) {
+    await recordKiwifyDiagnostic(env, rawBody, "invalid_signature");
     return json({ error: "invalid_kiwify_signature" }, 401);
   }
 
@@ -198,6 +228,31 @@ async function handleKiwifyWebhook(request, env) {
   // Product/order mapping is intentionally postponed until the real Kiwify
   // payload has been captured in staging and validated against documentation.
   return json({ ok: true, staged: true });
+}
+
+async function recordKiwifyDiagnostic(env, rawBody, reason) {
+  const payloadHash = await sha256(rawBody);
+  let eventType = "unknown";
+
+  try {
+    const parsed = JSON.parse(rawBody);
+    eventType = parsed?.event || parsed?.type || parsed?.order_status || "unknown";
+  } catch {}
+
+  await env.DB.prepare(
+    `INSERT INTO webhook_events
+      (provider, provider_event_id, event_type, payload_hash, received_at, status, error_code)
+     VALUES ('kiwify', ?1, ?2, ?3, datetime('now'), 'rejected', ?4)
+     ON CONFLICT(provider, provider_event_id) DO UPDATE SET
+       received_at = datetime('now'),
+       status = 'rejected',
+       error_code = excluded.error_code`
+  ).bind(
+    "diagnostic:" + payloadHash,
+    String(eventType),
+    payloadHash,
+    reason
+  ).run();
 }
 
 async function recordWebhookEvent(env, event) {
