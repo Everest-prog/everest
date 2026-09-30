@@ -25,7 +25,8 @@ async function handleHealth(env) {
     return json({
       ok: false,
       environment: env.ENVIRONMENT || "unknown",
-      database: "missing_binding"
+      database: "missing_binding",
+      resend_webhook_configured: Boolean(env.RESEND_WEBHOOK_SECRET)
     }, 503);
   }
 
@@ -35,13 +36,15 @@ async function handleHealth(env) {
     return json({
       ok: probe?.ok === 1,
       environment: env.ENVIRONMENT || "unknown",
-      database: probe?.ok === 1 ? "connected" : "unexpected_response"
+      database: probe?.ok === 1 ? "connected" : "unexpected_response",
+      resend_webhook_configured: Boolean(env.RESEND_WEBHOOK_SECRET)
     }, probe?.ok === 1 ? 200 : 503);
   } catch {
     return json({
       ok: false,
       environment: env.ENVIRONMENT || "unknown",
-      database: "error"
+      database: "error",
+      resend_webhook_configured: Boolean(env.RESEND_WEBHOOK_SECRET)
     }, 503);
   }
 }
