@@ -214,7 +214,14 @@ async function handleKiwifyWebhook(request, env) {
     return json({ error: "missing_event_id" }, 422);
   }
 
-  const eventType = payload?.event || payload?.type || "unknown";
+  const rawStatus =
+    payload?.webhook_event_type ||
+    payload?.event ||
+    payload?.type ||
+    payload?.order_status ||
+    "unknown";
+
+  const eventType = normalizeKiwifyEvent(rawStatus);
 
   const inserted = await recordWebhookEvent(env, {
     provider: "kiwify",
@@ -271,6 +278,20 @@ async function recordWebhookEvent(env, event) {
   ).run();
 
   return result.meta.changes > 0;
+}
+
+function normalizeKiwifyEvent(value) {
+  const status = String(value || "").trim().toLowerCase();
+
+  const map = {
+    paid: "purchase_approved",
+    approved: "purchase_approved",
+    refunded: "refund",
+    refund: "refund",
+    chargeback: "chargeback"
+  };
+
+  return map[status] || status || "unknown";
 }
 
 async function hmacSha1Hex(secret, value) {
