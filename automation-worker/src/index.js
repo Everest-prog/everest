@@ -277,7 +277,24 @@ async function recordWebhookEvent(env, event) {
     payloadHash
   ).run();
 
-  return result.meta.changes > 0;
+  const inserted = result.meta.changes > 0;
+
+  if (!inserted && event.eventType && event.eventType !== "unknown") {
+    await env.DB.prepare(
+      `UPDATE webhook_events
+       SET event_type = CASE
+         WHEN event_type = 'unknown' THEN ?1
+         ELSE event_type
+       END
+       WHERE provider = ?2 AND provider_event_id = ?3`
+    ).bind(
+      event.eventType,
+      event.provider,
+      event.providerEventId
+    ).run();
+  }
+
+  return inserted;
 }
 
 function normalizeKiwifyEvent(value) {
