@@ -197,6 +197,29 @@ Fica fora do escopo do MVP:
 - recomendação de alíquota;
 - substituição de orientação contábil ou tributária.
 
+## 4.3. Política confirmada para margem e markup
+
+A **margem sobre a venda** será o conceito principal do Ever.Precifica.
+
+O usuário informará:
+
+- margem de lucro desejada;
+- margem mínima aceitável.
+
+O preço recomendado será calculado a partir da margem desejada.
+
+O markup não será solicitado como entrada principal. Ele será calculado automaticamente e exibido apenas como indicador secundário/educacional:
+
+```
+Markup = preço de venda / custo-base
+```
+
+A ferramenta deve evitar apresentar markup como sinônimo de margem.
+
+Racional de produto: o público-alvo do Ever.Precifica tende a ter menor familiaridade com o conceito de markup. A experiência deve priorizar a pergunta de negócio "quanto da venda precisa sobrar?" em vez de exigir domínio de multiplicadores de custo.
+
+Quando a etapa de UX for iniciada, o markup deverá receber explicação contextual simples e não competir visualmente com margem, preço recomendado e lucro unitário.
+
 ## 5. Regras determinísticas
 
 O motor deve rejeitar ou alertar quando:
