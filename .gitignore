@@ -1,0 +1,21 @@
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# Node / tooling
+node_modules/
+.wrangler/
+.devcontainer/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
