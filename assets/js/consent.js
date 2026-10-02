@@ -3,6 +3,7 @@
 
   const STORAGE_KEY = "everest_analytics_consent";
   const GTM_ID = "GTM-TH5483TJ";
+  const STYLE_ID = "everest-cookie-styles";
 
   window.dataLayer = window.dataLayer || [];
 
@@ -23,6 +24,12 @@
   function loadGtm() {
     if (document.querySelector('script[data-everest-gtm]')) return;
 
+    // Basic consent mode: do not replay Ever.Est interactions that happened
+    // before analytics consent was granted.
+    window.dataLayer = window.dataLayer.filter((entry) => {
+      return !(entry && typeof entry === "object" && entry.event_source === "everest_site");
+    });
+
     // Mirror the official GTM bootstrap before loading gtm.js.
     window.dataLayer.push({
       "gtm.start": new Date().getTime(),
@@ -38,6 +45,7 @@
 
   function updateConsent(value) {
     const granted = value === "granted";
+    window.everestAnalyticsConsent = granted;
 
     gtag("consent", "update", {
       analytics_storage: granted ? "granted" : "denied",
@@ -67,31 +75,11 @@
     }
   }
 
-  function createBanner() {
-    if (document.getElementById("everest-cookie-banner")) return;
-
-    const banner = document.createElement("div");
-    banner.id = "everest-cookie-banner";
-    banner.setAttribute("role", "dialog");
-    banner.setAttribute("aria-label", "Preferências de cookies");
-    banner.innerHTML = `
-      <div class="everest-cookie-card">
-        <div>
-          <strong>Cookies e métricas</strong>
-          <p>
-            Usamos métricas para entender como o site é utilizado e melhorar as Ferramentas Ever.Est.
-            Você pode aceitar ou recusar. Cookies analíticos só serão ativados após sua escolha.
-            <a href="/privacidade.html">Saiba mais</a>.
-          </p>
-        </div>
-        <div class="everest-cookie-actions">
-          <button type="button" data-cookie-deny>Recusar</button>
-          <button type="button" data-cookie-accept>Aceitar métricas</button>
-        </div>
-      </div>
-    `;
+  function ensureConsentStyles() {
+    if (document.getElementById(STYLE_ID)) return;
 
     const style = document.createElement("style");
+    style.id = STYLE_ID;
     style.textContent = `
       #everest-cookie-banner {
         position: fixed;
@@ -144,8 +132,34 @@
         .everest-cookie-actions button { flex: 1; }
       }
     `;
-
     document.head.appendChild(style);
+  }
+
+  function createBanner() {
+    if (document.getElementById("everest-cookie-banner")) return;
+
+    const banner = document.createElement("div");
+    banner.id = "everest-cookie-banner";
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-label", "Preferências de cookies");
+    banner.innerHTML = `
+      <div class="everest-cookie-card">
+        <div>
+          <strong>Cookies e métricas</strong>
+          <p>
+            Usamos métricas para entender como o site é utilizado e melhorar as Ferramentas Ever.Est.
+            Você pode aceitar ou recusar. Cookies analíticos só serão ativados após sua escolha.
+            <a href="/privacidade.html">Saiba mais</a>.
+          </p>
+        </div>
+        <div class="everest-cookie-actions">
+          <button type="button" data-cookie-deny>Recusar</button>
+          <button type="button" data-cookie-accept>Aceitar métricas</button>
+        </div>
+      </div>
+    `;
+
+    ensureConsentStyles();
     document.body.appendChild(banner);
 
     banner.querySelector("[data-cookie-accept]").addEventListener("click", function () {
@@ -155,13 +169,21 @@
     });
 
     banner.querySelector("[data-cookie-deny]").addEventListener("click", function () {
+      const hadGtmLoaded = Boolean(document.querySelector('script[data-everest-gtm]'));
       updateConsent("denied");
       banner.remove();
+
+      if (hadGtmLoaded) {
+        window.location.reload();
+        return;
+      }
+
       showPreferencesButton();
     });
   }
 
   function showPreferencesButton() {
+    ensureConsentStyles();
     if (document.getElementById("everest-cookie-preferences")) return;
 
     const button = document.createElement("button");
