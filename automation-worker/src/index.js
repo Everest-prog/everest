@@ -16,6 +16,18 @@ export default {
       return handleKiwifyStatus(env);
     }
 
+    if (request.method === "GET" && url.pathname === "/internal/analytics-preview") {
+      return handleAnalyticsPreview(env);
+    }
+
+    if (request.method === "GET" && url.pathname === "/internal/preview-assets/consent.js") {
+      return handlePreviewAsset(env, "consent");
+    }
+
+    if (request.method === "GET" && url.pathname === "/internal/preview-assets/analytics.js") {
+      return handlePreviewAsset(env, "analytics");
+    }
+
     if (request.method === "POST" && url.pathname === "/webhooks/resend") {
       return handleResendWebhook(request, env);
     }
@@ -58,6 +70,63 @@ async function handleHealth(env) {
       resend_webhook_configured: Boolean(env.RESEND_WEBHOOK_SECRET)
     }, 503);
   }
+}
+
+
+const PREVIEW_CONSENT_JS = "(function () {\n  \"use strict\";\n\n  const STORAGE_KEY = \"everest_analytics_consent\";\n  const GTM_ID = \"GTM-TH5483TJ\";\n\n  window.dataLayer = window.dataLayer || [];\n\n  function gtag() {\n    window.dataLayer.push(arguments);\n  }\n\n  // Conservative default: analytics and advertising storage denied.\n  gtag(\"consent\", \"default\", {\n    analytics_storage: \"denied\",\n    ad_storage: \"denied\",\n    ad_user_data: \"denied\",\n    ad_personalization: \"denied\",\n    functionality_storage: \"granted\",\n    security_storage: \"granted\"\n  });\n\n  function loadGtm() {\n    if (document.querySelector('script[data-everest-gtm]')) return;\n\n    const script = document.createElement(\"script\");\n    script.async = true;\n    script.src = \"https://www.googletagmanager.com/gtm.js?id=\" + encodeURIComponent(GTM_ID);\n    script.dataset.everestGtm = \"true\";\n    document.head.appendChild(script);\n  }\n\n  function updateConsent(value) {\n    const granted = value === \"granted\";\n\n    gtag(\"consent\", \"update\", {\n      analytics_storage: granted ? \"granted\" : \"denied\",\n      ad_storage: \"denied\",\n      ad_user_data: \"denied\",\n      ad_personalization: \"denied\"\n    });\n\n    window.dataLayer.push({\n      event: \"everest_consent_update\",\n      analytics_consent: granted ? \"granted\" : \"denied\"\n    });\n\n    try {\n      localStorage.setItem(STORAGE_KEY, granted ? \"granted\" : \"denied\");\n    } catch (_) {}\n\n    if (granted) loadGtm();\n  }\n\n  function getStoredConsent() {\n    try {\n      const value = localStorage.getItem(STORAGE_KEY);\n      return value === \"granted\" || value === \"denied\" ? value : null;\n    } catch (_) {\n      return null;\n    }\n  }\n\n  function createBanner() {\n    if (document.getElementById(\"everest-cookie-banner\")) return;\n\n    const banner = document.createElement(\"div\");\n    banner.id = \"everest-cookie-banner\";\n    banner.setAttribute(\"role\", \"dialog\");\n    banner.setAttribute(\"aria-label\", \"Preferências de cookies\");\n    banner.innerHTML = `\n      <div class=\"everest-cookie-card\">\n        <div>\n          <strong>Cookies e métricas</strong>\n          <p>\n            Usamos métricas para entender como o site é utilizado e melhorar as Ferramentas Ever.Est.\n            Você pode aceitar ou recusar. Cookies analíticos só serão ativados após sua escolha.\n            <a href=\"/privacidade.html\">Saiba mais</a>.\n          </p>\n        </div>\n        <div class=\"everest-cookie-actions\">\n          <button type=\"button\" data-cookie-deny>Recusar</button>\n          <button type=\"button\" data-cookie-accept>Aceitar métricas</button>\n        </div>\n      </div>\n    `;\n\n    const style = document.createElement(\"style\");\n    style.textContent = `\n      #everest-cookie-banner {\n        position: fixed;\n        inset: auto 0 0 0;\n        z-index: 99999;\n        padding: 16px;\n        background: rgba(15,23,42,.96);\n        color: #fff;\n        box-shadow: 0 -8px 24px rgba(15,23,42,.18);\n      }\n      .everest-cookie-card {\n        max-width: 1100px;\n        margin: 0 auto;\n        display: flex;\n        gap: 20px;\n        align-items: center;\n        justify-content: space-between;\n      }\n      .everest-cookie-card strong { display: block; margin-bottom: 6px; }\n      .everest-cookie-card p { margin: 0; color: #cbd5e1; font-size: 14px; line-height: 1.55; }\n      .everest-cookie-card a { color: #fb923c; font-weight: 600; text-decoration: underline; }\n      .everest-cookie-actions { display: flex; gap: 10px; flex-shrink: 0; }\n      .everest-cookie-actions button {\n        border: 1px solid #64748b;\n        border-radius: 8px;\n        padding: 10px 14px;\n        font-weight: 700;\n        cursor: pointer;\n      }\n      .everest-cookie-actions [data-cookie-deny] { background: transparent; color: #fff; }\n      .everest-cookie-actions [data-cookie-accept] { background: #f97316; color: #fff; border-color: #f97316; }\n      #everest-cookie-preferences {\n        position: fixed;\n        right: 14px;\n        bottom: 14px;\n        z-index: 99998;\n        border: 1px solid #cbd5e1;\n        background: #fff;\n        color: #0f172a;\n        border-radius: 999px;\n        padding: 8px 12px;\n        font-size: 12px;\n        font-weight: 700;\n        cursor: pointer;\n        box-shadow: 0 4px 14px rgba(15,23,42,.12);\n      }\n      @media (max-width: 760px) {\n        .everest-cookie-card { flex-direction: column; align-items: stretch; }\n        .everest-cookie-actions { width: 100%; }\n        .everest-cookie-actions button { flex: 1; }\n      }\n    `;\n\n    document.head.appendChild(style);\n    document.body.appendChild(banner);\n\n    banner.querySelector(\"[data-cookie-accept]\").addEventListener(\"click\", function () {\n      updateConsent(\"granted\");\n      banner.remove();\n      showPreferencesButton();\n    });\n\n    banner.querySelector(\"[data-cookie-deny]\").addEventListener(\"click\", function () {\n      updateConsent(\"denied\");\n      banner.remove();\n      showPreferencesButton();\n    });\n  }\n\n  function showPreferencesButton() {\n    if (document.getElementById(\"everest-cookie-preferences\")) return;\n\n    const button = document.createElement(\"button\");\n    button.id = \"everest-cookie-preferences\";\n    button.type = \"button\";\n    button.textContent = \"Preferências de cookies\";\n    button.addEventListener(\"click\", function () {\n      button.remove();\n      createBanner();\n    });\n    document.body.appendChild(button);\n  }\n\n  document.addEventListener(\"DOMContentLoaded\", function () {\n    const stored = getStoredConsent();\n\n    if (stored === \"granted\") {\n      updateConsent(\"granted\");\n      showPreferencesButton();\n      return;\n    }\n\n    if (stored === \"denied\") {\n      updateConsent(\"denied\");\n      showPreferencesButton();\n      return;\n    }\n\n    createBanner();\n  });\n})();";
+const PREVIEW_ANALYTICS_JS = "(function () {\n  \"use strict\";\n\n  const ATTRIBUTION_KEYS = [\n    \"utm_source\",\n    \"utm_medium\",\n    \"utm_campaign\",\n    \"utm_content\",\n    \"utm_term\",\n    \"gclid\",\n    \"fbclid\"\n  ];\n\n  window.dataLayer = window.dataLayer || [];\n\n  function readAttribution() {\n    const params = new URLSearchParams(window.location.search);\n    const current = {};\n\n    ATTRIBUTION_KEYS.forEach((key) => {\n      const value = params.get(key);\n      if (value) {\n        current[key] = value;\n        try {\n          sessionStorage.setItem(\"everest_\" + key, value);\n        } catch (_) {}\n      }\n    });\n\n    ATTRIBUTION_KEYS.forEach((key) => {\n      if (current[key]) return;\n      try {\n        const stored = sessionStorage.getItem(\"everest_\" + key);\n        if (stored) current[key] = stored;\n      } catch (_) {}\n    });\n\n    return current;\n  }\n\n  function cleanParams(params) {\n    const safe = {};\n    Object.entries(params || {}).forEach(([key, value]) => {\n      if (value === undefined || value === null || value === \"\") return;\n      safe[key] = value;\n    });\n    return safe;\n  }\n\n  window.everestTrack = function (eventName, params) {\n    if (!eventName) return;\n\n    window.dataLayer.push({\n      event: eventName,\n      event_source: \"everest_site\",\n      page_path: window.location.pathname,\n      page_title: document.title,\n      occurred_at: new Date().toISOString(),\n      ...readAttribution(),\n      ...cleanParams(params)\n    });\n  };\n\n  document.addEventListener(\"DOMContentLoaded\", function () {\n    window.everestTrack(\"everest_page_view\");\n\n    document.querySelectorAll(\"[data-track]\").forEach((element) => {\n      element.addEventListener(\"click\", function () {\n        window.everestTrack(element.dataset.track, {\n          item_name: element.dataset.trackItem,\n          destination: element.getAttribute(\"href\")\n        });\n      });\n    });\n\n    document.querySelectorAll(\"[data-track-form]\").forEach((form) => {\n      form.addEventListener(\"submit\", function () {\n        window.everestTrack(form.dataset.trackForm, {\n          form_name: form.getAttribute(\"name\") || form.id || \"form\"\n        });\n      });\n    });\n  });\n})();";
+
+function handlePreviewAsset(env, asset) {
+  if (env.ENVIRONMENT !== "staging") {
+    return json({ error: "not_found" }, 404);
+  }
+
+  const body = asset === "consent" ? PREVIEW_CONSENT_JS : PREVIEW_ANALYTICS_JS;
+  return new Response(body, {
+    headers: {
+      "content-type": "application/javascript; charset=utf-8",
+      "cache-control": "no-store"
+    }
+  });
+}
+
+function handleAnalyticsPreview(env) {
+  if (env.ENVIRONMENT !== "staging") {
+    return json({ error: "not_found" }, 404);
+  }
+
+  const html = `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ever.Est — Analytics Preview</title>
+  <script src="/internal/preview-assets/consent.js" defer></script>
+  <script src="/internal/preview-assets/analytics.js" defer></script>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 760px; margin: 48px auto; padding: 0 20px; color: #0f172a; }
+    .card { border: 1px solid #cbd5e1; border-radius: 12px; padding: 24px; }
+    a.test { display: inline-block; margin-top: 16px; padding: 10px 14px; border-radius: 8px; background: #0f172a; color: #fff; text-decoration: none; }
+    code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Ever.Est — Preview de Analytics</h1>
+    <p>Ambiente técnico de staging para validar consentimento, GTM e GA4 antes da publicação.</p>
+    <p>Após aceitar métricas, clique no botão abaixo para gerar <code>tools_hub_click</code>.</p>
+    <a class="test" href="#preview-destination" data-track="tools_hub_click" data-track-item="preview_test">Gerar evento de teste</a>
+  </div>
+</body>
+</html>`;
+
+  return new Response(html, {
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+      "x-robots-tag": "noindex, nofollow"
+    }
+  });
 }
 
 async function handleKiwifyStatus(env) {
