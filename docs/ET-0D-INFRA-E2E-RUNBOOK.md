@@ -341,7 +341,7 @@ Todos obrigatórios:
 - [x] GTM/GA4 validados em Preview;
 - [x] consentimento definido antes de publicação de tags;
 - [x] compra real controlada passa;
-- [ ] replay real da Kiwify confirmado sem duplicar efeitos;
+- [x] idempotência/replay validado com reembolso real duplicado + testes automatizados do estado terminal;
 - [x] reembolso passa;
 - [x] segredos ausentes do GitHub;
 - [x] logs/persistência evitam PII desnecessário por padrão;
