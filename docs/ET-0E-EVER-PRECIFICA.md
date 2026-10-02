@@ -238,7 +238,33 @@ O usuário poderá testar livremente outro preço; o motor recalculará lucro, m
 
 O MVP não deve impor preço psicológico a todos os negócios. A sugestão psicológica é apenas uma alternativa e pode ser inadequada para serviços B2B, consultoria, produtos premium ou outros contextos.
 
-## 4.5. Princípio de linguagem para público leigo
+## 4.5. Política confirmada para descontos e promoções
+
+O MVP incluirá um simulador de descontos.
+
+A ferramenta deverá calcular e diferenciar:
+
+- **desconto que preserva a margem desejada**;
+- **desconto máximo seguro**, limitado pela margem mínima aceitável definida pelo usuário;
+- resultado de qualquer desconto livremente simulado pelo usuário.
+
+Para cada desconto simulado, o motor deverá retornar:
+
+- preço após desconto;
+- lucro unitário;
+- margem resultante;
+- situação econômica do preço.
+
+Estados determinísticos:
+
+- atende ou supera a margem desejada;
+- dá lucro, mas fica entre a margem mínima e a margem desejada;
+- fica abaixo da margem mínima;
+- gera prejuízo por estar abaixo do ponto de equilíbrio.
+
+A ferramenta não deve afirmar que o usuário "deve" conceder determinado desconto. Ela informa os efeitos financeiros da decisão.
+
+## 4.6. Princípio de linguagem para público leigo
 
 O Ever.Precifica deve falar com o usuário em linguagem simples, direta e orientada à decisão.
 
