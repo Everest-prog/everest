@@ -238,6 +238,31 @@ O usuário poderá testar livremente outro preço; o motor recalculará lucro, m
 
 O MVP não deve impor preço psicológico a todos os negócios. A sugestão psicológica é apenas uma alternativa e pode ser inadequada para serviços B2B, consultoria, produtos premium ou outros contextos.
 
+## 4.5. Princípio de linguagem para público leigo
+
+O Ever.Precifica deve falar com o usuário em linguagem simples, direta e orientada à decisão.
+
+Regras de comunicação:
+
+- evitar jargão contábil, financeiro ou tributário quando houver equivalente simples;
+- quando um termo técnico for necessário, explicar imediatamente em linguagem comum;
+- priorizar frases que respondam "o que isso significa para mim?";
+- mostrar primeiro a conclusão prática e depois o detalhe técnico;
+- não usar tom alarmista, punitivo ou excessivamente técnico;
+- diferenciar claramente "margem desejada", "margem mínima" e "prejuízo";
+- usar exemplos monetários concretos sempre que isso facilitar a compreensão;
+- markup deve aparecer apenas como informação secundária e explicada.
+
+Exemplos de tradução de linguagem:
+
+- "Margem abaixo do mínimo" → "Com este preço, sobra menos lucro do que o mínimo que você definiu."
+- "Abaixo do ponto de equilíbrio" → "Nesse preço, você vende com prejuízo."
+- "Margem desejada não atingida" → "Este preço ainda dá lucro, mas não chega à margem que você quer."
+- "Desconto máximo seguro" → "Este é o maior desconto que você pode dar sem ficar abaixo da margem mínima que definiu."
+- "Preço técnico" → "É o menor preço calculado para alcançar a margem que você escolheu."
+
+Na ET-0E-D — UX Architecture, essa diretriz deve ser transformada em microcopy, mensagens de erro, ajuda contextual e explicações dos resultados.
+
 ## 5. Regras determinísticas
 
 O motor deve rejeitar ou alertar quando:
