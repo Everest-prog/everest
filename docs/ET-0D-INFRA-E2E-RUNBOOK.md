@@ -346,7 +346,7 @@ Todos obrigatórios:
 - [x] segredos ausentes do GitHub;
 - [x] logs/persistência evitam PII desnecessário por padrão;
 - [x] evidências registradas;
-- [ ] PR ET-0D revisado antes do merge.
+- [x] PR ET-0D revisado antes do merge.
 
 ## Go-live
 
