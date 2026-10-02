@@ -6,7 +6,8 @@
     "dev": "wrangler dev",
     "deploy:staging": "wrangler deploy",
     "db:apply:local": "wrangler d1 execute ever_tools_staging --local --file=./schema.sql",
-    "db:apply:remote": "wrangler d1 execute ever_tools_staging --remote --file=./schema.sql"
+    "db:apply:remote": "wrangler d1 execute ever_tools_staging --remote --file=./schema.sql",
+    "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
     "standardwebhooks": "^1.1.1"
