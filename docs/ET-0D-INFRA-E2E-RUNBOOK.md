@@ -215,8 +215,7 @@ Webhook Resend deve ter assinatura validada antes de qualquer processamento.
 7. configurar consentimento antes de analytics/ads em produção;
 8. publicar GTM somente após validar consentimento e eventos.
 
-Eventos iniciais:
-- everest_page_view
+Eventos de negócio enviados ao GA4:
 - tools_hub_click
 - tool_interest_click
 - commercial_lead_submit
@@ -224,7 +223,22 @@ Eventos iniciais:
 - everfinance_click
 - checkout_click
 
+O `everest_page_view` continua no dataLayer para observabilidade interna, mas não é encaminhado como evento customizado ao GA4; o GA4 usa o `page_view` automático.
+
 Eventos de compra devem preferencialmente vir da camada server-side ou ser conciliados com a Kiwify para evitar confiar apenas no navegador.
+
+### Evidência GA4/GTM — ET-0D
+
+Validado em Preview/Tag Assistant:
+- consentimento padrão com `analytics_storage=denied`;
+- após opt-in, `analytics_storage=granted`;
+- `ad_storage`, `ad_user_data` e `ad_personalization` permaneceram negados;
+- evento `tools_hub_click` entrou no dataLayer e disparou a tag GA4;
+- parâmetros de item, destino, página e UTMs foram resolvidos corretamente;
+- requisição `g/collect` foi enviada para o Measurement ID da Ever.Est e retornou HTTP 204;
+- `tools_hub_click` apareceu no GA4 DebugView.
+
+O preview técnico temporário do Worker foi removido após a validação.
 
 ## Testes
 
@@ -311,20 +325,20 @@ Critério geral: falha observável, sem corrupção de estado e com replay poss�
 
 Todos obrigatórios:
 
-- [ ] contas externas criadas;
-- [ ] Worker staging ativo;
-- [ ] D1 staging ativo;
-- [ ] Kiwify webhook de teste passa;
-- [ ] Resend domínio/remetente verificado;
-- [ ] Resend webhook passa;
-- [ ] GTM/GA4 validados em Preview;
-- [ ] consentimento definido antes de publicação de tags;
-- [ ] compra real controlada passa;
-- [ ] replay não duplica efeitos;
-- [ ] reembolso passa;
-- [ ] segredos ausentes do GitHub;
-- [ ] logs não expõem PII desnecessário;
-- [ ] evidências registradas;
+- [x] contas externas criadas;
+- [x] Worker staging ativo;
+- [x] D1 staging ativo;
+- [x] Kiwify webhook de teste passa;
+- [x] Resend domínio/remetente verificado;
+- [x] Resend webhook passa;
+- [x] GTM/GA4 validados em Preview;
+- [x] consentimento definido antes de publicação de tags;
+- [x] compra real controlada passa;
+- [ ] replay real da Kiwify confirmado sem duplicar efeitos;
+- [x] reembolso passa;
+- [x] segredos ausentes do GitHub;
+- [x] logs/persistência evitam PII desnecessário por padrão;
+- [x] evidências registradas;
 - [ ] PR ET-0D revisado antes do merge.
 
 ## Go-live
