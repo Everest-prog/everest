@@ -1,7 +1,7 @@
 import { Webhook } from "standardwebhooks";
 import {
   isSupportedKiwifyEvent,
-  isKiwifyLogicalDuplicate
+  decideKiwifyEvent
 } from "./kiwify-idempotency.mjs";
 
 export default {
@@ -75,29 +75,59 @@ async function handleResendWebhook(request, env) {
     payload?.id ||
     crypto.randomUUID();
   const eventType = payload?.type || "unknown";
+  const providerEventId = String(eventId);
 
-  const inserted = await recordWebhookEvent(env, {
-    provider: "resend",
-    providerEventId: String(eventId),
-    eventType,
-    rawBody
-  });
+  const existing = await getWebhookEventState(env, "resend", providerEventId);
 
-  if (!inserted) return json({ ok: true, duplicate: true });
+  if (existing?.status === "processed" || existing?.status === "received") {
+    return json({ ok: true, duplicate: true });
+  }
 
-  await env.DB.prepare(
-    `INSERT INTO email_events (provider_event_id, contact_ref, email_type, event_type, occurred_at, created_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, datetime('now'))
-     ON CONFLICT(provider_event_id) DO NOTHING`
-  ).bind(
-    String(eventId),
-    null,
-    "transactional",
-    eventType,
-    payload?.created_at || new Date().toISOString()
-  ).run();
+  if (existing?.status === "failed") {
+    await resetWebhookEventForRetry(env, "resend", providerEventId);
+  } else {
+    const inserted = await recordWebhookEvent(env, {
+      provider: "resend",
+      providerEventId,
+      eventType,
+      rawBody
+    });
 
-  return json({ ok: true });
+    if (!inserted) return json({ ok: true, duplicate: true });
+  }
+
+  try {
+    await env.DB.prepare(
+      `INSERT INTO email_events (provider_event_id, contact_ref, email_type, event_type, occurred_at, created_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, datetime('now'))
+       ON CONFLICT(provider_event_id) DO NOTHING`
+    ).bind(
+      providerEventId,
+      null,
+      "transactional",
+      eventType,
+      payload?.created_at || new Date().toISOString()
+    ).run();
+
+    await markWebhookProcessed(
+      env,
+      "resend",
+      providerEventId,
+      "processed",
+      null
+    );
+
+    return json({ ok: true });
+  } catch {
+    await markWebhookProcessed(
+      env,
+      "resend",
+      providerEventId,
+      "failed",
+      "processing_error"
+    );
+    return json({ error: "resend_processing_failed" }, 500);
+  }
 }
 
 async function handleKiwifyWebhook(request, env) {
@@ -145,27 +175,6 @@ async function handleKiwifyWebhook(request, env) {
   const eventType = normalizeKiwifyEvent(rawStatus);
   const orderId = payload?.order_id ? String(payload.order_id) : null;
 
-  // Kiwify can regenerate delivery metadata when a webhook is resent.
-  // Deduplicate by the logical business event (order + normalized event type),
-  // not by delivery timestamps.
-  if (orderId && isSupportedKiwifyEvent(eventType)) {
-    const existingOrder = await env.DB.prepare(
-      `SELECT status
-       FROM orders
-       WHERE provider = 'kiwify' AND provider_order_id = ?1
-       LIMIT 1`
-    ).bind(orderId).first();
-
-    if (isKiwifyLogicalDuplicate(eventType, existingOrder?.status)) {
-      return json({
-        ok: true,
-        duplicate: true,
-        event_type: eventType,
-        order_status: existingOrder.status
-      });
-    }
-  }
-
   const providerEventId =
     orderId && isSupportedKiwifyEvent(eventType)
       ? orderId + ":" + eventType
@@ -183,14 +192,54 @@ async function handleKiwifyWebhook(request, env) {
     return json({ error: "missing_event_id" }, 422);
   }
 
-  const inserted = await recordWebhookEvent(env, {
-    provider: "kiwify",
-    providerEventId: String(providerEventId),
-    eventType,
-    rawBody
-  });
+  const [existingOrder, existingWebhook] = await Promise.all([
+    orderId
+      ? env.DB.prepare(
+          `SELECT status
+           FROM orders
+           WHERE provider = 'kiwify' AND provider_order_id = ?1
+           LIMIT 1`
+        ).bind(orderId).first()
+      : Promise.resolve(null),
+    getWebhookEventState(env, "kiwify", String(providerEventId))
+  ]);
 
-  if (!inserted) return json({ ok: true, duplicate: true });
+  const decision = decideKiwifyEvent(
+    eventType,
+    existingOrder?.status,
+    existingWebhook?.status
+  );
+
+  if (decision === "duplicate") {
+    return json({
+      ok: true,
+      duplicate: true,
+      event_type: eventType,
+      order_status: existingOrder?.status || null
+    });
+  }
+
+  if (decision === "retry") {
+    await resetWebhookEventForRetry(env, "kiwify", String(providerEventId));
+  } else {
+    const inserted = await recordWebhookEvent(env, {
+      provider: "kiwify",
+      providerEventId: String(providerEventId),
+      eventType,
+      rawBody
+    });
+
+    // Protect against a concurrent delivery that inserted the same logical
+    // event after our read but before this insert.
+    if (!inserted) {
+      return json({
+        ok: true,
+        duplicate: true,
+        event_type: eventType,
+        order_status: existingOrder?.status || null
+      });
+    }
+  }
 
   try {
     const result = await processKiwifyBusinessEvent(
@@ -433,6 +482,26 @@ async function sendTransactionalEmail(env, message) {
   });
 
   return response;
+}
+
+async function getWebhookEventState(env, provider, providerEventId) {
+  return env.DB.prepare(
+    `SELECT status, error_code
+     FROM webhook_events
+     WHERE provider = ?1 AND provider_event_id = ?2
+     LIMIT 1`
+  ).bind(provider, providerEventId).first();
+}
+
+async function resetWebhookEventForRetry(env, provider, providerEventId) {
+  await env.DB.prepare(
+    `UPDATE webhook_events
+     SET status = 'received',
+         error_code = NULL,
+         received_at = datetime('now'),
+         processed_at = NULL
+     WHERE provider = ?1 AND provider_event_id = ?2`
+  ).bind(provider, providerEventId).run();
 }
 
 async function markWebhookProcessed(env, provider, providerEventId, status, errorCode) {
