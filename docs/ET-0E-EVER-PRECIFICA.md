@@ -394,7 +394,7 @@ O cálculo foi ajustado para considerar que o arredondamento individual de tribu
 ### ET-0E-C — Product/Application Architecture
 - [x] definir estratégia inicial de estado da ferramenta;
 - [x] definir persistência local para o MVP;
-- [ ] definir integração de acesso/ativação do produto pago;
+- [x] definir integração de acesso/ativação do produto pago;
 - [ ] definir fronteira operacional entre site, ferramenta e automações;
 - [ ] definir política de limpeza/reset de dados;
 - [ ] registrar critérios de aceite da arquitetura.
@@ -420,6 +420,29 @@ Princípio de privacidade do MVP:
 > O Ever.Precifica deve funcionar sem enviar os dados financeiros da simulação para servidores da Ever.Est quando isso não for necessário.
 
 A persistência local é uma conveniência de uso, não um registro contábil nem um backup.
+
+#### Estratégia confirmada de acesso e ativação do produto pago
+
+O MVP não terá criação de conta, senha ou área de membros própria apenas para liberar o Ever.Precifica.
+
+Fluxo previsto:
+
+1. compra aprovada na Kiwify;
+2. webhook recebido pelo Worker;
+3. D1 registra o direito de acesso vinculado ao pedido;
+4. o cliente recebe um e-mail de ativação;
+5. o link de ativação é validado pelo Worker;
+6. o navegador recebe uma credencial local de acesso;
+7. os cálculos continuam acontecendo localmente no navegador;
+8. reembolso ou chargeback revoga o direito de acesso correspondente no backend.
+
+A validação de acesso deve ser separada dos dados financeiros da simulação: o backend precisa saber apenas se o usuário possui direito de uso, não os custos, preços, margens ou cenários informados na ferramenta.
+
+A interface deverá usar linguagem simples, evitando termos como "licença", "token" ou "credencial". Exemplo de mensagem ao usuário:
+
+> Seu acesso está liberado. Você já pode usar o Ever.Precifica neste dispositivo.
+
+A proteção de acesso do MVP é uma proteção comercial proporcional ao valor e ao risco do produto, não um sistema antipirataria complexo.
 
 ### ET-0E-D — UX Architecture
 - jornada;
