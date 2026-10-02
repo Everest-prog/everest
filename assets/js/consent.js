@@ -26,9 +26,12 @@
 
     // Basic consent mode: do not replay Ever.Est interactions that happened
     // before analytics consent was granted.
-    window.dataLayer = window.dataLayer.filter((entry) => {
-      return !(entry && typeof entry === "object" && entry.event_source === "everest_site");
-    });
+    for (let i = window.dataLayer.length - 1; i >= 0; i -= 1) {
+      const entry = window.dataLayer[i];
+      if (entry && typeof entry === "object" && entry.event_source === "everest_site") {
+        window.dataLayer.splice(i, 1);
+      }
+    }
 
     // Mirror the official GTM bootstrap before loading gtm.js.
     window.dataLayer.push({
@@ -197,17 +200,18 @@
     document.body.appendChild(button);
   }
 
+  const initialConsent = getStoredConsent();
+
+  // Returning opted-in visitors can load GTM immediately from the head.
+  // First-time visitors still remain fully blocked until an explicit choice.
+  if (initialConsent === "granted") {
+    updateConsent("granted");
+  } else if (initialConsent === "denied") {
+    window.everestAnalyticsConsent = false;
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
-    const stored = getStoredConsent();
-
-    if (stored === "granted") {
-      updateConsent("granted");
-      showPreferencesButton();
-      return;
-    }
-
-    if (stored === "denied") {
-      updateConsent("denied");
+    if (initialConsent === "granted" || initialConsent === "denied") {
       showPreferencesButton();
       return;
     }
