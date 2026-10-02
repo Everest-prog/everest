@@ -1,9 +1,9 @@
-name: ET-0D Worker Tests
+name: Ever.Tools Worker Tests
 
 on:
   push:
     branches:
-      - feat/et-0d-digital-foundation
+      - main
     paths:
       - "automation-worker/**"
       - ".github/workflows/et0d-worker-tests.yml"
