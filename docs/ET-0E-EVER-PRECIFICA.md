@@ -17,6 +17,26 @@ Princípio da arquitetura Ever.Est:
 
 ## 2. Proposta funcional do MVP
 
+### Escopo confirmado: Produto + Serviço
+
+O Ever.Precifica atenderá **produtos e serviços** no mesmo MVP.
+
+Os dois fluxos alimentam o mesmo motor determinístico. O que muda é a forma de decompor os custos para facilitar o preenchimento pelo usuário.
+
+**Produto**
+- custo de compra ou produção;
+- embalagem, frete e outros custos diretos unitários;
+- custos/despesas fixas alocados;
+- tributos, taxas e comissões sobre a venda.
+
+**Serviço**
+- mão de obra/horas consumidas;
+- materiais e despesas diretamente ligadas ao serviço;
+- custos/despesas fixas alocados;
+- tributos, taxas e comissões sobre a venda.
+
+A interface não deve obrigar o usuário a traduzir seu negócio para termos contábeis complexos. A normalização para o motor ocorre internamente.
+
 O MVP deve entregar cinco respostas centrais:
 
 1. preço mínimo econômico;
@@ -253,5 +273,5 @@ Não enviar custos, preços, margens ou outros valores financeiros sensíveis ao
 - [ ] política de alocação de custos confirmada;
 - [ ] tratamento de tributos/taxas definido;
 - [ ] critérios de erro/alerta definidos;
-- [ ] distinção entre produto e serviço decidida;
+- [x] distinção entre produto e serviço decidida;
 - [ ] critérios de aceite do MVP registrados.
