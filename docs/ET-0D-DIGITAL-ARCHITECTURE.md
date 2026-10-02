@@ -49,7 +49,7 @@ GitHub Pages remains the public-site host. It must not receive secrets or server
 
 ## 3. Event taxonomy
 
-Browser-side events use `window.dataLayer`. The current implementation does not transmit them to an external analytics provider by itself.
+Browser-side events use `window.dataLayer`. Google Tag Manager consumes a whitelist of business events and forwards them to GA4 only after analytics consent. The internal `everest_page_view` remains available in the data layer for observability, while GA4 uses its native automatic `page_view` to avoid duplicate page-view measurement.
 
 | Event | Trigger | Core fields |
 | --- | --- | --- |
@@ -165,7 +165,18 @@ Next:
 
 ## 10. Analytics provider
 
-The code intentionally creates the data layer before selecting a provider. Google Tag Manager/GA4 can consume it later without rewriting each CTA. Consent mode/tag governance must be configured before advertising/remarketing tags are enabled.
+GA4 and Google Tag Manager are configured and were validated in Preview/DebugView during ET-0D.
+
+Operational behavior:
+- GTM is loaded only after the visitor grants analytics consent;
+- `analytics_storage` changes from denied to granted only after opt-in;
+- advertising-related consent types remain denied;
+- GA4 automatic `page_view` is used instead of forwarding `everest_page_view`;
+- selected Ever.Est business events are forwarded through a GTM custom-event trigger;
+- event parameters include product/link/form context, page context and session attribution when present;
+- no PII is intentionally sent in analytics events.
+
+Advertising/remarketing tags remain disabled and require a new privacy/consent review before activation.
 
 ## 11. Launch dependencies
 
