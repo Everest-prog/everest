@@ -170,6 +170,33 @@ O usuário poderá informar diretamente o custo fixo já alocado por unidade/ser
 
 Ficam fora do MVP rateios por faturamento, centro de custo, ABC e métodos avançados de custeio.
 
+## 4.2. Política confirmada para tributos, taxas e comissões
+
+O Ever.Precifica não calculará nem recomendará alíquotas tributárias.
+
+O usuário informará manualmente os percentuais incidentes sobre a venda, em campos separados:
+
+- tributos sobre a venda;
+- taxa percentual do meio de pagamento;
+- comissão de marketplace/vendedor;
+- outras taxas percentuais.
+
+O motor somará esses percentuais em `V` para fins de cálculo, mas os resultados preservarão a abertura por componente para transparência.
+
+Taxas fixas por transação devem ser informadas separadamente e incorporadas ao custo unitário total, não ao percentual variável.
+
+É permitido informar `0%` em qualquer componente.
+
+Orientação obrigatória no campo de tributos:
+
+> Informe a alíquota efetivamente incidente sobre esta venda. Em caso de dúvida, consulte seu contador.
+
+Fica fora do escopo do MVP:
+- identificação automática de regime tributário;
+- cálculo automático de impostos por CNAE/regime;
+- recomendação de alíquota;
+- substituição de orientação contábil ou tributária.
+
 ## 5. Regras determinísticas
 
 O motor deve rejeitar ou alertar quando:
@@ -291,7 +318,7 @@ Não enviar custos, preços, margens ou outros valores financeiros sensíveis ao
 - [ ] saídas confirmadas;
 - [ ] fórmula-base confirmada;
 - [x] política de alocação de custos confirmada;
-- [ ] tratamento de tributos/taxas definido;
+- [x] tratamento de tributos/taxas definido;
 - [ ] critérios de erro/alerta definidos;
 - [x] distinção entre produto e serviço decidida;
 - [ ] critérios de aceite do MVP registrados.
