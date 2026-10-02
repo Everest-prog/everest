@@ -1,4 +1,8 @@
 import { Webhook } from "standardwebhooks";
+import {
+  isSupportedKiwifyEvent,
+  isKiwifyLogicalDuplicate
+} from "./kiwify-idempotency.mjs";
 
 export default {
   async fetch(request, env) {
@@ -504,30 +508,6 @@ async function recordWebhookEvent(env, event) {
   }
 
   return inserted;
-}
-
-function isSupportedKiwifyEvent(eventType) {
-  return ["purchase_approved", "refund", "chargeback"].includes(eventType);
-}
-
-function isKiwifyLogicalDuplicate(eventType, existingStatus) {
-  const status = String(existingStatus || "").trim().toLowerCase();
-  if (!status) return false;
-
-  if (eventType === "purchase_approved") {
-    // Never downgrade a terminal refund/chargeback back to approved on replay.
-    return ["approved", "refunded", "chargeback"].includes(status);
-  }
-
-  if (eventType === "refund") {
-    return ["refunded", "chargeback"].includes(status);
-  }
-
-  if (eventType === "chargeback") {
-    return status === "chargeback";
-  }
-
-  return false;
 }
 
 function normalizeKiwifyEvent(value) {
