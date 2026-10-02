@@ -1,9 +1,9 @@
 # Ever.Tools Automation Worker
 
-Cloudflare Worker de staging da ET-0D.
+Cloudflare Worker de staging das automações Ever.Tools.
 
 - Root directory: `automation-worker`
-- Branch de validação: `feat/et-0d-digital-foundation`
+- Branch de deploy: `main`
 - Configuração: `wrangler.toml`
 - Banco: D1 `ever_tools_staging`
 
