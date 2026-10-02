@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: em desenvolvimento  
+Status: ET-0E-A concluída · ET-0E-B em desenvolvimento  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
@@ -238,7 +238,29 @@ O usuário poderá testar livremente outro preço; o motor recalculará lucro, m
 
 O MVP não deve impor preço psicológico a todos os negócios. A sugestão psicológica é apenas uma alternativa e pode ser inadequada para serviços B2B, consultoria, produtos premium ou outros contextos.
 
-## 4.5. Política confirmada para descontos e promoções
+## 4.5. Política confirmada para diagnóstico do preço atual
+
+O campo de preço atual será opcional. Quando informado, o Ever.Precifica deverá comparar o preço praticado com os custos e metas do usuário.
+
+O diagnóstico deverá retornar:
+
+- preço atual;
+- lucro unitário no preço atual;
+- margem efetiva;
+- diferença para o preço necessário à margem desejada;
+- diferença percentual para a meta;
+- situação econômica do preço.
+
+Estados determinísticos:
+
+- gera prejuízo;
+- não gera prejuízo, mas fica abaixo da margem mínima;
+- fica entre a margem mínima e a margem desejada;
+- atende ou supera a margem desejada.
+
+A ferramenta pode mostrar quanto o preço precisaria variar para alcançar a margem desejada, mas não deve afirmar que o usuário necessariamente deve aumentar ou reduzir o preço, pois a decisão comercial também depende de mercado e estratégia.
+
+## 4.6. Política confirmada para descontos e promoções
 
 O MVP incluirá um simulador de descontos.
 
@@ -264,7 +286,7 @@ Estados determinísticos:
 
 A ferramenta não deve afirmar que o usuário "deve" conceder determinado desconto. Ela informa os efeitos financeiros da decisão.
 
-## 4.6. Princípio de linguagem para público leigo
+## 4.7. Princípio de linguagem para público leigo
 
 O Ever.Precifica deve falar com o usuário em linguagem simples, direta e orientada à decisão.
 
@@ -405,12 +427,32 @@ Não enviar custos, preços, margens ou outros valores financeiros sensíveis ao
 
 ## 10. Critério para concluir ET-0E-A
 
-- [ ] perguntas centrais do produto confirmadas;
-- [ ] entradas obrigatórias confirmadas;
-- [ ] saídas confirmadas;
-- [ ] fórmula-base confirmada;
+- [x] perguntas centrais do produto confirmadas;
+- [x] entradas obrigatórias confirmadas;
+- [x] saídas confirmadas;
+- [x] fórmula-base confirmada;
 - [x] política de alocação de custos confirmada;
 - [x] tratamento de tributos/taxas definido;
-- [ ] critérios de erro/alerta definidos;
+- [x] critérios de erro/alerta definidos;
 - [x] distinção entre produto e serviço decidida;
-- [ ] critérios de aceite do MVP registrados.
+- [x] critérios de aceite do MVP registrados.
+
+### Critérios de aceite do MVP
+
+O Ever.Precifica deve:
+
+- atender produtos e serviços com um único motor normalizado;
+- calcular preço técnico, referência comercial e referência psicológica sem arredondar abaixo da meta;
+- considerar custos diretos, custos adicionais, custos fixos alocados, taxas fixas e percentuais variáveis;
+- usar margem desejada como conceito principal e margem mínima como limite de segurança;
+- calcular markup apenas como indicador secundário;
+- calcular ponto de equilíbrio, lucro unitário e margem efetiva;
+- diagnosticar opcionalmente o preço já praticado;
+- simular descontos e identificar os limites de preservação da margem desejada e da margem mínima;
+- rejeitar entradas matematicamente inválidas e produzir alertas determinísticos;
+- nunca inferir ou recomendar alíquotas tributárias;
+- nunca delegar cálculos financeiros à IA;
+- comunicar resultados em linguagem adequada a um público não especialista;
+- permitir que todo resultado financeiro relevante seja reproduzido manualmente a partir das entradas e regras registradas.
+
+**ET-0E-A encerrada e aprovada em 02/10/2026.**
