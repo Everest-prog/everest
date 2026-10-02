@@ -1,3 +1,4 @@
+# Cloudflare Git integration deploys staging from main.
 name = "ever-tools-automation-staging"
 main = "src/index.js"
 compatibility_date = "2026-09-25"
