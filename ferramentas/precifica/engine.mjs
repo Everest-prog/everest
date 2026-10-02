@@ -220,13 +220,29 @@ function findPriceForMargin(ctx, targetMarginBps) {
     );
   }
 
-  let candidate = ceilDiv(ctx.costBaseCents * BPS_SCALE, denominator);
+  const theoreticalPrice = ceilDiv(
+    ctx.costBaseCents * BPS_SCALE,
+    denominator
+  );
 
-  // Component-by-component cent rounding may require a few additional cents
-  // beyond the closed-form result. Search deterministically for the first
-  // price that actually satisfies the target under the same rounding policy.
-  const maxAdjustments = 100000;
-  for (let i = 0; i <= maxAdjustments; i += 1) {
+  // Each percentage component is rounded independently to cents. That can
+  // move the true minimum a few cents either side of the closed-form result.
+  // The maximum displacement is bounded by the combined half-cent rounding
+  // error divided by the net contribution rate.
+  const activeRateComponents = RATE_KEYS.reduce(
+    (count, key) => count + (ctx.rates[key] > 0n ? 1n : 0n),
+    0n
+  );
+  const roundingAdjustmentBound =
+    ceilDiv(activeRateComponents * 5000n, denominator) + 2n;
+
+  let candidate =
+    theoreticalPrice > roundingAdjustmentBound
+      ? theoreticalPrice - roundingAdjustmentBound
+      : 1n;
+  const upperBound = theoreticalPrice + roundingAdjustmentBound;
+
+  while (candidate <= upperBound) {
     const evaluation = evaluatePriceInternal(ctx, candidate);
     if (meetsMargin(evaluation.profitCents, candidate, targetMarginBps)) {
       return candidate;
@@ -234,7 +250,7 @@ function findPriceForMargin(ctx, targetMarginBps) {
     candidate += 1n;
   }
 
-  throw new RangeError("Unable to converge on a valid price within the adjustment limit.");
+  throw new RangeError("Unable to converge on a valid price inside the rounding bound.");
 }
 
 function roundUpToWholeReal(priceCents) {
