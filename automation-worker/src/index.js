@@ -139,15 +139,41 @@ async function handleKiwifyWebhook(request, env) {
     "unknown";
 
   const eventType = normalizeKiwifyEvent(rawStatus);
+  const orderId = payload?.order_id ? String(payload.order_id) : null;
+
+  // Kiwify can regenerate delivery metadata when a webhook is resent.
+  // Deduplicate by the logical business event (order + normalized event type),
+  // not by delivery timestamps.
+  if (orderId && isSupportedKiwifyEvent(eventType)) {
+    const existingOrder = await env.DB.prepare(
+      `SELECT status
+       FROM orders
+       WHERE provider = 'kiwify' AND provider_order_id = ?1
+       LIMIT 1`
+    ).bind(orderId).first();
+
+    if (isKiwifyLogicalDuplicate(eventType, existingOrder?.status)) {
+      return json({
+        ok: true,
+        duplicate: true,
+        event_type: eventType,
+        order_status: existingOrder.status
+      });
+    }
+  }
 
   const providerEventId =
-    payload?.event_id ||
-    payload?.id ||
-    [
-      payload?.order_id,
-      rawStatus,
-      payload?.updated_at || payload?.approved_date || payload?.created_at
-    ].filter(Boolean).join(":");
+    orderId && isSupportedKiwifyEvent(eventType)
+      ? orderId + ":" + eventType
+      : (
+          payload?.event_id ||
+          payload?.id ||
+          [
+            payload?.order_id,
+            rawStatus,
+            payload?.updated_at || payload?.approved_date || payload?.created_at
+          ].filter(Boolean).join(":")
+        );
 
   if (!providerEventId) {
     return json({ error: "missing_event_id" }, 422);
@@ -478,6 +504,30 @@ async function recordWebhookEvent(env, event) {
   }
 
   return inserted;
+}
+
+function isSupportedKiwifyEvent(eventType) {
+  return ["purchase_approved", "refund", "chargeback"].includes(eventType);
+}
+
+function isKiwifyLogicalDuplicate(eventType, existingStatus) {
+  const status = String(existingStatus || "").trim().toLowerCase();
+  if (!status) return false;
+
+  if (eventType === "purchase_approved") {
+    // Never downgrade a terminal refund/chargeback back to approved on replay.
+    return ["approved", "refunded", "chargeback"].includes(status);
+  }
+
+  if (eventType === "refund") {
+    return ["refunded", "chargeback"].includes(status);
+  }
+
+  if (eventType === "chargeback") {
+    return status === "chargeback";
+  }
+
+  return false;
 }
 
 function normalizeKiwifyEvent(value) {
