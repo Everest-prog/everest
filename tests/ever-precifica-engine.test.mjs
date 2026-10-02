@@ -183,3 +183,56 @@ test("rejects a zero cost base because a price cannot be derived from margin alo
       error instanceof PricingInputError && error.code === "ZERO_COST_BASE"
   );
 });
+
+
+test("target prices are minimal across a matrix of costs, rates and margins", () => {
+  const scenarios = [
+    {
+      ...baseInput,
+      directCostCents: 8249,
+      ratesBps: { taxes: 600, payment: 320, commission: 1200, other: 100 },
+    },
+    {
+      ...baseInput,
+      directCostCents: 12345,
+      additionalCostCents: 678,
+      fixedFeeCents: 249,
+      ratesBps: { taxes: 450, payment: 349, commission: 0, other: 75 },
+      desiredMarginBps: 1800,
+      minimumMarginBps: 800,
+    },
+    {
+      ...baseInput,
+      directCostCents: 999,
+      allocatedFixedCostCents: 333,
+      ratesBps: { taxes: 0, payment: 499, commission: 1650, other: 0 },
+      desiredMarginBps: 3000,
+      minimumMarginBps: 1200,
+    },
+    {
+      ...baseInput,
+      directCostCents: 250000,
+      additionalCostCents: 12500,
+      allocatedFixedCostCents: 43000,
+      ratesBps: { taxes: 600, payment: 0, commission: 0, other: 0 },
+      desiredMarginBps: 3500,
+      minimumMarginBps: 1500,
+    },
+  ];
+
+  for (const input of scenarios) {
+    const result = calculatePricing(input);
+
+    assert.equal(result.technical.status, "AT_OR_ABOVE_DESIRED");
+    if (result.technical.priceCents > 1) {
+      const previous = evaluatePrice(input, result.technical.priceCents - 1);
+      assert.notEqual(previous.status, "AT_OR_ABOVE_DESIRED");
+    }
+
+    assert.ok(result.breakEven.profitCents >= 0);
+    if (result.breakEven.priceCents > 1) {
+      const previousBreakEven = evaluatePrice(input, result.breakEven.priceCents - 1);
+      assert.ok(previousBreakEven.profitCents < 0);
+    }
+  }
+});
