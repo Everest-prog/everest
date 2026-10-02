@@ -364,10 +364,23 @@ Não enviar custos, preços, margens ou outros valores financeiros sensíveis ao
 - definir critérios de aceite.
 
 ### ET-0E-B — Deterministic Pricing Engine
-- implementar núcleo matemático isolado;
-- política monetária/decimal;
-- validações;
-- testes unitários e vetores conhecidos.
+- [x] implementar núcleo matemático isolado;
+- [x] política monetária/decimal;
+- [x] validações;
+- [x] testes unitários iniciais e vetores conhecidos;
+- [ ] executar segunda rodada de casos-limite e invariantes antes de encerrar a etapa.
+
+Política técnica adotada:
+- dinheiro representado em centavos inteiros;
+- percentuais representados em basis points (0,01 ponto percentual);
+- cálculos críticos executados com inteiros/BigInt;
+- arredondamento explícito e testável;
+- preço-alvo ajustado para cima até a margem efetivamente ser atingida após os arredondamentos de centavos;
+- nenhuma decisão financeira depende de ponto flutuante ou IA.
+
+Implementação: `ferramentas/precifica/engine.mjs`  
+Testes: `tests/ever-precifica-engine.test.mjs`  
+CI: `Ever.Precifica Engine Tests`
 
 ### ET-0E-C — Product/Application Architecture
 - definir estado da ferramenta;
