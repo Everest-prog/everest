@@ -289,15 +289,22 @@ Critérios:
 - dados de atribuição são mantidos quando disponíveis;
 - nenhum acesso ao Ever.Finance é criado.
 
-### T4 — Replay real
+### T4 — Replay / idempotência
 
-Reenviar o webhook de compra aprovada pelos logs da Kiwify.
+A interface atual da Kiwify permite reenviar logs, mas no teste real de uma venda já reembolsada o botão de reenvio do log histórico de compra aprovada passou a gerar novas entregas de **reembolso**, refletindo o estado atual da venda. A documentação pública confirma a função de reenvio de logs, mas não define que o payload histórico original será preservado no reenvio. Por isso, esse painel não é usado como prova isolada de replay histórico de `purchase_approved`.
+
+Evidência adotada:
+- replay real de `refund` retornando `duplicate: true`;
+- regra de idempotência baseada em estado do pedido + evento lógico;
+- teste automatizado garantindo que `purchase_approved` é duplicado quando o pedido já está `approved`, `refunded` ou `chargeback`;
+- a checagem de duplicidade ocorre antes do envio de onboarding.
 
 Critérios:
 - HTTP 2xx;
 - nenhuma segunda linha lógica de pedido;
-- nenhum segundo onboarding;
-- `webhook_events` registra/reconhece idempotência conforme estratégia adotada.
+- nenhum segundo onboarding em evento logicamente duplicado;
+- replay de compra nunca reativa pedido `refunded` ou `chargeback`;
+- testes automatizados de idempotência aprovados.
 
 ### T5 — Reembolso
 
