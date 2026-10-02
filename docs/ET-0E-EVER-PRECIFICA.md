@@ -150,6 +150,26 @@ Desconto_max = 1 - (Preço_minimo_margem / Pref)
 
 O desconto máximo deve ser limitado a zero quando o preço de referência já estiver abaixo do mínimo da margem.
 
+## 4.1. Política confirmada de alocação de custos fixos
+
+O MVP adotará três caminhos simples:
+
+**Produto — rateio por quantidade**
+```
+CFU = custos fixos mensais / unidades esperadas vendidas no mês
+```
+
+**Serviço — rateio por horas faturáveis**
+```
+custo_fixo_hora = custos fixos mensais / horas faturáveis disponíveis no mês
+CFU_serviço = custo_fixo_hora × horas consumidas pelo serviço
+```
+
+**Modo manual**
+O usuário poderá informar diretamente o custo fixo já alocado por unidade/serviço quando conhecer esse valor.
+
+Ficam fora do MVP rateios por faturamento, centro de custo, ABC e métodos avançados de custeio.
+
 ## 5. Regras determinísticas
 
 O motor deve rejeitar ou alertar quando:
@@ -270,7 +290,7 @@ Não enviar custos, preços, margens ou outros valores financeiros sensíveis ao
 - [ ] entradas obrigatórias confirmadas;
 - [ ] saídas confirmadas;
 - [ ] fórmula-base confirmada;
-- [ ] política de alocação de custos confirmada;
+- [x] política de alocação de custos confirmada;
 - [ ] tratamento de tributos/taxas definido;
 - [ ] critérios de erro/alerta definidos;
 - [x] distinção entre produto e serviço decidida;
