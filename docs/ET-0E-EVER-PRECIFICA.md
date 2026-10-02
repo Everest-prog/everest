@@ -392,10 +392,34 @@ O cálculo foi ajustado para considerar que o arredondamento individual de tribu
 **ET-0E-B encerrada em 02/10/2026 com CI aprovada.**
 
 ### ET-0E-C — Product/Application Architecture
-- definir estado da ferramenta;
-- persistência local quando necessária;
-- integração com entrega/comercial;
-- fronteira entre site, ferramenta e automações.
+- [x] definir estratégia inicial de estado da ferramenta;
+- [x] definir persistência local para o MVP;
+- [ ] definir integração de acesso/ativação do produto pago;
+- [ ] definir fronteira operacional entre site, ferramenta e automações;
+- [ ] definir política de limpeza/reset de dados;
+- [ ] registrar critérios de aceite da arquitetura.
+
+#### Estratégia confirmada de execução e persistência no MVP
+
+O Ever.Precifica executará seus cálculos diretamente no navegador, usando o motor determinístico da própria ferramenta.
+
+Para o MVP:
+
+- custos, preços, margens e simulações permanecem no cliente;
+- esses valores não devem ser enviados ao GA4;
+- o estado da ferramenta pode ser persistido em `localStorage` para permitir continuidade de uso;
+- o usuário deve ter uma ação explícita para apagar os dados locais da ferramenta;
+- não haverá histórico financeiro em backend;
+- não haverá cadastro permanente de produtos, clientes ou operações;
+- não haverá login apenas para suportar persistência;
+- o Worker será utilizado apenas quando houver necessidade real de integração comercial, ativação, entrega ou automação;
+- funcionalidades de histórico financeiro permanente continuam pertencendo ao Ever.Finance.
+
+Princípio de privacidade do MVP:
+
+> O Ever.Precifica deve funcionar sem enviar os dados financeiros da simulação para servidores da Ever.Est quando isso não for necessário.
+
+A persistência local é uma conveniência de uso, não um registro contábil nem um backup.
 
 ### ET-0E-D — UX Architecture
 - jornada;
