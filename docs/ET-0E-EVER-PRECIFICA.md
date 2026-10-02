@@ -220,6 +220,24 @@ Racional de produto: o público-alvo do Ever.Precifica tende a ter menor familia
 
 Quando a etapa de UX for iniciada, o markup deverá receber explicação contextual simples e não competir visualmente com margem, preço recomendado e lucro unitário.
 
+## 4.4. Política confirmada para preço técnico e referências comerciais
+
+O Ever.Precifica distinguirá o resultado matemático do preço de apresentação comercial.
+
+A ferramenta deverá calcular e exibir:
+
+- **preço técnico**: menor preço necessário para atingir a margem desejada, conforme o motor determinístico;
+- **sugestão comercial**: referência arredondada igual ou superior ao preço técnico;
+- **sugestão psicológica**: referência comercial terminada em padrão de varejo, como `.90` ou `.99`, quando aplicável.
+
+A ferramenta **nunca deve arredondar automaticamente para baixo** em relação ao preço técnico quando isso reduzir a margem abaixo da meta definida.
+
+Cada referência deve exibir a margem efetivamente resultante.
+
+O usuário poderá testar livremente outro preço; o motor recalculará lucro, margem e demais indicadores para esse valor.
+
+O MVP não deve impor preço psicológico a todos os negócios. A sugestão psicológica é apenas uma alternativa e pode ser inadequada para serviços B2B, consultoria, produtos premium ou outros contextos.
+
 ## 5. Regras determinísticas
 
 O motor deve rejeitar ou alertar quando:
