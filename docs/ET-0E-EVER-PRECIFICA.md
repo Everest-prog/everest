@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: ET-0E-A concluída · ET-0E-B em desenvolvimento  
+Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C próxima  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
@@ -368,7 +368,7 @@ Não enviar custos, preços, margens ou outros valores financeiros sensíveis ao
 - [x] política monetária/decimal;
 - [x] validações;
 - [x] testes unitários iniciais e vetores conhecidos;
-- [ ] executar segunda rodada de casos-limite e invariantes antes de encerrar a etapa.
+- [x] executar segunda rodada de casos-limite e invariantes antes de encerrar a etapa.
 
 Política técnica adotada:
 - dinheiro representado em centavos inteiros;
@@ -381,6 +381,15 @@ Política técnica adotada:
 Implementação: `ferramentas/precifica/engine.mjs`  
 Testes: `tests/ever-precifica-engine.test.mjs`  
 CI: `Ever.Precifica Engine Tests`
+
+A segunda rodada adicionou uma matriz de cenários para validar duas invariantes essenciais:
+
+- o preço técnico é o menor centavo que efetivamente atinge a margem desejada;
+- o ponto de equilíbrio é o menor centavo que não gera prejuízo.
+
+O cálculo foi ajustado para considerar que o arredondamento individual de tributos/taxas pode deslocar o mínimo real alguns centavos para cima ou para baixo em relação à fórmula fechada.
+
+**ET-0E-B encerrada em 02/10/2026 com CI aprovada.**
 
 ### ET-0E-C — Product/Application Architecture
 - definir estado da ferramenta;
