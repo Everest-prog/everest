@@ -396,7 +396,7 @@ O cálculo foi ajustado para considerar que o arredondamento individual de tribu
 - [x] definir persistência local para o MVP;
 - [x] definir integração de acesso/ativação do produto pago;
 - [ ] definir fronteira operacional entre site, ferramenta e automações;
-- [ ] definir política de limpeza/reset de dados;
+- [x] definir política de limpeza/reset de dados;
 - [ ] registrar critérios de aceite da arquitetura.
 
 #### Estratégia confirmada de execução e persistência no MVP
@@ -443,6 +443,30 @@ A interface deverá usar linguagem simples, evitando termos como "licença", "to
 > Seu acesso está liberado. Você já pode usar o Ever.Precifica neste dispositivo.
 
 A proteção de acesso do MVP é uma proteção comercial proporcional ao valor e ao risco do produto, não um sistema antipirataria complexo.
+
+#### Recuperação de acesso no MVP
+
+O usuário poderá recuperar o acesso sem senha e sem atendimento manual obrigatório.
+
+Fluxo previsto:
+
+1. o usuário seleciona "Recuperar meu acesso";
+2. informa o mesmo e-mail utilizado na compra;
+3. o Worker consulta se existe direito de acesso válido;
+4. a interface sempre retorna uma mensagem genérica, independentemente do resultado da consulta;
+5. quando houver direito válido, o sistema envia um novo link de ativação por e-mail;
+6. o novo link invalida links de ativação anteriores ainda não utilizados;
+7. a nova ativação grava novamente a credencial local no navegador.
+
+Mensagem pública recomendada:
+
+> Se encontrarmos uma compra válida para este e-mail, você receberá um novo link de acesso.
+
+Essa resposta evita revelar se determinado e-mail está ou não cadastrado.
+
+Para o MVP não haverá limite rígido de dispositivos. Abuso relevante poderá ser monitorado e tratado em evolução futura, sem introduzir complexidade prematura no produto.
+
+A ação "Apagar meus dados" remove apenas o estado e os dados financeiros armazenados localmente no navegador. A eventual credencial de acesso deve ser tratada separadamente para evitar que uma limpeza de simulação force desnecessariamente uma nova ativação.
 
 ### ET-0E-D — UX Architecture
 - jornada;
