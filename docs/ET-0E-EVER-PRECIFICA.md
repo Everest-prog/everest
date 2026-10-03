@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D próxima  
+Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D em desenvolvimento  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
@@ -523,13 +523,15 @@ A arquitetura do MVP é considerada aceita quando:
 **Próximo checkpoint: ET-0E-D — UX Architecture. A etapa só deve começar após ciência explícita do proprietário de que o trabalho passará a tratar jornada, textos, compreensão, erros e organização da experiência.**
 
 ### ET-0E-D — UX Architecture
-- jornada;
-- ordem das perguntas;
-- progressive disclosure;
-- mensagens de erro;
-- compreensão do resultado.
+- [ ] definir jornada principal;
+- [ ] definir ordem das perguntas;
+- [ ] definir progressive disclosure;
+- [ ] definir mensagens de erro;
+- [ ] definir compreensão e hierarquia dos resultados;
+- [ ] definir comportamento de retomada e edição;
+- [ ] registrar critérios de aceite de UX.
 
-**Checkpoint obrigatório com o proprietário antes de iniciar UX.**
+**Checkpoint com o proprietário concluído em 03/10/2026. ET-0E-D autorizada para início.**
 
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
