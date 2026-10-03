@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C próxima  
+Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D próxima  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
@@ -395,9 +395,9 @@ O cálculo foi ajustado para considerar que o arredondamento individual de tribu
 - [x] definir estratégia inicial de estado da ferramenta;
 - [x] definir persistência local para o MVP;
 - [x] definir integração de acesso/ativação do produto pago;
-- [ ] definir fronteira operacional entre site, ferramenta e automações;
+- [x] definir fronteira operacional entre site, ferramenta e automações;
 - [x] definir política de limpeza/reset de dados;
-- [ ] registrar critérios de aceite da arquitetura.
+- [x] registrar critérios de aceite da arquitetura.
 
 #### Estratégia confirmada de execução e persistência no MVP
 
@@ -467,6 +467,60 @@ Essa resposta evita revelar se determinado e-mail está ou não cadastrado.
 Para o MVP não haverá limite rígido de dispositivos. Abuso relevante poderá ser monitorado e tratado em evolução futura, sem introduzir complexidade prematura no produto.
 
 A ação "Apagar meus dados" remove apenas o estado e os dados financeiros armazenados localmente no navegador. A eventual credencial de acesso deve ser tratada separadamente para evitar que uma limpeza de simulação force desnecessariamente uma nova ativação.
+
+#### Fronteira operacional confirmada
+
+**Site público — `soueverest.com.br`**
+- apresenta o Ever.Precifica;
+- explica proposta de valor e benefícios;
+- conduz o usuário ao checkout;
+- não processa pagamentos nem armazena dados financeiros das simulações.
+
+**Kiwify**
+- processa checkout e pagamento;
+- emite eventos de compra aprovada, reembolso e chargeback;
+- permanece como fonte comercial de origem para o direito de acesso no MVP.
+
+**Cloudflare Worker**
+- valida webhooks;
+- registra e atualiza o direito de acesso;
+- gera e valida links de ativação e recuperação;
+- não recebe custos, preços, margens ou cenários da ferramenta por padrão.
+
+**D1**
+- persiste somente dados necessários à operação comercial e ao direito de acesso;
+- não funciona como histórico financeiro das simulações.
+
+**Ever.Precifica no navegador**
+- executa o motor determinístico;
+- mantém o estado e as simulações localmente;
+- não depende do backend para calcular preços;
+- não envia valores financeiros ao GA4.
+
+**Resend**
+- envia os e-mails transacionais de ativação e recuperação de acesso.
+
+Princípio arquitetural:
+
+> Comercial e acesso ficam no backend. Cálculo e dados financeiros da simulação ficam no navegador.
+
+#### Critérios de aceite da ET-0E-C
+
+A arquitetura do MVP é considerada aceita quando:
+
+- o Ever.Precifica consegue calcular integralmente no cliente;
+- a ferramenta pode preservar estado local sem conta de usuário;
+- o usuário pode apagar os dados financeiros locais sem perder necessariamente o direito de acesso;
+- a compra aprovada pode gerar direito de uso;
+- reembolso e chargeback podem revogar esse direito;
+- o usuário pode recuperar o acesso por e-mail sem senha;
+- consultas de recuperação não revelam se um e-mail possui compra;
+- o backend não precisa receber os dados financeiros da simulação;
+- não há sobreposição desnecessária com funcionalidades do Ever.Finance.
+
+**ET-0E-C encerrada e aprovada em 03/10/2026.**
+
+**Próximo checkpoint: ET-0E-D — UX Architecture. A etapa só deve começar após ciência explícita do proprietário de que o trabalho passará a tratar jornada, textos, compreensão, erros e organização da experiência.**
 
 ### ET-0E-D — UX Architecture
 - jornada;
