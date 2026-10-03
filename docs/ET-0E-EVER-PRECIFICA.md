@@ -523,8 +523,8 @@ A arquitetura do MVP é considerada aceita quando:
 **Próximo checkpoint: ET-0E-D — UX Architecture. A etapa só deve começar após ciência explícita do proprietário de que o trabalho passará a tratar jornada, textos, compreensão, erros e organização da experiência.**
 
 ### ET-0E-D — UX Architecture
-- [ ] definir jornada principal;
-- [ ] definir ordem das perguntas;
+- [x] definir jornada principal;
+- [x] definir ordem das perguntas;
 - [ ] definir progressive disclosure;
 - [ ] definir mensagens de erro;
 - [ ] definir compreensão e hierarquia dos resultados;
@@ -532,6 +532,115 @@ A arquitetura do MVP é considerada aceita quando:
 - [ ] registrar critérios de aceite de UX.
 
 **Checkpoint com o proprietário concluído em 03/10/2026. ET-0E-D autorizada para início.**
+
+#### Jornada principal proposta
+
+O MVP utilizará um fluxo guiado em etapas curtas, com salvamento local automático e possibilidade de voltar sem perder respostas.
+
+Ordem inicial:
+
+1. O que você quer precificar? — Produto ou serviço.
+2. Quanto custa entregar isso? — Compra/produção ou mão de obra/material.
+3. Quais outros custos entram nessa venda? — Embalagem, frete, taxas fixas e outros custos diretos.
+4. Quanto dos seus custos mensais precisa entrar nesse preço? — Rateio guiado de custos fixos.
+5. Quanto é descontado da venda? — Tributos, cartão, marketplace, comissão e outros percentuais.
+6. Quanto você quer que sobre? — Margem desejada e margem mínima em linguagem simples.
+7. Você já vende por algum preço? — Campo opcional para diagnóstico.
+8. Seu resultado — Resposta prática primeiro; detalhes técnicos depois.
+
+Regra de ritmo: apresentar uma pergunta principal por vez quando o conceito for novo; campos intimamente relacionados podem ser agrupados para não tornar a jornada excessivamente lenta.
+
+#### ET-0E-D1 — Etapa 1: Produto ou Serviço
+
+**Objetivo de UX**
+
+Descobrir qual tipo de item o usuário deseja precificar e adaptar a linguagem das próximas etapas sem exigir conhecimento contábil.
+
+A seleção não altera o motor matemático central; altera apenas os nomes, exemplos e a forma de decompor os custos.
+
+**Pergunta principal**
+
+> O que você quer precificar?
+
+**Texto de apoio**
+
+> Escolha a opção que mais combina com o que você vende. Não precisa se preocupar com termos técnicos — vamos adaptar as próximas perguntas para você.
+
+**Opção: Produto**
+
+Descrição sugerida:
+
+> Algo que você vende por unidade, como mercadoria, alimento, peça, artesanato ou item fabricado.
+
+Exemplos de apoio:
+- produto comprado para revenda;
+- produto fabricado;
+- comida ou bebida;
+- artesanato;
+- produto digital vendido por unidade.
+
+**Opção: Serviço**
+
+Descrição sugerida:
+
+> Um trabalho que você realiza para o cliente, normalmente envolvendo tempo, conhecimento ou mão de obra.
+
+Exemplos de apoio:
+- consultoria;
+- manutenção;
+- instalação;
+- atendimento profissional;
+- serviço executado por hora ou por projeto.
+
+**Ajuda para quem estiver em dúvida**
+
+Texto sugerido:
+
+> Se sua venda mistura produto e serviço, escolha o que representa a parte principal do que o cliente está comprando. Os outros custos poderão ser adicionados nas próximas etapas.
+
+O MVP não terá uma terceira categoria "Produto + Serviço". Um item híbrido continuará utilizando um dos dois fluxos, com os demais custos adicionados posteriormente.
+
+**Comportamento da etapa**
+
+- uma única opção pode ficar selecionada por vez;
+- a escolha deve ser salva imediatamente no estado local;
+- ao voltar para esta etapa, a escolha anterior permanece selecionada;
+- o usuário só pode avançar após escolher Produto ou Serviço;
+- trocar a escolha deve atualizar as próximas perguntas sem apagar valores que ainda possam ser reaproveitados com segurança;
+- quando a mudança tornar algum dado incompatível com o novo fluxo, a ferramenta deve pedir confirmação antes de descartar esse dado.
+
+**Resultado interno esperado**
+
+Valor normalizado:
+
+```
+itemType = "product" | "service"
+```
+
+Nenhum dado financeiro é coletado nesta etapa.
+
+**Linguagem**
+
+Evitar:
+- "natureza da operação";
+- "classificação do item";
+- "objeto da precificação".
+
+Preferir:
+- "O que você quer precificar?";
+- "Produto";
+- "Serviço";
+- "Escolha o que mais combina com o que você vende."
+
+**Critérios de aceite da Etapa 1**
+
+- o usuário consegue entender a diferença entre Produto e Serviço sem conhecimento técnico;
+- a decisão cabe em uma única tela/etapa;
+- a escolha adapta o vocabulário das etapas seguintes;
+- não há exigência de preencher valores financeiros;
+- um negócio híbrido consegue continuar sem precisar de uma terceira categoria;
+- a escolha persiste ao voltar ou recarregar a ferramenta;
+- nenhuma ação desta etapa envia dados financeiros ao backend ou ao GA4.
 
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
