@@ -642,6 +642,169 @@ Preferir:
 - a escolha persiste ao voltar ou recarregar a ferramenta;
 - nenhuma ação desta etapa envia dados financeiros ao backend ou ao GA4.
 
+#### ET-0E-D2 — Etapa 2: Quanto custa entregar isso?
+
+**Objetivo de UX**
+
+Capturar o custo direto principal do item sem exigir que o usuário conheça expressões como "custo direto unitário" ou "custo de mão de obra apropriado".
+
+A etapa muda de linguagem conforme `itemType`.
+
+---
+
+##### Fluxo Produto
+
+**Pergunta principal**
+
+> Quanto custa para você ter 1 unidade pronta para vender?
+
+**Texto de apoio**
+
+> Pense no valor que você paga para comprar ou produzir uma unidade. Embalagem, frete, taxas e outros gastos entram nas próximas etapas.
+
+**Campo principal**
+
+> Custo de 1 unidade
+
+Entrada monetária em reais.
+
+**Ajuda contextual**
+
+Para revenda:
+
+> Use o valor que você paga por uma unidade do produto.
+
+Para fabricação/produção:
+
+> Some apenas os materiais e custos diretamente usados para produzir uma unidade. Se preferir, você poderá detalhar outros gastos depois.
+
+**Modo opcional: "Quero calcular esse valor"**
+
+Para usuários que não conhecem o custo unitário, a ferramenta poderá abrir um cálculo auxiliar simples:
+
+- custo total do lote/produção;
+- quantidade de unidades produzidas/compradas.
+
+Cálculo:
+
+```
+custo_unitario = custo_total_do_lote / quantidade_de_unidades
+```
+
+A ferramenta mostra o resultado em linguagem simples:
+
+> Cada unidade custa aproximadamente R$ X para você.
+
+O resultado calculado alimenta o mesmo campo principal.
+
+---
+
+##### Fluxo Serviço
+
+**Pergunta principal**
+
+> Quanto custa o trabalho usado para realizar este serviço?
+
+**Texto de apoio**
+
+> Considere somente o custo diretamente ligado à execução deste serviço. Materiais, deslocamento e outros gastos poderão ser adicionados depois.
+
+O usuário terá dois caminhos.
+
+**Caminho simples — Já sei o custo**
+
+Campo:
+
+> Custo de mão de obra deste serviço
+
+Exemplo de ajuda:
+
+> Se você já sabe quanto custa a mão de obra necessária para realizar este serviço, informe o valor aqui.
+
+**Caminho guiado — Quero calcular**
+
+Perguntas:
+
+1. Quanto custa 1 hora desse trabalho?
+2. Quanto tempo este serviço leva?
+
+O tempo deve aceitar horas e minutos em linguagem natural de formulário, mas ser normalizado internamente para minutos.
+
+Cálculo:
+
+```
+custo_mao_de_obra =
+  custo_hora × (minutos_do_servico / 60)
+```
+
+Exemplo de resultado:
+
+> Este serviço usa aproximadamente R$ X de mão de obra.
+
+A ferramenta não deve tentar definir automaticamente quanto "vale" a hora do usuário nesta etapa. Ela calcula a partir do valor informado.
+
+**Ajuda para quem não sabe o custo da própria hora**
+
+Texto provisório:
+
+> Se você ainda não sabe quanto custa uma hora do seu trabalho, tudo bem. Você pode informar uma estimativa agora e ajustar depois.
+
+No MVP, o Ever.Precifica não abrirá um módulo completo de formação do custo-hora pessoal/empresarial dentro desta etapa, para não misturar precificação com cálculo de pró-labore, folha ou estrutura financeira.
+
+---
+
+##### Regras comuns da Etapa 2
+
+- valores monetários são armazenados em centavos inteiros;
+- o campo principal não pode receber valor negativo;
+- zero pode ser aceito apenas quando fizer sentido e deve gerar confirmação/aviso, pois um custo direto igual a zero pode indicar preenchimento incompleto;
+- o usuário pode voltar e alterar o valor sem perder as demais etapas compatíveis;
+- cálculos auxiliares servem apenas para chegar ao custo direto normalizado;
+- a ferramenta deve mostrar o valor calculado antes de o usuário avançar;
+- nenhum valor desta etapa é enviado ao GA4;
+- nenhum valor financeiro precisa ser enviado ao backend.
+
+**Resultado interno esperado**
+
+Produto:
+
+```
+directCostCents
+```
+
+Serviço:
+
+```
+directCostCents
+```
+
+Mesmo com experiências diferentes, ambos convergem para o mesmo campo normalizado do motor.
+
+**Linguagem a evitar**
+
+- custo direto unitário;
+- apropriação de mão de obra;
+- custo de transformação;
+- custo primário.
+
+**Linguagem preferida**
+
+- "Quanto custa para você ter 1 unidade pronta para vender?";
+- "Quanto custa o trabalho usado para realizar este serviço?";
+- "Custo de 1 unidade";
+- "Custo de mão de obra deste serviço";
+- "Quero calcular esse valor".
+
+**Critérios de aceite da Etapa 2**
+
+- um vendedor de produto consegue informar o custo de uma unidade sem entender contabilidade;
+- um produtor consegue chegar ao custo unitário por lote e quantidade;
+- um prestador de serviço pode informar o custo direto da mão de obra ou calculá-lo por hora × tempo;
+- o fluxo não mistura custo direto com custos fixos, taxas ou tributos;
+- Produto e Serviço convergem para `directCostCents`;
+- o usuário entende o valor obtido antes de avançar;
+- os dados permanecem locais ao navegador.
+
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
 - componentes;
