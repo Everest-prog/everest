@@ -1404,6 +1404,151 @@ Nenhum desses valores deve ser enviado ao GA4.
 - os valores convergem para `ratesBps`;
 - os dados financeiros permanecem locais ao navegador.
 
+**Etapa 5 aprovada para o MVP em 05/10/2026.**
+
+**Oportunidade futura — Split Payment no Brasil**
+
+Registrar no roadmap pós-MVP a avaliação de uma evolução do Ever.Precifica para cenários de Split Payment vinculados à reforma tributária brasileira.
+
+Essa evolução só deverá ser desenhada após validar a regulamentação, o cronograma efetivo e os impactos operacionais vigentes à época. Possíveis frentes futuras:
+
+- separar visualmente valor da venda, tributos retidos e valor líquido disponível;
+- simular o efeito do recolhimento segregado no caixa;
+- adaptar a explicação de "quanto sobra da venda";
+- revisar o tratamento de tributos no motor sem transformar o Ever.Precifica em sistema fiscal;
+- avaliar uma edição ou módulo comercial específico, caso exista demanda relevante.
+
+Essa funcionalidade fica explicitamente fora do MVP atual.
+
+#### ET-0E-D6 — Etapa 6: Quanto você quer que sobre?
+
+**Objetivo de UX**
+
+Coletar a margem desejada e a margem mínima sem exigir que o usuário compreenda previamente os conceitos de margem e markup.
+
+A etapa começa pela consequência prática e só depois apresenta o termo técnico.
+
+**Pergunta principal**
+
+> De cada R$ 100 vendidos, quanto você gostaria que sobrasse como lucro?
+
+**Texto de apoio**
+
+> Pense no valor que você gostaria de manter como lucro depois dos custos e taxas considerados pelo Ever.Precifica.
+
+**Campo principal**
+
+> Quero que sobrem R$ ___ de cada R$ 100 vendidos
+
+Exemplos de interpretação:
+
+```
+R$ 20 de cada R$ 100 → margem desejada de 20%
+R$ 25 de cada R$ 100 → margem desejada de 25%
+R$ 32,50 de cada R$ 100 → margem desejada de 32,5%
+```
+
+Depois do preenchimento, a ferramenta traduz:
+
+> Isso corresponde a uma margem desejada de X%.
+
+##### Margem mínima em linguagem simples
+
+Segunda pergunta:
+
+> E qual é o mínimo que você aceita que sobre?
+
+Texto de apoio:
+
+> Esse será seu limite de segurança para descontos e negociações.
+
+Campo:
+
+> No mínimo, quero que sobrem R$ ___ de cada R$ 100 vendidos
+
+A margem mínima deve ser menor ou igual à margem desejada.
+
+##### Ajuda contextual
+
+Para a meta:
+
+> Esta é sua meta de lucro sobre a venda. O Ever.Precifica vai calcular qual preço é necessário para atingir esse valor com os custos e taxas que você informou.
+
+Para o mínimo:
+
+> Este não é o preço ideal. É apenas o limite que você considera aceitável para uma promoção ou negociação.
+
+Explicação opcional:
+
+> Em finanças, chamamos esse percentual de margem. Você não precisa fazer a conta: o Ever.Precifica faz isso para você.
+
+Markup não aparece como entrada nesta etapa.
+
+##### Validações
+
+Valor negativo:
+> O valor que deve sobrar não pode ser negativo.
+
+Valor igual ou acima de R$ 100:
+> Para calcular um preço possível, precisa sobrar menos de R$ 100 a cada R$ 100 vendidos.
+
+Margem mínima acima da desejada:
+> O seu mínimo não pode ser maior que a sua meta. Reduza o mínimo ou aumente quanto você gostaria que sobrasse.
+
+Combinação impossível com os percentuais já informados:
+> Com os percentuais da etapa anterior e o valor que você quer que sobre, não existe espaço suficiente no preço para cobrir tudo. Revise sua meta ou as taxas informadas.
+
+Quando ajudar na compreensão, a ferramenta pode complementar:
+
+> Dos R$ 100 vendidos, X já são consumidos por impostos e taxas. Você definiu que Y devem sobrar como lucro.
+
+##### Valores padrão
+
+O MVP não deve escolher uma margem "ideal" automaticamente.
+
+Nenhum percentual deve vir pré-preenchido como recomendação financeira. Exemplos didáticos podem existir, desde que sejam claramente apresentados como exemplos.
+
+##### Resultado interno esperado
+
+```
+desiredMarginBps
+minimumMarginBps
+```
+
+Conversão:
+
+```
+R$ 25 de cada R$ 100 = 25,00% = 2500 bps
+```
+
+Os valores permanecem locais ao navegador e não são enviados ao GA4.
+
+##### Linguagem a evitar
+
+- "defina seu markup";
+- "margem de contribuição desejada", como pergunta principal;
+- "rentabilidade alvo";
+- "percentual ótimo";
+- recomendações universais de margem.
+
+**Linguagem preferida**
+
+- "De cada R$ 100 vendidos, quanto você gostaria que sobrasse como lucro?";
+- "E qual é o mínimo que você aceita que sobre?";
+- "Esta é sua meta.";
+- "Este é seu limite de segurança.";
+- "Em finanças, chamamos esse percentual de margem."
+
+##### Critérios de aceite da Etapa 6
+
+- o usuário consegue informar a meta sem saber previamente o que é margem;
+- margem desejada e margem mínima ficam claramente diferentes;
+- o sistema não sugere uma margem "correta";
+- markup não é usado como entrada;
+- combinações matematicamente impossíveis são explicadas em linguagem simples;
+- os valores convergem para `desiredMarginBps` e `minimumMarginBps`;
+- os dados permanecem locais ao navegador.
+
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
 - componentes;
