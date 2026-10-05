@@ -1184,6 +1184,226 @@ O motor recebe apenas o valor alocado normalizado.
 - todos os caminhos convergem para `allocatedFixedCostCents`;
 - os dados permanecem locais ao navegador.
 
+**Etapa 4 aprovada para o MVP em 05/10/2026.**
+
+#### ET-0E-D5 — Etapa 5: Quanto é descontado da venda?
+
+**Objetivo de UX**
+
+Capturar os percentuais que reduzem o valor que realmente sobra da venda, sem exigir que o usuário domine conceitos tributários, financeiros ou de marketplace.
+
+A etapa deve deixar claro que aqui entram **percentuais**, e não valores fixos em reais.
+
+**Pergunta principal**
+
+> Quando você vende, alguma parte do valor fica com impostos, cartão, marketplace ou comissão?
+
+**Texto de apoio**
+
+> Informe apenas os percentuais que realmente se aplicam à sua venda. Se algum deles não existir no seu caso, deixe em 0%.
+
+---
+
+##### Campos principais
+
+**Tributos sobre a venda**
+
+Pergunta:
+
+> Quanto da venda vai para impostos?
+
+Ajuda obrigatória:
+
+> Informe a alíquota que realmente incide sobre esta venda. Se tiver dúvida, consulte seu contador.
+
+O Ever.Precifica não deve tentar sugerir ou adivinhar a alíquota.
+
+**Taxa do meio de pagamento**
+
+Pergunta:
+
+> Quanto o cartão, gateway ou meio de pagamento desconta em percentual?
+
+Exemplos de apoio:
+- cartão;
+- link de pagamento;
+- gateway;
+- adquirente.
+
+**Comissão ou marketplace**
+
+Pergunta:
+
+> Alguma plataforma ou vendedor fica com uma porcentagem da venda?
+
+Exemplos de apoio:
+- marketplace;
+- aplicativo de entrega;
+- representante;
+- vendedor com comissão;
+- plataforma intermediadora.
+
+**Outro percentual**
+
+Pergunta:
+
+> Existe mais algum percentual descontado desta venda?
+
+O usuário poderá adicionar mais de um item personalizado, cada um com:
+- nome curto;
+- percentual.
+
+---
+
+##### Progressive disclosure
+
+A etapa começa com as categorias mais comuns e permite adicionar apenas o que existe no negócio.
+
+Exemplo de ações:
+
+> + Adicionar taxa do cartão  
+> + Adicionar comissão/marketplace  
+> + Adicionar outro percentual
+
+Tributos podem permanecer como campo visível por sua relevância, sempre aceitando 0%.
+
+Não utilizar seleção obrigatória de regime tributário, CNAE ou tipo societário.
+
+---
+
+##### Ajuda para percentuais
+
+A ferramenta deve aceitar entrada em percentual de forma natural.
+
+Exemplo:
+
+```
+6
+```
+
+deve ser entendido como:
+
+```
+6%
+```
+
+O usuário não deve precisar digitar `0,06`.
+
+Precisão do MVP:
+- até duas casas decimais de ponto percentual;
+- internamente, conversão para basis points.
+
+Exemplos:
+
+```
+6%    → 600 bps
+3,2%  → 320 bps
+12,75% → 1275 bps
+```
+
+---
+
+##### Resumo antes de avançar
+
+A ferramenta deve mostrar uma frase simples:
+
+> No total, X% do valor da venda é consumido por impostos, taxas e comissões.
+
+E, opcionalmente, a abertura por item:
+
+```
+Impostos .......... 6,0%
+Cartão ............. 3,2%
+Marketplace ....... 12,0%
+Outros ............. 1,0%
+Total ............. 22,2%
+```
+
+Esse resumo ajuda o usuário a perceber erros de digitação antes de avançar.
+
+---
+
+##### Alertas e validações
+
+Percentual negativo:
+> Confira este valor. O percentual não pode ser negativo.
+
+Percentual individual igual ou acima de 100%:
+> Esse percentual parece muito alto. Confira antes de continuar.
+
+Soma dos percentuais igual ou acima de 100%:
+> Com esses percentuais, todo o valor da venda seria consumido antes mesmo dos seus custos e do lucro. Revise os números informados.
+
+Percentuais altos, mas matematicamente possíveis:
+- não bloquear automaticamente;
+- destacar para revisão.
+
+Quando todos os campos forem 0%:
+> Nenhum percentual foi informado. Você pode continuar se isso estiver correto para sua venda.
+
+---
+
+##### Evitar duplicidade com a Etapa 3
+
+A ferramenta deverá lembrar:
+
+> Se uma taxa foi informada como valor fixo em reais na etapa anterior, não repita aqui. Nesta etapa entram apenas cobranças percentuais.
+
+Exemplo simples:
+
+> R$ 2,50 por transação → etapa anterior.  
+> 3,2% sobre a venda → aqui.
+
+---
+
+##### Resultado interno esperado
+
+Campos normalizados:
+
+```
+ratesBps = {
+  taxes,
+  payment,
+  commission,
+  other
+}
+```
+
+Caso existam vários "outros percentuais", a interface poderá manter os itens detalhados localmente e somá-los em `other` antes de enviar ao motor.
+
+Nenhum desses valores deve ser enviado ao GA4.
+
+---
+
+##### Linguagem a evitar
+
+- alíquota efetiva agregada;
+- despesas variáveis percentuais;
+- deduções incidentes;
+- carga tributária calculada pela ferramenta;
+- MDR, como termo principal sem explicação.
+
+**Linguagem preferida**
+
+- "Quanto da venda vai para impostos?";
+- "Quanto o cartão desconta?";
+- "Alguma plataforma fica com uma porcentagem?";
+- "No total, X% do valor da venda é consumido por impostos, taxas e comissões."
+
+---
+
+##### Critérios de aceite da Etapa 5
+
+- o usuário entende que esta etapa trata apenas de percentuais;
+- tributos, cartão, comissão/marketplace e outros percentuais ficam separados;
+- o sistema não calcula nem recomenda tributos;
+- a entrada aceita percentuais em formato humano, como 3,2%;
+- o usuário vê o total antes de avançar;
+- existe proteção textual contra duplicar taxas fixas da etapa anterior;
+- todos os campos podem ser 0%;
+- os valores convergem para `ratesBps`;
+- os dados financeiros permanecem locais ao navegador.
+
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
 - componentes;
