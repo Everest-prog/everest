@@ -2210,6 +2210,57 @@ O Ever.Precifica pode ter uma experiência visual mais sofisticada que o site in
 
 A direção Ever.Glass poderá futuramente servir como base para modernização das demais Ever.Tools, sem exigir que o site institucional inteiro seja redesenhado durante este MVP.
 
+#### Herança visual Ever.Est — montanha, escalada e altitude
+
+A ET-0E-E deve preservar explicitamente o território visual já existente da Ever.Est.
+
+Referências confirmadas no acervo da marca incluem:
+- montanhas e cumes em luz de amanhecer/entardecer;
+- alpinista no topo;
+- mochila, crampons, piolet, corda e equipamentos de ascensão;
+- acampamento/base;
+- rotas e linhas de progressão;
+- contraste entre azul profundo e luz laranja;
+- uso recorrente da ideia de "topo" como evolução e clareza.
+
+A arquitetura de marca ET-0B já define o universo narrativo como baseado em **topo, escalada, preparação, técnica, clareza e tecnologia**, e orienta que a metáfora conduza a narrativa sem dominar cada frase.
+
+##### Aplicação no Ever.Precifica
+
+A linguagem visual do produto combinará **Ever.Glass + altitude/alpinismo**.
+
+Uso recomendado:
+- fotografias de montanhas como atmosfera de fundo, com contraste controlado;
+- luz laranja de nascer/pôr do sol como origem natural do accent orange;
+- linhas topográficas, rotas de ascensão ou contornos de montanha em baixa opacidade;
+- progressão das 8 etapas tratada visualmente como avanço de rota, sem transformar o fluxo em jogo;
+- ícones ou microelementos inspirados em bússola, rota, cume, checkpoint e equipamentos apenas quando fizerem sentido funcional;
+- resultados podem usar a ideia de "chegar ao ponto seguro/à meta" de forma visual, sem prometer sucesso financeiro.
+
+Evitar:
+- repetir fotografias de alpinistas em todas as telas;
+- usar montanhismo como metáfora em toda frase;
+- transformar o usuário em "alpinista" de forma forçada;
+- usar imagens complexas imediatamente atrás de campos sem camada de contraste;
+- elementos decorativos que reduzam a percepção de ferramenta financeira séria.
+
+##### Composição cromática
+
+A identidade deve manter:
+- azul-marinho profundo como campo principal;
+- azul petróleo/azul frio nas camadas intermediárias;
+- branco e cinza frio para conteúdo;
+- laranja Ever.Est como luz, ação e progressão;
+- laranja de fotografia natural pode dialogar com o accent da interface.
+
+No dark-first, a fotografia de montanha pode funcionar como ambiente distante, enquanto a interface Ever.Glass permanece em primeiro plano.
+
+##### Princípio de marca
+
+> A montanha representa contexto e direção; o vidro representa tecnologia e clareza; os números continuam sendo o conteúdo principal.
+
+Essa combinação deve fazer o Ever.Precifica parecer uma evolução natural da Ever.Est — não uma ferramenta genérica com um tema visual aplicado por cima.
+
 ### ET-0E-F — Build
 - implementação da ferramenta;
 - integração do motor com a interface;
