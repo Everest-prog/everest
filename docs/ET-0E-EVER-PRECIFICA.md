@@ -1731,6 +1731,278 @@ Nenhum preço informado é enviado ao GA4 ou ao backend.
 - o valor converge para `currentPriceCents`;
 - os dados permanecem locais ao navegador.
 
+**Etapa 7 aprovada para o MVP em 05/10/2026.**
+
+#### ET-0E-D8 — Etapa 8: Seu resultado
+
+**Objetivo de UX**
+
+Entregar uma resposta útil em poucos segundos para três perguntas:
+
+1. por quanto posso vender para atingir minha meta;
+2. quanto sobra nesse preço;
+3. até onde consigo negociar ou dar desconto sem ultrapassar o limite que defini.
+
+O resultado deve priorizar decisão prática. Termos técnicos e decomposição detalhada ficam em segundo plano.
+
+---
+
+##### Bloco principal — sugestão de preço
+
+Título:
+
+> Sua sugestão de preço
+
+Valor principal:
+
+> R$ X
+
+Texto de apoio:
+
+> Este valor foi arredondado para uma referência comercial e mantém a meta que você definiu.
+
+A sugestão comercial será o destaque principal da experiência.
+
+Logo abaixo:
+
+> Menor preço calculado para atingir sua meta: R$ Y
+
+O termo interno `technicalPrice` não precisa aparecer para o usuário. A linguagem pública será "menor preço para atingir sua meta".
+
+Quando houver referência psicológica diferente e aplicável:
+
+> Outra opção de preço: R$ Z  
+> Mantém sua meta e usa uma terminação comercial como R$ 79,90.
+
+A ferramenta não deve afirmar que a terminação psicológica venderá mais.
+
+---
+
+##### Bloco — o que acontece nesse preço
+
+Mostrar primeiro valores concretos:
+
+> Vendendo por R$ X:
+> - sobra aproximadamente R$ Y de lucro por venda;
+> - sua margem fica em Z%;
+> - os custos e percentuais informados ficam cobertos.
+
+Quando a margem efetiva ficar ligeiramente acima da meta por causa do arredondamento comercial, explicar de forma simples:
+
+> O valor ficou um pouco acima da sua meta porque arredondamos o preço para cima, nunca para baixo.
+
+---
+
+##### Bloco — entenda para onde vai o dinheiro
+
+Usar uma decomposição simples do preço escolhido.
+
+Exemplo conceitual:
+
+```
+De cada R$ 100 desta venda:
+R$ A ajudam a pagar produto/serviço e outros custos
+R$ B vão para impostos, taxas e comissões
+R$ C sobram como lucro
+```
+
+Quando houver custos mensais alocados, eles devem aparecer dentro do grupo de custos, com possibilidade de detalhamento.
+
+A soma visual e textual precisa reconciliar com o preço avaliado, respeitando o arredondamento do motor.
+
+---
+
+##### Bloco condicional — seu preço atual
+
+Só aparece quando `currentPriceCents` tiver sido informado.
+
+Título:
+
+> Como seu preço atual se compara?
+
+Mostrar:
+- preço atual;
+- quanto sobra em reais;
+- margem atual;
+- diagnóstico em linguagem simples;
+- diferença para o preço necessário à meta.
+
+Exemplos:
+
+> Com R$ 69,90, a venda dá lucro, mas ainda fica abaixo da meta que você definiu.
+
+ou:
+
+> Seu preço atual já alcança a meta que você definiu.
+
+A ferramenta nunca deve apresentar essa comparação como ordem para alterar o preço.
+
+---
+
+##### Bloco — quanto posso dar de desconto?
+
+A linguagem principal deve evitar "desconto máximo seguro" sem explicação.
+
+Mostrar duas referências:
+
+**Mantendo sua meta**
+> Você pode dar até X% de desconto e ainda manter a margem que deseja.
+
+**Sem ficar abaixo do seu mínimo**
+> Até Y% de desconto, você ainda permanece no limite mínimo que definiu.
+
+Quando o preço de referência já estiver abaixo de alguma dessas faixas, mostrar 0% e explicar o motivo em linguagem simples.
+
+---
+
+##### Simulador de desconto
+
+Pergunta:
+
+> Quer testar um desconto?
+
+Campo:
+
+> Desconto: ___%
+
+Ao digitar, atualizar imediatamente:
+
+- preço depois do desconto;
+- lucro por venda;
+- quanto sobra de cada R$ 100;
+- situação em relação à meta e ao mínimo.
+
+Estados de linguagem:
+
+**Meta preservada**
+> Mesmo com esse desconto, sua meta continua sendo atingida.
+
+**Entre meta e mínimo**
+> Esse desconto reduz seu lucro, mas ainda mantém o mínimo que você definiu.
+
+**Abaixo do mínimo**
+> Com esse desconto, sobra menos do que o mínimo que você definiu.
+
+**Prejuízo**
+> Com esse desconto, a venda não cobre todos os custos e taxas informados.
+
+O simulador informa consequência; não recomenda conceder o desconto.
+
+---
+
+##### Avisos contextuais
+
+Se custos mensais foram ignorados na Etapa 4:
+
+> Você optou por não incluir os custos mensais do negócio. Por isso, o lucro mostrado pode parecer maior do que o resultado real da operação.
+
+Se todos os percentuais da Etapa 5 forem zero:
+
+> Nenhum imposto, taxa percentual ou comissão foi considerado neste cálculo.
+
+Esses avisos não devem competir com o preço principal, mas precisam permanecer acessíveis.
+
+---
+
+##### Detalhes do cálculo — progressive disclosure
+
+A área "Ver detalhes do cálculo" fica recolhida por padrão.
+
+Pode mostrar:
+
+- custo principal;
+- outros gastos;
+- parcela dos custos mensais;
+- tarifa fixa;
+- tributos;
+- taxa de pagamento;
+- comissão/marketplace;
+- outros percentuais;
+- menor preço para não ter prejuízo;
+- margem;
+- lucro por venda;
+- markup.
+
+Para markup, usar explicação:
+
+> Markup mostra quantas vezes o preço representa o custo-base. Ele aparece aqui apenas como informação complementar.
+
+Para ponto de equilíbrio, usar primeiro linguagem comum:
+
+> Menor preço para não ter prejuízo
+
+e, secundariamente:
+
+> Também chamado de ponto de equilíbrio desta venda.
+
+As fórmulas não precisam aparecer na visualização principal. A auditabilidade será garantida pelo detalhamento dos valores e pelas regras registradas no motor.
+
+---
+
+##### Ações depois do resultado
+
+A experiência deve permitir:
+
+**Alterar informações**
+> Volta às etapas anteriores sem perder os dados.
+
+**Testar outro preço**
+> Permite avaliar outro preço sem alterar automaticamente os dados-base.
+
+**Começar nova simulação**
+> Limpa os dados financeiros da simulação após confirmação.
+
+O autosave local continua ativo. Não é necessário um botão "Salvar" para o MVP.
+
+---
+
+##### Ordem de leitura recomendada
+
+1. sugestão de preço;
+2. lucro e margem resultantes;
+3. composição simples da venda;
+4. diagnóstico do preço atual, quando houver;
+5. limites e simulador de desconto;
+6. avisos contextuais;
+7. detalhes técnicos recolhidos;
+8. ações para editar ou iniciar nova simulação.
+
+Essa ordem é de informação/UX, não uma especificação de layout visual.
+
+---
+
+##### Eventos de produto
+
+Podem ser enviados sem valores financeiros:
+
+- `tool_result_view`;
+- `precifica_price_simulated`;
+- `precifica_discount_simulated`.
+
+Não enviar:
+- preço;
+- custo;
+- lucro;
+- margem;
+- percentual de desconto;
+- decomposição financeira.
+
+---
+
+##### Critérios de aceite da Etapa 8
+
+- o usuário identifica rapidamente uma sugestão prática de preço;
+- o menor preço para atingir a meta fica distinguível da sugestão comercial;
+- lucro e margem são traduzidos em linguagem compreensível;
+- a composição do preço explica para onde o dinheiro vai;
+- o diagnóstico do preço atual aparece somente quando aplicável;
+- os dois limites de desconto são claramente diferentes;
+- o simulador explica a consequência do desconto sem recomendar a decisão;
+- avisos sobre dados omitidos permanecem visíveis;
+- markup e demais termos técnicos ficam secundários;
+- o usuário pode voltar, testar outro preço ou iniciar nova simulação;
+- nenhum valor financeiro é enviado ao GA4 ou ao backend.
+
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
 - componentes;
