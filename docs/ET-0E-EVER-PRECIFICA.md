@@ -2117,13 +2117,98 @@ A ET-0E-D é aceita quando:
 **Próximo checkpoint obrigatório: ET-0E-E — Visual/UI Design. Não iniciar decisões visuais antes de nova autorização explícita do proprietário.**
 
 ### ET-0E-E — Visual/UI Design
-- identidade visual;
-- componentes;
-- hierarquia;
-- responsividade;
-- estados vazios/erro/sucesso.
+- [ ] identidade visual;
+- [ ] componentes;
+- [ ] hierarquia;
+- [ ] responsividade;
+- [ ] estados vazios/erro/sucesso;
+- [ ] motion e transições;
+- [ ] acessibilidade visual;
+- [ ] especificação dos tokens de design.
 
-**Checkpoint obrigatório com o proprietário antes de iniciar Design.**
+**Checkpoint com o proprietário concluído em 05/10/2026. ET-0E-E autorizada para início.**
+
+#### Direção visual aprovada — Ever.Glass
+
+Referência: interfaces fluidas e translúcidas inspiradas na linguagem contemporânea de "Liquid Glass", reinterpretadas com identidade própria da Ever.Est.
+
+O objetivo não é copiar a interface da Apple, mas utilizar princípios compatíveis:
+- profundidade por camadas;
+- superfícies translúcidas;
+- sensação de material vítreo;
+- transições fluidas;
+- controles que parecem flutuar sobre o conteúdo;
+- hierarquia clara;
+- adaptação responsiva;
+- uso contido do efeito para não prejudicar leitura ou foco.
+
+Nome interno da direção visual: **Ever.Glass**.
+
+##### Princípios Ever.Glass
+
+1. **Conteúdo primeiro**
+   O vidro serve para organizar e enfatizar controles, navegação e resultados; não deve competir com os números.
+
+2. **Vidro funcional, não decorativo**
+   Efeitos translúcidos devem concentrar-se em:
+   - navegação;
+   - container principal da etapa;
+   - controles selecionáveis;
+   - resumo persistente;
+   - cards de resultado;
+   - modais/confirmacões.
+
+3. **Superfícies em camadas**
+   A interface deve combinar fundo atmosférico, camada de conteúdo e superfícies de vidro com profundidade perceptível.
+
+4. **Identidade Ever.Est preservada**
+   Paleta-base atual:
+   - Everest Dark: `#0f172a`;
+   - Everest Blue: `#1e293b`;
+   - Everest Orange: `#f97316`;
+   - Everest Light: `#f8fafc`.
+
+   O laranja permanece como cor de ação/destaque, e não como preenchimento dominante.
+
+5. **Legibilidade acima do efeito**
+   Blur, transparência, highlights e sombras nunca podem reduzir a leitura de campos, valores ou mensagens.
+
+6. **Movimento com propósito**
+   Transições servem para comunicar mudança de estado, avanço de etapa, expansão de campos e atualização do resultado.
+
+7. **Acessibilidade desde o design**
+   A experiência deve possuir fallback para redução de transparência e redução de movimento, além de contraste suficiente em todos os estados.
+
+##### Material visual inicial
+
+Direção técnica a validar em protótipo:
+
+- fundo principal em azul-marinho profundo com gradientes atmosféricos discretos;
+- superfícies de vidro com transparência moderada e `backdrop-filter`;
+- bordas claras muito sutis;
+- highlight interno para sugerir refração;
+- sombras macias e difusas;
+- cantos amplamente arredondados;
+- estados ativos com luz/acentuação laranja da Ever.Est;
+- tipografia limpa, com números financeiros de alta legibilidade;
+- ausência de texturas excessivas ou reflexos fortes atrás de formulários.
+
+Os valores finais de blur, opacidade, raio, sombra e contraste serão definidos como tokens após a validação visual.
+
+##### Restrições
+
+- não aplicar efeito de vidro em todos os elementos;
+- não usar transparência sobre fundos visualmente caóticos;
+- não depender exclusivamente de cor/transparência para comunicar estado;
+- não reproduzir componentes proprietários da Apple de forma literal;
+- não sacrificar desempenho em dispositivos móveis de entrada;
+- manter fallback sem `backdrop-filter`.
+
+##### Relação com o site atual
+
+O Ever.Precifica pode ter uma experiência visual mais sofisticada que o site institucional atual, mas deve continuar reconhecível como Ever.Est por meio da paleta, marca, tom e linguagem.
+
+A direção Ever.Glass poderá futuramente servir como base para modernização das demais Ever.Tools, sem exigir que o site institucional inteiro seja redesenhado durante este MVP.
 
 ### ET-0E-F — Build
 - implementação da ferramenta;
