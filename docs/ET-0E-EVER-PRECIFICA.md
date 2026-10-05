@@ -809,6 +809,187 @@ Mesmo com experiências diferentes, ambos convergem para o mesmo campo normaliza
 
 **Etapa 2 aprovada para o MVP em 05/10/2026, sem assistente de formação de custo-hora.**
 
+#### ET-0E-D3 — Etapa 3: Quais outros custos entram nessa venda?
+
+**Objetivo de UX**
+
+Capturar gastos adicionais que acontecem por venda, unidade ou execução do serviço sem misturá-los com custos mensais, tributos percentuais ou margem.
+
+A etapa deve ajudar o usuário a lembrar custos que normalmente ficam "escondidos", mas sem obrigá-lo a preencher categorias que não existem em seu negócio.
+
+**Pergunta principal**
+
+> Além do custo principal, você tem algum outro gasto para fazer esta venda?
+
+**Texto de apoio**
+
+> Pense em valores que aparecem porque esta venda aconteceu — como embalagem, entrega, deslocamento, material extra ou uma tarifa fixa. Se não tiver nenhum, você pode continuar.
+
+A etapa é opcional: todos os valores podem permanecer em zero.
+
+---
+
+##### Fluxo Produto
+
+Sugestões iniciais de campos:
+
+- **Embalagem por unidade**
+  > Caixa, saco, etiqueta, proteção ou outro material usado para entregar uma unidade.
+
+- **Frete ou entrega que você paga**
+  > Informe apenas a parte que fica por sua conta nesta venda.
+
+- **Outros gastos por unidade**
+  > Qualquer outro valor que só existe porque aquela unidade foi vendida.
+
+- **Tarifa fixa por venda**
+  > Um valor fixo cobrado por pedido ou transação. Percentuais de cartão, marketplace ou comissão entram depois.
+
+Exemplos que podem aparecer como ajuda contextual:
+- embalagem;
+- etiqueta;
+- sacola;
+- material de proteção;
+- frete subsidiado;
+- montagem por unidade;
+- personalização cobrada de forma fixa;
+- tarifa fixa da plataforma.
+
+---
+
+##### Fluxo Serviço
+
+Sugestões iniciais de campos:
+
+- **Materiais usados neste serviço**
+  > Peças, insumos, produtos ou materiais consumidos para realizar o serviço.
+
+- **Deslocamento**
+  > Combustível, transporte, pedágio, estacionamento ou outro gasto específico para atender este cliente.
+
+- **Outros gastos deste serviço**
+  > Qualquer outro valor que aparece porque este serviço foi realizado.
+
+- **Tarifa fixa por venda**
+  > Um valor fixo cobrado por pedido ou transação. Percentuais de cartão ou comissão entram depois.
+
+Exemplos que podem aparecer como ajuda contextual:
+- material consumível;
+- peça aplicada;
+- estacionamento;
+- pedágio;
+- deslocamento terceirizado;
+- impressão;
+- serviço terceirizado diretamente relacionado à entrega.
+
+---
+
+##### Progressive disclosure
+
+Para evitar uma tela com muitos campos, o usuário verá primeiro opções simples como:
+
+> + Adicionar embalagem  
+> + Adicionar entrega/deslocamento  
+> + Adicionar outro gasto  
+> + Adicionar tarifa fixa
+
+Somente os campos escolhidos são expandidos.
+
+A ferramenta também poderá oferecer:
+
+> Não tenho outros gastos nesta venda
+
+Essa escolha apenas mantém os valores adicionais em zero; não impede o usuário de voltar e adicioná-los depois.
+
+**Campo "Outro gasto"**
+
+O usuário poderá adicionar mais de um gasto personalizado.
+
+Cada item terá:
+
+- nome opcional ou curto, como "laço", "estacionamento" ou "terceirização";
+- valor em reais.
+
+Internamente, todos os itens adicionais variáveis em valor fixo por venda/unidade serão somados para formar `additionalCostCents`.
+
+A tarifa fixa por transação permanecerá separada em `fixedFeeCents`, porque possui papel próprio no contrato do motor.
+
+**Importante: não duplicar custos**
+
+A etapa deve alertar em linguagem simples:
+
+> Se este valor já está incluído no custo que você informou antes, não adicione novamente.
+
+Isso é especialmente importante para:
+- frete já incorporado ao custo de compra;
+- material já incluído no custo de produção;
+- mão de obra já incluída no custo direto do serviço.
+
+**Diferenciar valor fixo de percentual**
+
+Ajuda contextual:
+
+> Aqui entram valores em reais, como R$ 3,50 por embalagem. Percentuais, como 3,2% do cartão ou 12% do marketplace, serão informados em outra etapa.
+
+Essa distinção deve aparecer antes ou junto do campo "Tarifa fixa por venda".
+
+**Comportamento**
+
+- a etapa é opcional;
+- nenhum campo começa com valor financeiro presumido;
+- valores negativos são inválidos;
+- zero é permitido;
+- o usuário pode adicionar e remover gastos personalizados;
+- remover um gasto deve pedir confirmação apenas quando houver valor preenchido;
+- a soma dos gastos adicionais deve ser recalculada imediatamente;
+- a ferramenta pode mostrar um pequeno resumo ao final da etapa:
+  > Outros gastos desta venda: R$ X
+- valores permanecem salvos localmente;
+- nenhuma descrição ou valor financeiro desta etapa é enviado ao GA4 ou ao backend.
+
+**Resultado interno esperado**
+
+```
+additionalCostItems = [
+  { label, amountCents },
+  ...
+]
+
+additionalCostCents = soma(additionalCostItems.amountCents)
+
+fixedFeeCents
+```
+
+O array detalhado pertence apenas ao estado da interface. O motor recebe os valores normalizados agregados.
+
+**Linguagem a evitar**
+
+- custos acessórios;
+- custos variáveis unitários;
+- despesas diretamente atribuíveis;
+- despesas incrementais.
+
+**Linguagem preferida**
+
+- "Outros gastos desta venda";
+- "Embalagem";
+- "Entrega ou deslocamento";
+- "Materiais usados";
+- "Tarifa fixa por venda";
+- "Outro gasto";
+- "Se este valor já está incluído no custo anterior, não adicione novamente."
+
+**Critérios de aceite da Etapa 3**
+
+- o usuário entende que a etapa trata de valores em reais ligados àquela venda;
+- Produto e Serviço recebem exemplos compatíveis com sua realidade;
+- a etapa não mistura percentuais, custos mensais ou margem;
+- o usuário pode continuar sem preencher nenhum gasto adicional;
+- é possível adicionar gastos personalizados sem aumentar a complexidade do motor;
+- a interface previne, por texto, a duplicação de custos;
+- os valores convergem para `additionalCostCents` e `fixedFeeCents`;
+- os dados permanecem locais ao navegador.
+
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
 - componentes;
