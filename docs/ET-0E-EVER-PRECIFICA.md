@@ -990,6 +990,200 @@ O array detalhado pertence apenas ao estado da interface. O motor recebe os valo
 - os valores convergem para `additionalCostCents` e `fixedFeeCents`;
 - os dados permanecem locais ao navegador.
 
+**Etapa 3 aprovada para o MVP em 05/10/2026.**
+
+#### ET-0E-D4 — Etapa 4: Quanto dos seus custos mensais precisa entrar nesse preço?
+
+**Objetivo de UX**
+
+Ajudar o usuário a incluir uma parte dos custos mensais do negócio no preço sem exigir que ele conheça termos como rateio, absorção ou custo fixo unitário.
+
+A etapa deve explicar primeiro o raciocínio prático:
+
+> Seu negócio tem gastos que existem mesmo quando nenhuma venda acontece. Vamos dividir uma parte deles entre os produtos ou serviços para que o preço ajude a pagar essas contas.
+
+Exemplos de apoio:
+- aluguel;
+- internet;
+- sistema/software;
+- contador;
+- salários administrativos;
+- energia mínima;
+- telefone;
+- outras despesas mensais recorrentes.
+
+**Pergunta de entrada**
+
+> Você quer incluir uma parte dos custos mensais do negócio neste preço?
+
+Opções:
+
+- **Sim, quero calcular**
+- **Já sei quanto colocar por venda**
+- **Não quero incluir agora**
+
+A terceira opção deve gerar um aviso informativo, sem bloquear:
+
+> Tudo bem. Só lembre que, sem considerar esses custos, o preço pode parecer mais lucrativo do que realmente é.
+
+---
+
+##### Produto — caminho guiado
+
+Perguntas:
+
+1. **Quanto seu negócio gasta por mês, mesmo sem vender?**
+   - valor total dos custos mensais que o usuário deseja considerar;
+2. **Quantas unidades você espera vender por mês?**
+   - quantidade estimada.
+
+Cálculo:
+
+```
+custo_fixo_por_unidade =
+  custos_mensais / unidades_esperadas_no_mes
+```
+
+Mensagem de resultado:
+
+> Para ajudar a pagar esses custos, cada unidade precisa carregar aproximadamente R$ X.
+
+Ajuda para quantidade:
+
+> Use uma estimativa realista de vendas mensais. Se vender menos do que isso, cada unidade precisaria carregar uma parcela maior desses custos.
+
+---
+
+##### Serviço — caminho guiado
+
+Perguntas:
+
+1. **Quanto seu negócio gasta por mês, mesmo sem atender clientes?**
+2. **Quantas horas você consegue realmente vender em um mês?**
+3. **Quanto tempo este serviço leva?**
+
+A expressão "horas faturáveis" não será usada como pergunta principal.
+
+Ajuda contextual:
+
+> Pense apenas nas horas que podem virar serviço pago. Desconte pausas, tarefas administrativas, reuniões internas e tempo sem atendimento.
+
+Cálculo interno:
+
+```
+custo_fixo_por_hora =
+  custos_mensais / horas_que_podem_ser_vendidas
+
+custo_fixo_deste_servico =
+  custo_fixo_por_hora × horas_deste_servico
+```
+
+Mensagem de resultado:
+
+> Para ajudar a pagar os custos mensais do negócio, este serviço precisa carregar aproximadamente R$ X.
+
+Se o tempo do serviço já tiver sido informado na Etapa 2, o Ever.Precifica deve reaproveitá-lo, sem pedir o mesmo dado novamente. O usuário poderá editar o tempo caso necessário.
+
+---
+
+##### Caminho manual
+
+Para Produto:
+
+> **Quanto dos seus custos mensais você já definiu para cada unidade?**
+
+Para Serviço:
+
+> **Quanto dos seus custos mensais você já definiu para este serviço?**
+
+Esse valor alimenta diretamente `allocatedFixedCostCents`.
+
+---
+
+##### Progressive disclosure e prevenção de sobrecarga
+
+A primeira tela da etapa não deve exibir simultaneamente todos os campos de cálculo.
+
+Primeiro, o usuário escolhe entre:
+- calcular;
+- informar manualmente;
+- não incluir.
+
+Somente depois aparecem os campos necessários ao caminho escolhido.
+
+A ferramenta não exigirá que o usuário liste individualmente todas as despesas mensais no MVP. Ela pedirá apenas o **total mensal que deseja considerar**.
+
+Pode existir ajuda contextual com exemplos, mas não um mini-DRE ou cadastro de despesas.
+
+---
+
+##### Validações e mensagens
+
+Custos mensais negativos:
+> Confira este valor. O total de custos mensais não pode ser negativo.
+
+Unidades esperadas igual a zero:
+> Informe pelo menos 1 unidade para conseguirmos dividir os custos.
+
+Horas disponíveis igual a zero:
+> Informe pelo menos algum tempo disponível para serviços pagos.
+
+Estimativa aparentemente muito baixa ou alta:
+- não bloquear;
+- apenas permitir revisão;
+- não presumir que a estimativa está errada.
+
+Quando o usuário selecionar "Não quero incluir agora":
+> Você poderá voltar e incluir esses custos depois.
+
+---
+
+##### Resultado interno esperado
+
+Todos os caminhos convergem para:
+
+```
+allocatedFixedCostCents
+```
+
+Dados auxiliares podem permanecer no estado local da interface:
+
+```
+fixedCostMode = "guided" | "manual" | "skipped"
+monthlyFixedCostCents
+expectedMonthlyUnits
+monthlyBillableMinutes
+serviceMinutes
+```
+
+O motor recebe apenas o valor alocado normalizado.
+
+**Linguagem a evitar**
+
+- rateio de custos fixos;
+- absorção de despesas;
+- custo fixo unitário;
+- horas faturáveis, como termo principal.
+
+**Linguagem preferida**
+
+- "custos mensais do negócio";
+- "quanto seu negócio gasta por mês, mesmo sem vender?";
+- "quantas unidades você espera vender por mês?";
+- "quantas horas você consegue realmente vender em um mês?";
+- "quanto desses custos precisa entrar neste preço?".
+
+**Critérios de aceite da Etapa 4**
+
+- o usuário entende por que custos mensais precisam ser considerados;
+- ele pode calcular, informar um valor já conhecido ou pular;
+- Produto usa divisão por unidades esperadas;
+- Serviço usa horas disponíveis e duração do serviço;
+- dados já informados anteriormente são reaproveitados;
+- a ferramenta não força o usuário a montar uma lista contábil de despesas;
+- todos os caminhos convergem para `allocatedFixedCostCents`;
+- os dados permanecem locais ao navegador.
+
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
 - componentes;
