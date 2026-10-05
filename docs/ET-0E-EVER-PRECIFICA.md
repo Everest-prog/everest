@@ -1549,6 +1549,188 @@ Os valores permanecem locais ao navegador e não são enviados ao GA4.
 - os valores convergem para `desiredMarginBps` e `minimumMarginBps`;
 - os dados permanecem locais ao navegador.
 
+**Etapa 6 aprovada para o MVP em 05/10/2026.**
+
+#### ET-0E-D7 — Etapa 7: Você já vende por algum preço?
+
+**Objetivo de UX**
+
+Permitir que o usuário compare o preço que já pratica com os custos, taxas e metas informados, transformando o Ever.Precifica também em um diagnóstico do preço atual.
+
+Esta etapa é opcional.
+
+**Pergunta principal**
+
+> Você já vende este produto ou serviço por algum preço?
+
+Opções:
+
+- **Sim**
+- **Ainda não**
+
+Se o usuário escolher "Ainda não", a ferramenta segue diretamente para o resultado sem qualquer penalidade.
+
+---
+
+##### Quando o usuário já possui preço
+
+Pergunta:
+
+> Qual preço você cobra hoje?
+
+Campo:
+
+> Preço atual: R$ ___
+
+Texto de apoio:
+
+> Vamos comparar esse valor com seus custos e com o quanto você gostaria que sobrasse. Isso não significa que você precisa mudar o preço — é apenas um diagnóstico.
+
+O usuário também poderá usar esse campo para testar um preço que esteja pensando em praticar, mesmo que ainda não seja o preço oficial.
+
+Ajuda contextual:
+
+> Você pode informar o preço atual ou um preço que queira testar.
+
+---
+
+##### Diagnóstico em linguagem simples
+
+O motor classifica o preço em quatro situações.
+
+**1. Prejuízo**
+
+> Nesse preço, a venda não cobre todos os custos e taxas que você informou.
+
+Complemento possível:
+
+> A cada venda, faltam aproximadamente R$ X para cobrir tudo.
+
+**2. Dá lucro, mas fica abaixo do mínimo**
+
+> Esse preço dá lucro, mas sobra menos do que o mínimo que você definiu como aceitável.
+
+**3. Fica entre o mínimo e a meta**
+
+> Esse preço dá lucro e está acima do seu limite mínimo, mas ainda não chega ao valor que você gostaria que sobrasse.
+
+**4. Atende ou supera a meta**
+
+> Com esse preço, sua meta de lucro é atingida ou superada.
+
+---
+
+##### Mostrar a diferença para a meta
+
+Quando o preço atual estiver abaixo do preço técnico necessário à meta:
+
+> Para alcançar sua meta, o preço calculado precisa ser aproximadamente R$ X maior.
+
+A ferramenta também pode mostrar a diferença percentual:
+
+> Isso representa cerca de Y% acima do preço informado.
+
+Quando o preço atual já atingir ou superar a meta:
+
+> Seu preço atual já alcança a meta que você definiu.
+
+Se estiver significativamente acima, a ferramenta não deve sugerir redução automática.
+
+---
+
+##### Não transformar diagnóstico em ordem comercial
+
+O Ever.Precifica não deve dizer:
+
+- "Aumente seu preço";
+- "Baixe seu preço";
+- "Seu preço está errado";
+- "Este é o preço ideal de mercado".
+
+Preferir:
+
+- "Para alcançar sua meta, o preço calculado seria...";
+- "Com o preço atual, sobra...";
+- "Seu preço atual está abaixo/acima da meta que você definiu.";
+- "Use esta comparação como apoio à sua decisão."
+
+Preço de mercado, concorrência e posicionamento não são inferidos pelo motor.
+
+---
+
+##### Validações
+
+Preço negativo:
+> Confira este valor. O preço não pode ser negativo.
+
+Preço igual a zero:
+> Para comparar sua venda, informe um preço maior que zero.
+
+Preço muito abaixo dos custos:
+- não bloquear;
+- mostrar diagnóstico de prejuízo de forma clara.
+
+Preço muito acima:
+- não bloquear;
+- apenas calcular o resultado;
+- não presumir erro de digitação sem evidência.
+
+---
+
+##### Resultado interno esperado
+
+Quando informado:
+
+```
+currentPriceCents
+```
+
+Quando não informado:
+
+```
+currentPriceCents = null
+```
+
+O motor devolve, quando aplicável:
+- lucro unitário;
+- margem efetiva;
+- status econômico;
+- diferença em reais para o preço técnico;
+- diferença percentual para a meta.
+
+Nenhum preço informado é enviado ao GA4 ou ao backend.
+
+---
+
+##### Linguagem a evitar
+
+- "preço incorreto";
+- "preço subótimo";
+- "gap de pricing";
+- "desvio de margem";
+- "reposicionamento obrigatório".
+
+**Linguagem preferida**
+
+- "Qual preço você cobra hoje?";
+- "Vamos comparar esse valor com seus custos e sua meta.";
+- "Com esse preço, sobra...";
+- "Para alcançar sua meta, o preço calculado seria...";
+- "Use esta comparação como apoio à sua decisão."
+
+---
+
+##### Critérios de aceite da Etapa 7
+
+- a etapa pode ser ignorada sem impedir o cálculo;
+- o usuário consegue informar um preço atual ou um preço de teste;
+- o diagnóstico distingue prejuízo, abaixo do mínimo, abaixo da meta e meta atingida;
+- o sistema explica a diferença para a meta em reais e percentual;
+- o texto não transforma o resultado em ordem para aumentar ou reduzir preços;
+- preço de mercado não é inferido;
+- o valor converge para `currentPriceCents`;
+- os dados permanecem locais ao navegador.
+
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
 - componentes;
