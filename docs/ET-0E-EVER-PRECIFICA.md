@@ -745,11 +745,13 @@ A ferramenta não deve tentar definir automaticamente quanto "vale" a hora do us
 
 **Ajuda para quem não sabe o custo da própria hora**
 
-Texto provisório:
+Texto confirmado:
 
 > Se você ainda não sabe quanto custa uma hora do seu trabalho, tudo bem. Você pode informar uma estimativa agora e ajustar depois.
 
-No MVP, o Ever.Precifica não abrirá um módulo completo de formação do custo-hora pessoal/empresarial dentro desta etapa, para não misturar precificação com cálculo de pró-labore, folha ou estrutura financeira.
+**Decisão de MVP:** não haverá assistente para calcular o custo-hora nesta etapa.
+
+O Ever.Precifica não abrirá um módulo completo de formação do custo-hora pessoal/empresarial dentro desta etapa, para não misturar precificação com cálculo de pró-labore, folha ou estrutura financeira. Essa possibilidade poderá ser reavaliada em evolução futura do produto.
 
 ---
 
@@ -804,6 +806,8 @@ Mesmo com experiências diferentes, ambos convergem para o mesmo campo normaliza
 - Produto e Serviço convergem para `directCostCents`;
 - o usuário entende o valor obtido antes de avançar;
 - os dados permanecem locais ao navegador.
+
+**Etapa 2 aprovada para o MVP em 05/10/2026, sem assistente de formação de custo-hora.**
 
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
