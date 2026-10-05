@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D em desenvolvimento  
+Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D concluída · ET-0E-E aguardando autorização  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
@@ -525,11 +525,11 @@ A arquitetura do MVP é considerada aceita quando:
 ### ET-0E-D — UX Architecture
 - [x] definir jornada principal;
 - [x] definir ordem das perguntas;
-- [ ] definir progressive disclosure;
-- [ ] definir mensagens de erro;
-- [ ] definir compreensão e hierarquia dos resultados;
-- [ ] definir comportamento de retomada e edição;
-- [ ] registrar critérios de aceite de UX.
+- [x] definir progressive disclosure;
+- [x] definir mensagens de erro;
+- [x] definir compreensão e hierarquia dos resultados;
+- [x] definir comportamento de retomada e edição;
+- [x] registrar critérios de aceite de UX.
 
 **Checkpoint com o proprietário concluído em 03/10/2026. ET-0E-D autorizada para início.**
 
@@ -2002,6 +2002,119 @@ Não enviar:
 - markup e demais termos técnicos ficam secundários;
 - o usuário pode voltar, testar outro preço ou iniciar nova simulação;
 - nenhum valor financeiro é enviado ao GA4 ou ao backend.
+
+**Etapa 8 aprovada para o MVP em 05/10/2026.**
+
+#### Revisão transversal da ET-0E-D
+
+A revisão final de UX consolida regras que valem para toda a jornada.
+
+##### Navegação e progresso
+
+- a experiência usa 8 etapas principais;
+- o usuário sempre pode voltar sem perder respostas compatíveis;
+- avançar depende apenas dos dados realmente obrigatórios da etapa;
+- etapas opcionais podem ser puladas de forma explícita;
+- a interface deve indicar progresso sem sugerir urgência;
+- recarregar a página restaura a simulação salva localmente quando houver estado válido.
+
+##### Salvamento e retomada
+
+- alterações são salvas localmente de forma automática;
+- não existe botão obrigatório "Salvar";
+- ao retornar à ferramenta, o usuário pode continuar a simulação anterior;
+- quando houver dados locais, a experiência deve oferecer de forma compreensível "Continuar de onde parei" ou "Começar nova simulação";
+- iniciar nova simulação exige confirmação quando houver dados preenchidos;
+- "Apagar meus dados" remove os dados financeiros locais, mantendo o tratamento separado do direito de acesso.
+
+##### Edição e dependências
+
+- alterar uma resposta recalcula imediatamente os resultados dependentes;
+- dados reaproveitáveis não são apagados silenciosamente;
+- mudança Produto ↔ Serviço preserva valores compatíveis;
+- quando uma mudança tornar dados incompatíveis, a ferramenta explica o que será removido antes da confirmação;
+- dados repetidos, como duração do serviço, são reaproveitados entre etapas.
+
+##### Progressive disclosure
+
+- uma pergunta nova por vez quando o conceito exigir explicação;
+- grupos pequenos podem aparecer juntos quando pertencem ao mesmo raciocínio;
+- campos opcionais ficam recolhidos até serem necessários;
+- detalhes técnicos do resultado ficam recolhidos por padrão;
+- a experiência evita telas longas que se comportem como planilhas.
+
+##### Validação e erros
+
+- erros de digitação não devem interromper o usuário enquanto ele ainda está preenchendo;
+- validações bloqueantes aparecem ao tentar avançar ou quando o campo perde foco e o valor já é claramente inválido;
+- a mensagem deve explicar como corrigir o problema;
+- preservar o valor digitado sempre que possível;
+- nunca substituir um valor inválido silenciosamente por outro;
+- alertas não bloqueantes devem ser claramente diferentes de erros que impedem o cálculo;
+- erros técnicos inesperados não devem expor stack traces, códigos internos ou detalhes de implementação ao usuário.
+
+Exemplo de erro bloqueante:
+
+> Confira este valor para continuar.
+
+seguido da explicação específica do campo.
+
+##### Linguagem transversal
+
+- conclusão prática antes do termo técnico;
+- frases curtas e concretas;
+- valores monetários usados como exemplos quando ajudam;
+- evitar tom de julgamento sobre a gestão do usuário;
+- não chamar um preço de "certo", "errado" ou "ideal de mercado";
+- não recomendar margem universal;
+- não transformar diagnóstico em ordem comercial;
+- quando houver termo técnico, explicar em linguagem comum no mesmo contexto.
+
+##### Estados e segurança de compreensão
+
+A jornada deve contemplar:
+- estado inicial;
+- estado parcialmente preenchido;
+- etapa válida;
+- erro de campo;
+- alerta não bloqueante;
+- cálculo impossível;
+- resultado sem preço atual;
+- resultado com preço atual;
+- desconto dentro da meta;
+- desconto entre meta e mínimo;
+- desconto abaixo do mínimo;
+- desconto com prejuízo;
+- simulação retomada do navegador;
+- confirmação de limpeza/nova simulação.
+
+##### Privacidade e analytics
+
+- valores de custo, preço, lucro, margem, tributos, taxas e desconto permanecem fora do GA4;
+- eventos de uso podem indicar apenas ações e etapas, sem transportar valores financeiros;
+- cálculos permanecem no navegador;
+- UX de consentimento analítico continua obedecendo à arquitetura já definida no site.
+
+##### Critérios finais de aceite de UX
+
+A ET-0E-D é aceita quando:
+
+- um usuário não especialista consegue completar a jornada sem conhecer markup ou terminologia contábil;
+- Produto e Serviço utilizam linguagem própria sem duplicar o motor;
+- o usuário entende o que é obrigatório, opcional e estimado;
+- a ferramenta previne duplicidade entre custos fixos em reais e percentuais;
+- custos mensais podem ser calculados, informados manualmente ou ignorados conscientemente;
+- margem desejada e limite mínimo são compreendidos por meio de "quanto sobra de cada R$ 100";
+- preço atual é opcional e produz diagnóstico, não ordem;
+- o resultado responde rapidamente preço, lucro e capacidade de desconto;
+- detalhes técnicos continuam disponíveis sem dominar a leitura;
+- voltar, editar, recarregar e retomar não causam perda silenciosa de dados;
+- mensagens de erro são corrigíveis e escritas para público leigo;
+- dados financeiros não saem do navegador por analytics ou por necessidade de cálculo.
+
+**ET-0E-D encerrada e aprovada em 05/10/2026.**
+
+**Próximo checkpoint obrigatório: ET-0E-E — Visual/UI Design. Não iniciar decisões visuais antes de nova autorização explícita do proprietário.**
 
 ### ET-0E-E — Visual/UI Design
 - identidade visual;
