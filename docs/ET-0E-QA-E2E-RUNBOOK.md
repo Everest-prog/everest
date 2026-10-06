@@ -67,6 +67,11 @@ Esperado:
 - nenhum indicador público de que o e-mail não possui compra;
 - nenhum e-mail enviado.
 
+Evidência em 06/10/2026:
+- [x] endpoint respondeu `ok: true`;
+- [x] mensagem pública genérica confirmada;
+- [x] nenhum dado sobre existência de cadastro exposto.
+
 ### Recuperação com compra
 
 Esperado:
