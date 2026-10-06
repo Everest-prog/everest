@@ -88,8 +88,8 @@ Esperado:
 4. [x] confirmar criação de activation token hash;
 5. [x] confirmar envio pelo Resend;
 6. [ ] abrir link de ativação;
-7. [ ] confirmar que o token de ativação vira `used_at`;
-8. [ ] confirmar criação de sessão opaca;
+7. [x] confirmar que o token de ativação vira `used_at`;
+8. [x] confirmar criação de sessão opaca;
 9. [ ] confirmar carregamento da jornada Ever.Precifica;
 10. [ ] atualizar a página;
 11. [ ] confirmar acesso sem novo e-mail.
