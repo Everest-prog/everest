@@ -85,9 +85,11 @@ Evidência em 06/10/2026:
 - [x] recuperação com compra aprovada enviou novo e-mail de ativação;
 - [x] novo token de recuperação criado no D1, ainda não usado e não revogado;
 - [x] segunda recuperação dentro de 5 minutos manteve HTTP 200/mensagem genérica e não enviou novo e-mail;
+- [x] novo link de recuperação ativado com sucesso em janela anônima, sem sessão prévia;
+- [x] endpoint retornou HTTP 200, `ok = true`, `product_code = ever_precifica_e2e` e nova credencial opaca ao navegador.
 - [x] confirmar novo token no D1;
 - [x] confirmar cooldown de 5 minutos;
-- [ ] confirmar ativação do novo link em um navegador sem sessão.
+- [x] confirmar ativação do novo link em um navegador sem sessão.
 
 ## 4. E2E de compra e ativação
 
