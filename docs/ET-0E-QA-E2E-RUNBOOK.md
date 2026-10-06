@@ -152,6 +152,7 @@ Evidência parcial em 06/10/2026:
 - [x] novo ciclo E2E: pedido aprovado posteriormente confirmado como `refunded` no D1, com `refunded_at` preenchido;
 - [x] validar revogação de sessão/token no novo ciclo compra → ativação → recovery → refund.
 - Evidência: `revoked_activation_tokens = 2`, `revoked_sessions = 2`, `active_sessions = 0` para o pedido reembolsado.
+- [x] sessão previamente válida passou a retornar HTTP 401, `ok = false` e `valid = false` após o reembolso.
 
 ### Chargeback
 
