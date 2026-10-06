@@ -83,7 +83,8 @@ Esperado:
 Evidência em 06/10/2026:
 - [x] recuperação com compra aprovada respondeu HTTP 200 e mensagem genérica;
 - [x] recuperação com compra aprovada enviou novo e-mail de ativação;
-- [ ] confirmar novo token no D1;
+- [x] novo token de recuperação criado no D1, ainda não usado e não revogado;
+- [x] confirmar novo token no D1;
 - [ ] confirmar cooldown de 5 minutos;
 - [ ] confirmar ativação do novo link em um navegador sem sessão.
 
