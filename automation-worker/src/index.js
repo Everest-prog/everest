@@ -648,29 +648,24 @@ async function processKiwifyBusinessEvent(env, payload, eventType, providerEvent
 
     let emailSent = false;
 
-    if (rawEmail && env.RESEND_API_KEY) {
-      const firstName = String(
-        payload?.Customer?.first_name ||
-        payload?.customer?.first_name ||
-        ""
-      ).trim();
+    if (rawEmail && emailHash && env.RESEND_API_KEY) {
+      const orderRow = await env.DB.prepare(
+        `SELECT id
+         FROM orders
+         WHERE provider = 'kiwify' AND provider_order_id = ?1
+         LIMIT 1`
+      ).bind(orderId).first();
 
-      const response = await sendTransactionalEmail(env, {
-        to: rawEmail,
-        subject: "Ever.Precifica — compra de teste confirmada",
-        text:
-          (firstName ? "Olá, " + firstName + "!\n\n" : "Olá!\n\n") +
-          "Sua compra de teste do Ever.Precifica foi confirmada. " +
-          "Este e-mail valida o fluxo técnico Kiwify → Ever.Est → Resend.\n\n" +
-          "Nenhuma ação é necessária.",
-        idempotencyKey: "kiwify:" + orderId + ":purchase-approved:v1"
-      });
-
-      if (!response.ok) {
-        throw new Error("resend_send_failed");
+      if (orderRow?.id) {
+        await sendAccessActivation(env, {
+          orderId: orderRow.id,
+          productCode,
+          email: rawEmail,
+          emailHash,
+          reason: "purchase"
+        });
+        emailSent = true;
       }
-
-      emailSent = true;
     }
 
     return {
@@ -711,6 +706,28 @@ async function processKiwifyBusinessEvent(env, payload, eventType, providerEvent
       emailHash,
       refundedAt
     ).run();
+
+    await env.DB.prepare(
+      `UPDATE access_activation_tokens
+       SET revoked_at = COALESCE(revoked_at, datetime('now'))
+       WHERE order_id = (
+         SELECT id FROM orders
+         WHERE provider = 'kiwify' AND provider_order_id = ?1
+         LIMIT 1
+       )
+       AND revoked_at IS NULL`
+    ).bind(orderId).run();
+
+    await env.DB.prepare(
+      `UPDATE access_sessions
+       SET revoked_at = COALESCE(revoked_at, datetime('now'))
+       WHERE order_id = (
+         SELECT id FROM orders
+         WHERE provider = 'kiwify' AND provider_order_id = ?1
+         LIMIT 1
+       )
+       AND revoked_at IS NULL`
+    ).bind(orderId).run();
 
     return {
       status: "processed",
