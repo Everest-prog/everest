@@ -6,6 +6,7 @@ import {
   calculatePricing,
   simulateDiscount,
 } from "./engine.mjs";
+import { ensureAccess, requestRecovery } from "./access.mjs";
 
 const STORAGE_KEY = "ever_precifica_mvp_v1";
 const STEPS = ["Tipo", "Custo", "Outros gastos", "Custos mensais", "Taxas", "Meta", "Preço atual", "Resultado"];
@@ -695,5 +696,73 @@ document.getElementById("confirm-reset").addEventListener("click",(event)=>{
   render();
 });
 
-track("tool_activation",{stage:"open"});
-render();
+function renderAccessGate(accessState = {}) {
+  stepLabel.textContent = "Acesso ao Ever.Precifica";
+  progressRoute.innerHTML = "";
+
+  const warning = accessState.activationError
+    ? '<div class="notice warn"><span>!</span><div>Este link de ativação não é mais válido. Solicite um novo link abaixo.</div></div>'
+    : accessState.networkError
+      ? '<div class="notice warn"><span>!</span><div>Não conseguimos validar seu acesso agora. Você pode tentar novamente ou solicitar um novo link.</div></div>'
+      : accessState.expired
+        ? '<div class="notice info"><span>i</span><div>Seu acesso neste navegador precisa ser reativado.</div></div>'
+        : "";
+
+  screen.innerHTML = `
+    <span class="eyebrow">Acesso protegido</span>
+    <h2 class="screen-title">Entre pelo link que enviamos por e-mail.</h2>
+    <p class="screen-copy">O Ever.Precifica não usa senha. Depois da compra, você recebe um link para liberar este navegador.</p>
+    ${warning}
+    <div class="section-card">
+      <h3>Perdeu o link ou trocou de dispositivo?</h3>
+      <p class="form-help">Informe o mesmo e-mail usado na compra. Se encontrarmos uma compra válida, enviaremos um novo link.</p>
+      <label class="form-group" for="recovery-email" style="margin-top:14px">
+        <span class="form-label">E-mail usado na compra</span>
+        <span class="input-shell"><input id="recovery-email" type="email" autocomplete="email" placeholder="voce@empresa.com.br"></span>
+      </label>
+      <div id="recovery-message"></div>
+      <div class="inline-actions">
+        <button type="button" class="primary-button" id="recovery-button">Enviar novo link</button>
+        <button type="button" class="secondary-button" id="retry-access-button">Tentar validar novamente</button>
+      </div>
+    </div>
+    <div class="notice info"><span>◇</span><div>Seus custos, preços e margens continuam ficando somente neste navegador.</div></div>
+  `;
+
+  document.getElementById("recovery-button").addEventListener("click", async () => {
+    const email = String(document.getElementById("recovery-email").value || "").trim();
+    const holder = document.getElementById("recovery-message");
+
+    if (!email || !email.includes("@")) {
+      holder.innerHTML = '<div class="notice error"><span>!</span><div>Informe um e-mail válido para continuar.</div></div>';
+      return;
+    }
+
+    const button = document.getElementById("recovery-button");
+    button.disabled = true;
+    button.textContent = "Enviando…";
+    const result = await requestRecovery(email);
+    button.disabled = false;
+    button.textContent = "Enviar novo link";
+    holder.innerHTML = `<div class="notice ${result.ok ? "success" : "error"}"><span>${result.ok ? "✓" : "!"}</span><div>${escapeHTML(result.message)}</div></div>`;
+  });
+
+  document.getElementById("retry-access-button").addEventListener("click", () => bootstrap());
+}
+
+async function bootstrap() {
+  stepLabel.textContent = "Validando acesso…";
+  progressRoute.innerHTML = "";
+  screen.innerHTML = document.getElementById("spinner-template").innerHTML;
+
+  const access = await ensureAccess();
+  if (!access.valid) {
+    renderAccessGate(access);
+    return;
+  }
+
+  track("tool_activation",{stage:"open"});
+  render();
+}
+
+bootstrap();
