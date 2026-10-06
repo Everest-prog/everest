@@ -273,7 +273,7 @@ function renderStep1() {
     }
     state.itemType = nextType;
     saveState();
-    renderStep1();
+    render();
   }));
 }
 
@@ -333,7 +333,7 @@ function renderStep2() {
     </div>
     ${navActions()}`;
 
-  screen.querySelectorAll("[data-mode]").forEach((button)=>button.addEventListener("click",()=>{state.directMode=button.dataset.mode;saveState();renderStep2();}));
+  screen.querySelectorAll("[data-mode]").forEach((button)=>button.addEventListener("click",()=>{state.directMode=button.dataset.mode;saveState();render();}));
   bindMoney("direct-cost",(v)=>state.directCostCents=v);
   bindMoney("lot-cost",(v)=>state.productLotCostCents=v,updateGuided);
   document.getElementById("lot-units")?.addEventListener("input",(e)=>{state.productLotUnits=Math.max(0,parseInt(e.target.value||"0",10)||0);saveState();updateGuided();});
@@ -383,9 +383,9 @@ function renderStep3() {
     if(item?.amountCents>0 && !window.confirm("Remover este gasto preenchido?")) return;
     state.customCosts.splice(index,1);
     saveState();
-    renderStep3();
+    render();
   }));
-  document.getElementById("add-custom-cost").addEventListener("click",()=>{state.customCosts.push({label:"",amountCents:0});saveState();renderStep3();});
+  document.getElementById("add-custom-cost").addEventListener("click",()=>{state.customCosts.push({label:"",amountCents:0});saveState();render();});
   function updateSummary(){document.getElementById("additional-total").textContent=money(additionalTotal()+state.fixedFeeCents);}
 }
 
@@ -423,7 +423,7 @@ function renderStep4() {
       </div><div class="summary-strip"><span>Parcela dos custos mensais nesta venda</span><strong id="allocated-fixed-result">${money(allocated)}</strong></div></div>`:mode==="manual"?`<div class="section-card"><div class="form-grid">${moneyField("manual-fixed",product?"Quanto dos custos mensais entra em cada unidade?":"Quanto dos custos mensais entra neste serviço?",state.allocatedFixedCostCents)}</div></div>`:mode==="skipped"?'<div class="notice warn"><span>!</span><div>Sem esses custos, o lucro mostrado pode parecer maior do que o resultado real da operação.</div></div>':""}
     ${navActions()}`;
 
-  screen.querySelectorAll("[data-fixed-mode]").forEach((button)=>button.addEventListener("click",()=>{state.fixedCostMode=button.dataset.fixedMode;saveState();renderStep4();}));
+  screen.querySelectorAll("[data-fixed-mode]").forEach((button)=>button.addEventListener("click",()=>{state.fixedCostMode=button.dataset.fixedMode;saveState();render();}));
   bindMoney("monthly-fixed",(v)=>state.monthlyFixedCostCents=v,updateAllocated);
   bindMoney("manual-fixed",(v)=>state.allocatedFixedCostCents=v);
   document.getElementById("expected-units")?.addEventListener("input",(e)=>{state.expectedMonthlyUnits=Math.max(0,parseInt(e.target.value||"0",10)||0);saveState();updateAllocated();});
@@ -483,7 +483,7 @@ function renderStep7() {
     </div>
     ${state.hasCurrentPrice===true?`<div class="section-card"><div class="form-grid">${moneyField("current-price","Qual preço você cobra hoje?",state.currentPriceCents,"Também pode ser um preço que você esteja pensando em praticar.")}</div></div>`:""}
     ${navActions({nextLabel:"Ver meu resultado"})}`;
-  screen.querySelectorAll("[data-current]").forEach((button)=>button.addEventListener("click",()=>{state.hasCurrentPrice=button.dataset.current==="yes";saveState();renderStep7();}));
+  screen.querySelectorAll("[data-current]").forEach((button)=>button.addEventListener("click",()=>{state.hasCurrentPrice=button.dataset.current==="yes";saveState();render();}));
   bindMoney("current-price",(v)=>state.currentPriceCents=v);
 }
 
