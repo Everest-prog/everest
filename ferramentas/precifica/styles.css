@@ -13,7 +13,7 @@ button,input{font:inherit}
 button{cursor:pointer}
 .mountain-bg,.atmosphere{position:fixed;inset:0;pointer-events:none}
 .mountain-bg{
-  background-image:linear-gradient(180deg,rgba(7,17,31,.22),rgba(7,17,31,.82)),url("../../Imagem o vale.png");
+  background-image:linear-gradient(180deg,rgba(7,17,31,.22),rgba(7,17,31,.82)),url("https://raw.githubusercontent.com/Everest-prog/everest/refs/heads/feat/et-0e-ever-precifica/Imagem%20o%20vale.png");
   background-size:cover;background-position:center;transform:scale(1.02)
 }
 .atmosphere{
@@ -98,3 +98,5 @@ details{margin-top:18px;border-top:1px solid rgba(255,255,255,.08);padding-top:1
 @media (max-width:520px){.hide-mobile{display:none}.workspace{padding:14px}.screen-panel{padding:18px}.progress-head{align-items:center}.autosave-status{display:none}.screen-actions{flex-wrap:wrap}.screen-actions button{flex:1}.brand-copy small{display:none}}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass-shell,.screen-panel,.glass-dialog{background:#0f172a}.ghost-button,.choice-card,.section-card,.kpi-card{background:#172033}}
+
+.qa-banner{position:fixed;z-index:50;top:8px;left:50%;transform:translateX(-50%);padding:7px 12px;border-radius:999px;background:rgba(251,191,36,.92);color:#111827;font-size:10px;font-weight:800;letter-spacing:.08em;box-shadow:0 8px 24px rgba(0,0,0,.22)}
