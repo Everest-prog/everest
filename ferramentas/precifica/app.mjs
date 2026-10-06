@@ -763,6 +763,17 @@ async function bootstrap() {
   progressRoute.innerHTML = "";
   screen.innerHTML = document.getElementById("spinner-template").innerHTML;
 
+  const isQaPreview =
+    window.EVER_PRECIFICA_QA_BYPASS === true &&
+    location.hostname === "ever-tools-automation-staging.gabrielfelipegfrs.workers.dev" &&
+    location.pathname.startsWith("/preview/precifica");
+
+  if (isQaPreview) {
+    accessValidated = true;
+    render();
+    return;
+  }
+
   const access = await ensureAccess();
   if (!access.valid) {
     renderAccessGate(access);
