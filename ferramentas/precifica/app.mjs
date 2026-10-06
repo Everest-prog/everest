@@ -70,6 +70,7 @@ const loaded = loadState();
 let state = loaded.state;
 let resumePending = loaded.resumed && hasMeaningfulData(state);
 let resultViewTracked = false;
+let accessValidated = false;
 
 function hasMeaningfulData(s) {
   return Boolean(
@@ -692,6 +693,12 @@ document.getElementById("confirm-reset").addEventListener("click",(event)=>{
   resumePending=false;
   resetDialog.close();
   saveState();
+
+  if (!accessValidated) {
+    bootstrap();
+    return;
+  }
+
   track("tool_activation",{stage:"new_simulation"});
   render();
 });
@@ -751,6 +758,7 @@ function renderAccessGate(accessState = {}) {
 }
 
 async function bootstrap() {
+  accessValidated = false;
   stepLabel.textContent = "Validando acesso…";
   progressRoute.innerHTML = "";
   screen.innerHTML = document.getElementById("spinner-template").innerHTML;
@@ -761,6 +769,7 @@ async function bootstrap() {
     return;
   }
 
+  accessValidated = true;
   track("tool_activation",{stage:"open"});
   render();
 }
