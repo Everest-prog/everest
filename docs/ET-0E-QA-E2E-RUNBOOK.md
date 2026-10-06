@@ -82,17 +82,23 @@ Esperado:
 
 ## 4. E2E de compra e ativação
 
-1. concluir compra E2E interna;
-2. confirmar webhook `purchase_approved`;
-3. confirmar pedido `approved` no D1;
-4. confirmar criação de activation token hash;
-5. confirmar envio pelo Resend;
-6. abrir link de ativação;
-7. confirmar que o token de ativação vira `used_at`;
-8. confirmar criação de sessão opaca;
-9. confirmar carregamento da jornada Ever.Precifica;
-10. atualizar a página;
-11. confirmar acesso sem novo e-mail.
+1. [x] concluir compra E2E interna;
+2. [x] confirmar webhook `purchase_approved`;
+3. [x] confirmar pedido `approved` no D1;
+4. [ ] confirmar criação de activation token hash;
+5. [ ] confirmar envio pelo Resend;
+6. [ ] abrir link de ativação;
+7. [ ] confirmar que o token de ativação vira `used_at`;
+8. [ ] confirmar criação de sessão opaca;
+9. [ ] confirmar carregamento da jornada Ever.Precifica;
+10. [ ] atualizar a página;
+11. [ ] confirmar acesso sem novo e-mail.
+
+Evidência em 06/10/2026:
+- novo pedido E2E registrado no D1 com `product_code = ever_precifica_e2e`;
+- status confirmado como `approved`;
+- `approved_at` preenchido;
+- `refunded_at` nulo.
 
 Critério:
 - token bruto de sessão fica somente no navegador;
