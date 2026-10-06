@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D concluída · ET-0E-E aguardando autorização  
+Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D concluída · ET-0E-E concluída · ET-0E-F em desenvolvimento  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
@@ -2117,14 +2117,14 @@ A ET-0E-D é aceita quando:
 **Próximo checkpoint obrigatório: ET-0E-E — Visual/UI Design. Não iniciar decisões visuais antes de nova autorização explícita do proprietário.**
 
 ### ET-0E-E — Visual/UI Design
-- [ ] identidade visual;
-- [ ] componentes;
-- [ ] hierarquia;
-- [ ] responsividade;
-- [ ] estados vazios/erro/sucesso;
-- [ ] motion e transições;
-- [ ] acessibilidade visual;
-- [ ] especificação dos tokens de design.
+- [x] identidade visual;
+- [x] componentes;
+- [x] hierarquia;
+- [x] responsividade;
+- [x] estados vazios/erro/sucesso;
+- [x] motion e transições;
+- [x] acessibilidade visual;
+- [x] especificação dos tokens de design.
 
 **Checkpoint com o proprietário concluído em 05/10/2026. ET-0E-E autorizada para início.**
 
@@ -2261,10 +2261,34 @@ No dark-first, a fotografia de montanha pode funcionar como ambiente distante, e
 
 Essa combinação deve fazer o Ever.Precifica parecer uma evolução natural da Ever.Est — não uma ferramenta genérica com um tema visual aplicado por cima.
 
+#### Conceito visual aprovado
+
+O mockup conceitual Ever.Precifica/Ever.Glass foi aprovado pelo proprietário em 05/10/2026 como referência para implementação.
+
+A implementação deve preservar:
+- atmosfera dark-first;
+- fotografia de montanha ao fundo;
+- luz laranja como acento;
+- superfícies vítreas em primeiro plano;
+- números e resultado como maior hierarquia;
+- progresso visual em forma de rota/checkpoints;
+- sensação premium sem excesso decorativo.
+
+Elementos do mockup que representem funcionalidades fora do MVP não devem ser implementados apenas por aparecerem na imagem.
+
+Especificação completa: `docs/ET-0E-EVER-GLASS-DESIGN-SYSTEM.md`.
+
+**ET-0E-E encerrada e aprovada em 05/10/2026.**
+
 ### ET-0E-F — Build
-- implementação da ferramenta;
-- integração do motor com a interface;
-- instrumentação de eventos.
+- [ ] F1 — shell Ever.Glass + jornada navegável;
+- [ ] F2 — integração completa com o motor determinístico;
+- [ ] F3 — persistência local + retomada/limpeza;
+- [ ] F4 — ativação e recuperação de acesso via Worker;
+- [ ] F5 — instrumentação de eventos sem dados financeiros;
+- [ ] F6 — hardening de acessibilidade e responsividade.
+
+**ET-0E-F iniciada após aprovação explícita da direção visual.**
 
 ### ET-0E-G — QA & E2E
 - testes funcionais;
