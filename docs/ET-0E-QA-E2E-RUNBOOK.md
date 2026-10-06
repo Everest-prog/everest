@@ -334,3 +334,14 @@ Validado em 06/10/2026:
 - margem resultante: 24,83%;
 - status corretamente classificado como acima do mínimo de 15% e abaixo da meta de 25%;
 - atualização ocorreu em tempo real sem reload.
+
+
+### Evidência visual — Limite mínimo de desconto
+
+Validado em 06/10/2026:
+- desconto de 24,1% aplicado sobre preço de referência de R$ 154,00;
+- preço resultante: R$ 116,89;
+- lucro por venda: R$ 17,54;
+- margem resultante: 15,01%;
+- resultado ficou praticamente no limite mínimo definido de 15%;
+- mensagem manteve classificação correta: acima do mínimo e abaixo da meta.
