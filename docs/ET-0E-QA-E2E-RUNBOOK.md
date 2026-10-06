@@ -150,7 +150,8 @@ Evidência parcial em 06/10/2026:
 - [x] tentativa de recuperação retornou somente a mensagem pública genérica;
 - [x] nenhum e-mail de ativação foi recebido para o pedido reembolsado;
 - [x] novo ciclo E2E: pedido aprovado posteriormente confirmado como `refunded` no D1, com `refunded_at` preenchido;
-- [ ] validar revogação de sessão/token no novo ciclo compra → ativação → recovery → refund.
+- [x] validar revogação de sessão/token no novo ciclo compra → ativação → recovery → refund.
+- Evidência: `revoked_activation_tokens = 2`, `revoked_sessions = 2`, `active_sessions = 0` para o pedido reembolsado.
 
 ### Chargeback
 
