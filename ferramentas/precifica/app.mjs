@@ -361,7 +361,7 @@ function renderStep3() {
         ${state.customCosts.map((item,index)=>`
           <div class="form-grid" style="margin-bottom:12px">
             <label class="form-group"><span class="form-label">Nome do gasto</span><span class="input-shell"><input data-custom-label="${index}" value="${escapeHTML(item.label)}" placeholder="Ex.: personalização"></span></label>
-            <label class="form-group"><span class="form-label">Valor</span><span class="input-shell"><span class="input-prefix">R$</span><input data-custom-value="${index}" inputmode="decimal" value="${numberToInput(item.amountCents)}"></span></label>
+            <label class="form-group"><span class="form-label">Valor</span><span class="input-shell"><span class="input-prefix">R$</span><input data-custom-value="${index}" inputmode="decimal" value="${numberToInput(item.amountCents)}"></span><button type="button" class="ghost-button" data-remove-custom="${index}" style="margin-top:8px">Remover gasto</button></label>
           </div>`).join("")}
       </div>
       <button type="button" class="secondary-button" id="add-custom-cost">+ Adicionar outro gasto</button>
@@ -375,6 +375,14 @@ function renderStep3() {
   bindMoney("fixed-fee",(v)=>state.fixedFeeCents=v,updateSummary);
   screen.querySelectorAll("[data-custom-label]").forEach((input)=>input.addEventListener("input",(e)=>{state.customCosts[Number(input.dataset.customLabel)].label=e.target.value;saveState();}));
   screen.querySelectorAll("[data-custom-value]").forEach((input)=>input.addEventListener("input",(e)=>{const v=moneyToCents(e.target.value);if(Number.isFinite(v)){state.customCosts[Number(input.dataset.customValue)].amountCents=Math.max(0,v);saveState();updateSummary();}}));
+  screen.querySelectorAll("[data-remove-custom]").forEach((button)=>button.addEventListener("click",()=>{
+    const index=Number(button.dataset.removeCustom);
+    const item=state.customCosts[index];
+    if(item?.amountCents>0 && !window.confirm("Remover este gasto preenchido?")) return;
+    state.customCosts.splice(index,1);
+    saveState();
+    renderStep3();
+  }));
   document.getElementById("add-custom-cost").addEventListener("click",()=>{state.customCosts.push({label:"",amountCents:0});saveState();renderStep3();});
   function updateSummary(){document.getElementById("additional-total").textContent=money(additionalTotal()+state.fixedFeeCents);}
 }
