@@ -91,8 +91,8 @@ Esperado:
 7. [x] confirmar que o token de ativação vira `used_at`;
 8. [x] confirmar criação de sessão opaca;
 9. [ ] confirmar carregamento da jornada Ever.Precifica;
-10. [ ] atualizar a página;
-11. [ ] confirmar acesso sem novo e-mail.
+10. [x] validar sessão persistida diretamente no Worker;
+11. [x] confirmar acesso válido sem reutilizar link de ativação.
 
 Evidência em 06/10/2026:
 - novo pedido E2E registrado no D1 com `product_code = ever_precifica_e2e`;
