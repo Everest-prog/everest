@@ -299,3 +299,12 @@ Validado em 06/10/2026:
 - entrada com vírgula decimal (`3,2`) interpretada corretamente;
 - resumo total atualizado em tempo real;
 - distinção entre tarifa fixa em reais e cobrança percentual permaneceu clara.
+
+
+### Evidência visual — Etapa 6
+
+Validado em 06/10/2026:
+- meta de R$ 25 por R$ 100 traduzida corretamente para 25%;
+- tentativa de mínimo de R$ 30 com meta de R$ 25 foi bloqueada;
+- mensagem exibida: "O mínimo não pode ser maior que sua meta.";
+- erro apresentado de forma legível e sem apagar os valores informados.
