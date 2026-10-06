@@ -323,3 +323,14 @@ Validado em 06/10/2026:
 - preço atual de R$ 79,90 diagnosticado como prejuízo;
 - diferença para a meta exibida em reais;
 - limites de desconto exibidos separadamente para preservação da meta e do mínimo.
+
+
+### Evidência visual — Simulador de desconto
+
+Validado em 06/10/2026:
+- desconto de 10% aplicado sobre preço de referência de R$ 154,00;
+- novo preço calculado: R$ 138,60;
+- lucro por venda: R$ 34,42;
+- margem resultante: 24,83%;
+- status corretamente classificado como acima do mínimo de 15% e abaixo da meta de 25%;
+- atualização ocorreu em tempo real sem reload.
