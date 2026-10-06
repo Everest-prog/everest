@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D concluída · ET-0E-E concluída · ET-0E-F em desenvolvimento  
+Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D concluída · ET-0E-E concluída · ET-0E-F code-complete · ET-0E-G próxima  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
