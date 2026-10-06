@@ -86,7 +86,7 @@ Esperado:
 2. [x] confirmar webhook `purchase_approved`;
 3. [x] confirmar pedido `approved` no D1;
 4. [x] confirmar criação de activation token hash;
-5. [ ] confirmar envio pelo Resend;
+5. [x] confirmar envio pelo Resend;
 6. [ ] abrir link de ativação;
 7. [ ] confirmar que o token de ativação vira `used_at`;
 8. [ ] confirmar criação de sessão opaca;
@@ -100,7 +100,8 @@ Evidência em 06/10/2026:
 - `approved_at` preenchido;
 - `refunded_at` nulo;
 - activation token criado para o novo pedido, com `used_at` e `revoked_at` nulos;
-- expiração configurada para 30 minutos após a criação.
+- expiração configurada para 30 minutos após a criação;
+- e-mail de ativação recebido na caixa do comprador.
 
 Critério:
 - token bruto de sessão fica somente no navegador;
