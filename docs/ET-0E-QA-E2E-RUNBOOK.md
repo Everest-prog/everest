@@ -290,3 +290,12 @@ ET-0E-G só fecha quando:
 - nenhum erro crítico permanecer aberto.
 
 Depois disso, seguir para ET-0E-H — Release.
+
+
+### Evidência visual — Etapa 5
+
+Validado em 06/10/2026:
+- Percentuais de teste 6% + 3,2% + 12% + 1% = 22,2%;
+- entrada com vírgula decimal (`3,2`) interpretada corretamente;
+- resumo total atualizado em tempo real;
+- distinção entre tarifa fixa em reais e cobrança percentual permaneceu clara.
