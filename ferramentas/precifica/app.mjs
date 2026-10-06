@@ -764,7 +764,6 @@ async function bootstrap() {
   screen.innerHTML = document.getElementById("spinner-template").innerHTML;
 
   const isQaPreview =
-    window.EVER_PRECIFICA_QA_BYPASS === true &&
     location.hostname === "ever-tools-automation-staging.gabrielfelipegfrs.workers.dev" &&
     location.pathname.startsWith("/preview/precifica");
 
