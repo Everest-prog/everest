@@ -86,7 +86,8 @@ Evidência em 06/10/2026:
 - [x] novo token de recuperação criado no D1, ainda não usado e não revogado;
 - [x] segunda recuperação dentro de 5 minutos manteve HTTP 200/mensagem genérica e não enviou novo e-mail;
 - [x] novo link de recuperação ativado com sucesso em janela anônima, sem sessão prévia;
-- [x] endpoint retornou HTTP 200, `ok = true`, `product_code = ever_precifica_e2e` e nova credencial opaca ao navegador.
+- [x] endpoint retornou HTTP 200, `ok = true`, `product_code = ever_precifica_e2e` e nova credencial opaca ao navegador;
+- [x] sessão recuperada em janela anônima validada com HTTP 200, `valid = true` e `product_code = ever_precifica_e2e`.
 - [x] confirmar novo token no D1;
 - [x] confirmar cooldown de 5 minutos;
 - [x] confirmar ativação do novo link em um navegador sem sessão.
