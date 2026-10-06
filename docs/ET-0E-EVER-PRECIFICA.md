@@ -2281,14 +2281,46 @@ Especificação completa: `docs/ET-0E-EVER-GLASS-DESIGN-SYSTEM.md`.
 **ET-0E-E encerrada e aprovada em 05/10/2026.**
 
 ### ET-0E-F — Build
-- [ ] F1 — shell Ever.Glass + jornada navegável;
-- [ ] F2 — integração completa com o motor determinístico;
-- [ ] F3 — persistência local + retomada/limpeza;
-- [ ] F4 — ativação e recuperação de acesso via Worker;
-- [ ] F5 — instrumentação de eventos sem dados financeiros;
-- [ ] F6 — hardening de acessibilidade e responsividade.
+- [x] F1 — shell Ever.Glass + jornada navegável;
+- [x] F2 — integração completa com o motor determinístico;
+- [x] F3 — persistência local + retomada/limpeza;
+- [x] F4 — ativação e recuperação de acesso via Worker — código concluído; aplicação do schema remoto pendente para E2E;
+- [x] F5 — instrumentação de eventos sem dados financeiros — código concluído; eventos específicos aguardam configuração GTM para coleta;
+- [x] F6 — hardening inicial de acessibilidade e responsividade — validação real de dispositivos fica para QA.
 
 **ET-0E-F iniciada após aprovação explícita da direção visual.**
+
+Implementação principal:
+- `ferramentas/precifica/index.html`;
+- `ferramentas/precifica/styles.css`;
+- `ferramentas/precifica/app.mjs`;
+- `ferramentas/precifica/access.mjs`;
+- `ferramentas/precifica/engine.mjs`.
+
+Backend de acesso:
+- `POST /access/recover`;
+- `POST /access/activate`;
+- `POST /access/validate`;
+- links de ativação de uso único com expiração;
+- sessão local opaca;
+- revogação por refund/chargeback;
+- recuperação com resposta genérica para evitar enumeração de e-mails;
+- cooldown de 5 minutos por e-mail/produto para recuperação;
+- e-mail bruto usado apenas em memória; D1 mantém hash;
+- CORS restrito ao `SITE_URL` e origens locais permitidas apenas em staging.
+
+Persistência financeira:
+- permanece em `localStorage`;
+- credencial de acesso usa chave separada;
+- "Nova simulação" limpa números sem apagar o direito de acesso.
+
+CI:
+- sintaxe do módulo do navegador validada;
+- sintaxe do Worker validada;
+- testes do motor determinístico mantidos;
+- suíte do Worker mantida.
+
+**ET-0E-F considerada code-complete em 06/10/2026. A conclusão operacional depende da ET-0E-G — QA & E2E.**
 
 ### ET-0E-G — QA & E2E
 - testes funcionais;
