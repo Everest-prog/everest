@@ -759,6 +759,14 @@ function mapKiwifyProductCode(payload, env) {
   ).trim();
 
   if (
+    env.KIWIFY_PRECIFICA_PRODUCT_ID &&
+    productId &&
+    productId === String(env.KIWIFY_PRECIFICA_PRODUCT_ID)
+  ) {
+    return "ever_precifica";
+  }
+
+  if (
     env.KIWIFY_E2E_PRODUCT_ID &&
     productId &&
     productId === String(env.KIWIFY_E2E_PRODUCT_ID)
