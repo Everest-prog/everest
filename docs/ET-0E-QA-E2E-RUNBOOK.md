@@ -85,7 +85,7 @@ Esperado:
 1. [x] concluir compra E2E interna;
 2. [x] confirmar webhook `purchase_approved`;
 3. [x] confirmar pedido `approved` no D1;
-4. [ ] confirmar criação de activation token hash;
+4. [x] confirmar criação de activation token hash;
 5. [ ] confirmar envio pelo Resend;
 6. [ ] abrir link de ativação;
 7. [ ] confirmar que o token de ativação vira `used_at`;
@@ -98,7 +98,9 @@ Evidência em 06/10/2026:
 - novo pedido E2E registrado no D1 com `product_code = ever_precifica_e2e`;
 - status confirmado como `approved`;
 - `approved_at` preenchido;
-- `refunded_at` nulo.
+- `refunded_at` nulo;
+- activation token criado para o novo pedido, com `used_at` e `revoked_at` nulos;
+- expiração configurada para 30 minutos após a criação.
 
 Critério:
 - token bruto de sessão fica somente no navegador;
