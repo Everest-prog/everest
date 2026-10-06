@@ -30,5 +30,8 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Check browser module syntax
+        run: node --check ferramentas/precifica/app.mjs
+
       - name: Run deterministic pricing engine tests
         run: node --test tests/ever-precifica-engine.test.mjs
