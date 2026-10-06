@@ -345,3 +345,14 @@ Validado em 06/10/2026:
 - margem resultante: 15,01%;
 - resultado ficou praticamente no limite mínimo definido de 15%;
 - mensagem manteve classificação correta: acima do mínimo e abaixo da meta.
+
+
+### Evidência visual — Desconto abaixo do mínimo
+
+Validado em 06/10/2026:
+- desconto de 30% aplicado sobre preço de referência de R$ 154,00;
+- preço resultante: R$ 107,80;
+- lucro por venda: R$ 10,46;
+- margem resultante: 9,7%;
+- sistema classificou corretamente como abaixo do mínimo definido de 15%;
+- mensagem exibida: "Com esse desconto, sobra menos do que o mínimo que você definiu.";
