@@ -308,3 +308,18 @@ Validado em 06/10/2026:
 - tentativa de mínimo de R$ 30 com meta de R$ 25 foi bloqueada;
 - mensagem exibida: "O mínimo não pode ser maior que sua meta.";
 - erro apresentado de forma legível e sem apagar os valores informados.
+
+
+### Evidência visual — Etapa 8
+
+Validado em 06/10/2026:
+- sugestão comercial exibida em destaque: R$ 154,00;
+- menor preço para atingir a meta: R$ 153,56;
+- alternativa comercial/psicológica: R$ 153,90;
+- lucro por venda: R$ 46,41;
+- margem resultante: 30,14%;
+- menor preço sem prejuízo: R$ 94,34;
+- composição do preço reconciliada entre custos, taxas/comissões e lucro;
+- preço atual de R$ 79,90 diagnosticado como prejuízo;
+- diferença para a meta exibida em reais;
+- limites de desconto exibidos separadamente para preservação da meta e do mínimo.
