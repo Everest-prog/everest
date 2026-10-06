@@ -2326,7 +2326,7 @@ CI:
 - [x] runbook de QA/E2E preparado;
 - [x] CI de sintaxe e testes automatizados verde;
 - [x] aplicar schema de acesso no D1 staging;
-- [ ] implantar Worker de staging com /access/*;
+- [x] implantar Worker de staging com /access/* — health validado em 06/10/2026;
 - [ ] validar compra → ativação → uso → recovery → refund;
 - [ ] validar Produto e Serviço em navegador real;
 - [ ] validar mobile e acessibilidade;
