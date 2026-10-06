@@ -12,6 +12,22 @@ export default {
       return handleHealth(env);
     }
 
+    if (request.method === "OPTIONS" && url.pathname.startsWith("/access/")) {
+      return handleAccessOptions(request, env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/access/recover") {
+      return handleAccessRecover(request, env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/access/activate") {
+      return handleAccessActivate(request, env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/access/validate") {
+      return handleAccessValidate(request, env);
+    }
+
     if (request.method === "POST" && url.pathname === "/webhooks/resend") {
       return handleResendWebhook(request, env);
     }
