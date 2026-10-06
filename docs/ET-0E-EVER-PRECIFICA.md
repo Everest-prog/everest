@@ -2325,7 +2325,7 @@ CI:
 ### ET-0E-G — QA & E2E
 - [x] runbook de QA/E2E preparado;
 - [x] CI de sintaxe e testes automatizados verde;
-- [ ] aplicar schema de acesso no D1 staging;
+- [x] aplicar schema de acesso no D1 staging;
 - [ ] implantar Worker de staging com /access/*;
 - [ ] validar compra → ativação → uso → recovery → refund;
 - [ ] validar Produto e Serviço em navegador real;
