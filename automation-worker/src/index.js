@@ -12,6 +12,10 @@ export default {
       return handleHealth(env);
     }
 
+    if (request.method === "GET" && url.pathname.startsWith("/preview/precifica")) {
+      return handlePrecificaPreview(request, env);
+    }
+
     if (request.method === "OPTIONS" && url.pathname.startsWith("/access/")) {
       return handleAccessOptions(request, env);
     }
@@ -39,6 +43,70 @@ export default {
     return json({ error: "not_found" }, 404);
   }
 };
+
+async function handlePrecificaPreview(request, env) {
+  if (env.ENVIRONMENT !== "staging") {
+    return json({ error: "not_found" }, 404);
+  }
+
+  const url = new URL(request.url);
+  const basePath = "/preview/precifica";
+  let relative = url.pathname.slice(basePath.length);
+
+  if (!relative || relative === "/") relative = "/preview.html";
+
+  const allowed = new Set([
+    "/preview.html",
+    "/styles.css",
+    "/app.mjs",
+    "/engine.mjs",
+    "/access.mjs"
+  ]);
+
+  if (!allowed.has(relative)) {
+    return json({ error: "not_found" }, 404);
+  }
+
+  const repoPath =
+    relative === "/preview.html"
+      ? "ferramentas/precifica/preview.html"
+      : "ferramentas/precifica" + relative;
+
+  const rawUrl =
+    "https://raw.githubusercontent.com/Everest-prog/everest/refs/heads/" +
+    "feat/et-0e-ever-precifica/" +
+    repoPath;
+
+  const upstream = await fetch(rawUrl, {
+    headers: { "user-agent": "Ever.Est-Precifica-QA" }
+  });
+
+  if (!upstream.ok) {
+    return json({ error: "preview_asset_unavailable" }, 502);
+  }
+
+  const contentType =
+    relative.endsWith(".html") ? "text/html; charset=utf-8" :
+    relative.endsWith(".css") ? "text/css; charset=utf-8" :
+    "text/javascript; charset=utf-8";
+
+  return new Response(await upstream.text(), {
+    status: 200,
+    headers: {
+      "content-type": contentType,
+      "cache-control": "no-store",
+      "x-robots-tag": "noindex, nofollow",
+      "content-security-policy":
+        "default-src 'self'; " +
+        "script-src 'self'; " +
+        "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
+        "font-src https://fonts.gstatic.com; " +
+        "img-src 'self' https://raw.githubusercontent.com data:; " +
+        "connect-src 'self'; " +
+        "base-uri 'none'; frame-ancestors 'none'"
+    }
+  });
+}
 
 async function handleHealth(env) {
   if (!env.DB) {
