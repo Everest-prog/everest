@@ -1,6 +1,6 @@
 # ET-0E — Ever.Precifica
 
-Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D concluída · ET-0E-E concluída · ET-0E-F code-complete · ET-0E-G próxima  
+Status: ET-0E-A concluída · ET-0E-B concluída · ET-0E-C concluída · ET-0E-D concluída · ET-0E-E concluída · ET-0E-F code-complete · ET-0E-G em preparação/execução  
 Branch: `feat/et-0e-ever-precifica`
 
 ## 1. Objetivo do produto
@@ -2323,11 +2323,16 @@ CI:
 **ET-0E-F considerada code-complete em 06/10/2026. A conclusão operacional depende da ET-0E-G — QA & E2E.**
 
 ### ET-0E-G — QA & E2E
-- testes funcionais;
-- casos-limite;
-- mobile;
-- consentimento/analytics;
-- fluxo comercial e entrega.
+- [x] runbook de QA/E2E preparado;
+- [x] CI de sintaxe e testes automatizados verde;
+- [ ] aplicar schema de acesso no D1 staging;
+- [ ] implantar Worker de staging com /access/*;
+- [ ] validar compra → ativação → uso → recovery → refund;
+- [ ] validar Produto e Serviço em navegador real;
+- [ ] validar mobile e acessibilidade;
+- [ ] validar consentimento/analytics sem dados financeiros.
+
+Runbook: `docs/ET-0E-QA-E2E-RUNBOOK.md`.
 
 ### ET-0E-H — Release
 - checkout final;
