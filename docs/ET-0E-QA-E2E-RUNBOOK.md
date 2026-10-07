@@ -356,3 +356,13 @@ Validado em 06/10/2026:
 - margem resultante: 9,7%;
 - sistema classificou corretamente como abaixo do mínimo definido de 15%;
 - mensagem exibida: "Com esse desconto, sobra menos do que o mínimo que você definiu.";
+
+
+### Evidência visual — Etapa 2 (Serviço)
+
+Validado em 07/10/2026:
+- fluxo de Serviço alterou corretamente a linguagem de custo por unidade para custo do trabalho;
+- modo guiado exibiu custo por hora + duração do serviço;
+- cenário de teste: R$ 5,00/hora por 78 minutos;
+- custo direto calculado corretamente em R$ 6,50;
+- texto de ajuda permaneceu em linguagem leiga e sem jargões.
