@@ -366,3 +366,13 @@ Validado em 07/10/2026:
 - cenário de teste: R$ 5,00/hora por 78 minutos;
 - custo direto calculado corretamente em R$ 6,50;
 - texto de ajuda permaneceu em linguagem leiga e sem jargões.
+
+
+### Evidência visual — Etapa 3 (Serviço)
+
+Validado em 07/10/2026:
+- linguagem adaptada corretamente para materiais usados no serviço e deslocamento;
+- tarifa fixa por venda mantida como valor em reais;
+- gasto personalizado adicional aceito e incluído no total;
+- cenário de teste: R$ 10,00 materiais + R$ 0,50 deslocamento + R$ 1,10 tarifa fixa + R$ 5,00 estacionamento = R$ 16,60;
+- alerta contra duplicidade de custos permaneceu visível.
