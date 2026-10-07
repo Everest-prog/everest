@@ -615,6 +615,11 @@ function renderStep8() {
   }
 
   bindPercent("discount-input",(v)=>{state.discountBps=Math.min(10000,v);saveState();updateDiscount();});
+  document.getElementById("discount-input")?.addEventListener("change",()=>{
+    if(state.discountBps > 0){
+      track("precifica_discount_simulated",{stage:"result"});
+    }
+  });
   document.getElementById("result-new").addEventListener("click",()=>resetDialog.showModal());
   updateDiscount();
 
