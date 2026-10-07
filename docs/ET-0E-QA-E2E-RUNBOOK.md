@@ -232,14 +232,16 @@ Testar ao menos:
 - desktop >=1280px.
 
 Validar:
-- [ ] sem overflow horizontal;
-- [ ] campos legíveis;
-- [ ] CTA alcançável;
-- [ ] progresso compreensível;
-- [ ] modal cabe na viewport;
-- [ ] cards empilham corretamente;
-- [ ] fundo não compromete contraste;
-- [ ] performance aceitável com blur reduzido.
+- [x] sem overflow horizontal;
+- [x] campos legíveis;
+- [x] CTA alcançável;
+- [x] progresso compreensível;
+- [x] modal cabe na viewport;
+- [x] cards empilham corretamente;
+- [x] fundo não compromete contraste;
+- [x] performance aceitável com blur reduzido.
+
+Evidência: validação manual mobile realizada pelo proprietário em 07/10/2026 e considerada aprovada para o MVP.
 
 ## 11. Acessibilidade
 
