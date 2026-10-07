@@ -376,3 +376,13 @@ Validado em 07/10/2026:
 - gasto personalizado adicional aceito e incluído no total;
 - cenário de teste: R$ 10,00 materiais + R$ 0,50 deslocamento + R$ 1,10 tarifa fixa + R$ 5,00 estacionamento = R$ 16,60;
 - alerta contra duplicidade de custos permaneceu visível.
+
+
+### Evidência visual — Etapa 4 (Serviço)
+
+Validado em 07/10/2026:
+- rateio de custos mensais adaptado para horas realmente vendáveis;
+- cenário de teste: R$ 4.200/mês, 200 horas vendáveis e serviço com duração de 78 minutos;
+- parcela dos custos mensais calculada em R$ 27,30;
+- duração do serviço foi reaproveitada da Etapa 2;
+- linguagem manteve "horas que você consegue realmente vender" em vez de jargões como "horas faturáveis".
