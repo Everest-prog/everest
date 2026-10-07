@@ -386,3 +386,20 @@ Validado em 07/10/2026:
 - parcela dos custos mensais calculada em R$ 27,30;
 - duração do serviço foi reaproveitada da Etapa 2;
 - linguagem manteve "horas que você consegue realmente vender" em vez de jargões como "horas faturáveis".
+
+
+### Evidência visual — Resultado final (Serviço)
+
+Validado em 07/10/2026:
+- sugestão comercial exibida: R$ 82,00;
+- menor preço calculado para atingir a meta: R$ 81,30;
+- alternativa comercial: R$ 81,90;
+- lucro por venda: R$ 25,04;
+- margem resultante: 30,54%;
+- menor preço sem prejuízo: R$ 54,79;
+- custos informados consolidados em R$ 50,40;
+- impostos, taxas e comissões consolidados em R$ 6,56;
+- preço atual de R$ 78,00 permaneceu lucrativo, com R$ 21,36 de lucro e margem de 27,38%, porém abaixo da meta;
+- limite de desconto preservando a meta: 0,85%;
+- limite de desconto sem ficar abaixo do mínimo: 20,17%;
+- motor combinou corretamente mão de obra, materiais, deslocamento, tarifa fixa e custos mensais alocados.
