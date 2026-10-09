@@ -194,6 +194,22 @@ Validar:
 - O direito de acesso permaneceu válido após a limpeza dos dados, sem exigir nova compra ou ativação.
 - A persistência dos dados após limpar e atualizar novamente ainda merece checagem isolada; o teste de cancelamento do modal não foi confirmado explicitamente nesta evidência.
 
+### Regressão — seleção inicial não deve disparar retomada (09/10/2026)
+
+Situação relatada: depois de apagar os dados, o navegador voltava corretamente à Etapa 1, mas ao selecionar Produto ou Serviço reaparecia **Continuar de onde você parou?**.
+
+Correção de código: `ferramentas/precifica/app.mjs`, commit `040c655`. Uma seleção isolada de tipo deixa de ser suficiente para caracterizar simulação retomável, e uma escolha ativa descarta qualquer indicação de retomada pendente.
+
+Revalidar no preview de staging:
+- [ ] Nova simulação → confirmar exclusão → atualizar a página → Etapa 1 sem aviso de retomada;
+- [ ] selecionar Produto → permanecer na Etapa 1, com Produto selecionado → Continuar leva à Etapa 2;
+- [ ] voltar e selecionar Serviço → permanecer na Etapa 1, com Serviço selecionado → Continuar leva à Etapa 2;
+- [ ] atualizar a página estando apenas com o tipo selecionado, sem avançar → não abrir aviso de retomada;
+- [ ] preencher custo na Etapa 2, atualizar a página → oferecer retomada e preservar valores;
+- [ ] acesso adquirido deve permanecer em todas as operações.
+
+Status: correção aplicada; **revalidação manual pendente**.
+
 ## 8. Jornada Serviço
 
 Cenário base:
