@@ -247,12 +247,12 @@ Evidência: validação manual mobile realizada pelo proprietário em 07/10/2026
 
 - [x] navegação por Tab;
 - [x] foco visível;
-- [ ] labels persistentes;
-- [ ] erro compreensível sem depender de cor;
-- [ ] botões >=44px quando aplicável;
-- [ ] reduced motion respeitado;
-- [ ] fallback sem backdrop-filter legível;
-- [ ] leitura de resultado em ordem lógica.
+- [x] labels persistentes;
+- [x] erro compreensível sem depender de cor;
+- [x] botões >=44px quando aplicável;
+- [x] reduced motion respeitado;
+- [x] fallback sem backdrop-filter legível;
+- [x] leitura de resultado em ordem lógica.
 
 ## 12. Analytics e privacidade
 
@@ -460,3 +460,15 @@ Validado em 09/10/2026:
 - modal de Ajuda abriu com `Enter` pelo teclado;
 - modal fechou corretamente com `Esc`;
 - interação principal do modal funcionou sem mouse.
+
+
+### Revisão estática de acessibilidade
+
+Validado em 09/10/2026:
+- campos usam labels persistentes associados aos inputs;
+- mensagens de erro exibem texto e ícone, não dependem apenas de cor;
+- controles principais receberam alvo mínimo de 44px;
+- botão de fechar dos dialogs ajustado de 38px para 44px;
+- `prefers-reduced-motion` reduz animações e transições;
+- existe fallback sólido para navegadores sem `backdrop-filter`;
+- estrutura visual e ordem do DOM mantêm leitura lógica do resultado.
