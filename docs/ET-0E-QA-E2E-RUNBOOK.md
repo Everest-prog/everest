@@ -205,10 +205,10 @@ Revalidar no preview de staging:
 - [x] selecionar Produto → permanecer na Etapa 1, com Produto selecionado → Continuar leva à Etapa 2;
 - [ ] voltar e selecionar Serviço → permanecer na Etapa 1, com Serviço selecionado → Continuar leva à Etapa 2;
 - [ ] atualizar a página estando apenas com o tipo selecionado, sem avançar → não abrir aviso de retomada;
-- [ ] preencher custo na Etapa 2, atualizar a página → oferecer retomada e preservar valores;
+- [x] preencher custo na Etapa 2, atualizar a página → oferecer retomada e preservar valores;
 - [ ] acesso adquirido deve permanecer em todas as operações.
 
-Status: correção aplicada; **revalidação manual pendente**.
+Status: correção aplicada; **seleção de Produto e retomada da Etapa 2 revalidadas em 09/10/2026**. Demais cenários de regressão permanecem pendentes.
 
 ## 8. Jornada Serviço
 
