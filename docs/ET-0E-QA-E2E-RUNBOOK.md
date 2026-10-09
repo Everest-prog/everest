@@ -178,14 +178,21 @@ Cenário base:
 Validar:
 - [ ] 8 etapas;
 - [ ] Voltar preserva dados;
-- [ ] recarregar restaura estado;
+- [x] recarregar restaura estado;
 - [ ] resultado bate com engine;
 - [ ] preço técnico nunca abaixo da margem-meta;
 - [ ] sugestão comercial não arredonda para baixo;
 - [ ] preço atual recebe diagnóstico correto;
 - [ ] desconto atualiza sem reload;
-- [ ] nova simulação limpa números;
-- [ ] direito de acesso permanece.
+- [x] nova simulação limpa números;
+- [x] direito de acesso permanece.
+
+**Evidência de persistência e limpeza — 09/10/2026**
+
+- Após preencher e avançar na simulação, o usuário confirmou que a retomada funcionou ao atualizar a página.
+- O comando **Nova simulação** apagou os dados financeiros da simulação anterior.
+- O direito de acesso permaneceu válido após a limpeza dos dados, sem exigir nova compra ou ativação.
+- A persistência dos dados após limpar e atualizar novamente ainda merece checagem isolada; o teste de cancelamento do modal não foi confirmado explicitamente nesta evidência.
 
 ## 8. Jornada Serviço
 
