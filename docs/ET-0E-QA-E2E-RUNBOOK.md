@@ -405,3 +405,12 @@ Validado em 07/10/2026:
 - limite de desconto preservando a meta: 0,85%;
 - limite de desconto sem ficar abaixo do mínimo: 20,17%;
 - motor combinou corretamente mão de obra, materiais, deslocamento, tarifa fixa e custos mensais alocados.
+
+
+### Evidência de Analytics — Ever.Precifica
+
+Validado em 09/10/2026:
+- evento `precifica_calculation_started` apareceu no Tag Assistant;
+- o acionador `Eventos Ever.Est — Analytics` reconheceu o evento;
+- a tag `GA4 — Eventos Ever.Est` disparou com sucesso;
+- validação de payload sem dados financeiros ainda pendente.
