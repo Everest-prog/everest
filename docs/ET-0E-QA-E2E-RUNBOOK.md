@@ -434,3 +434,12 @@ Validado em 09/10/2026:
 - `precifica_price_simulated`: `stage = current_price`;
 - `precifica_discount_simulated`: `stage = result`;
 - nenhum preço, custo, lucro, margem, desconto, imposto, taxa ou e-mail foi enviado na camada de dados.
+
+
+### Publicação GTM — Ever.Precifica
+
+Validado em 09/10/2026:
+- GTM Version 3 publicada;
+- nome: `ET-0E — Eventos Ever.Precifica`;
+- acionador `Eventos Ever.Est — Analytics` atualizado;
+- eventos específicos do Ever.Precifica liberados sem envio de dados financeiros.
