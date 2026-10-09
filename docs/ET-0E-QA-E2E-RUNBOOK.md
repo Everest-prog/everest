@@ -452,3 +452,11 @@ Validado em 09/10/2026:
 - sequência de foco por teclado considerada lógica;
 - destaque de foco permaneceu claramente visível durante todo o percurso;
 - elementos principais alcançáveis sem mouse.
+
+
+### Evidência de acessibilidade — Modal
+
+Validado em 09/10/2026:
+- modal de Ajuda abriu com `Enter` pelo teclado;
+- modal fechou corretamente com `Esc`;
+- interação principal do modal funcionou sem mouse.
