@@ -245,8 +245,8 @@ Evidência: validação manual mobile realizada pelo proprietário em 07/10/2026
 
 ## 11. Acessibilidade
 
-- [ ] navegação por Tab;
-- [ ] foco visível;
+- [x] navegação por Tab;
+- [x] foco visível;
 - [ ] labels persistentes;
 - [ ] erro compreensível sem depender de cor;
 - [ ] botões >=44px quando aplicável;
@@ -443,3 +443,12 @@ Validado em 09/10/2026:
 - nome: `ET-0E — Eventos Ever.Precifica`;
 - acionador `Eventos Ever.Est — Analytics` atualizado;
 - eventos específicos do Ever.Precifica liberados sem envio de dados financeiros.
+
+
+### Evidência de acessibilidade — Navegação por teclado
+
+Validado em 09/10/2026:
+- navegação por `Tab` funcionou na Etapa 1;
+- sequência de foco por teclado considerada lógica;
+- destaque de foco permaneceu claramente visível durante todo o percurso;
+- elementos principais alcançáveis sem mouse.
