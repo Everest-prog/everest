@@ -423,3 +423,14 @@ Validado em 09/10/2026:
 - campos observados: `event`, metadados internos do GTM, `analytics_consent`, `event_source`, `page_path`, `page_title`, `occurred_at` e `stage`;
 - nenhum preço, custo, lucro, margem, desconto, imposto, taxa ou e-mail foi enviado;
 - `analytics_consent = granted` confirmado durante o teste.
+
+
+### Evidência de Analytics — Eventos adicionais
+
+Validado em 09/10/2026:
+- `precifica_calculation_completed`, `precifica_price_simulated` e `precifica_discount_simulated` apareceram no Tag Assistant;
+- os três payloads mantiveram apenas metadados técnicos/contextuais e o campo `stage`;
+- `precifica_calculation_completed`: `stage = result`;
+- `precifica_price_simulated`: `stage = current_price`;
+- `precifica_discount_simulated`: `stage = result`;
+- nenhum preço, custo, lucro, margem, desconto, imposto, taxa ou e-mail foi enviado na camada de dados.
