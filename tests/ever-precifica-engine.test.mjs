@@ -236,3 +236,69 @@ test("target prices are minimal across a matrix of costs, rates and margins", ()
     }
   }
 });
+
+
+test("rejects zero expected units and zero billable capacity", () => {
+  assert.throws(
+    () => allocateProductFixedCostCents(10000, 0),
+    (error) =>
+      error instanceof PricingInputError &&
+      error.code === "INVALID_INTEGER"
+  );
+
+  assert.throws(
+    () => allocateServiceFixedCostCents(10000, 0, 60),
+    (error) =>
+      error instanceof PricingInputError &&
+      error.code === "INVALID_INTEGER"
+  );
+});
+
+test("rejects total variable rates at or above 100%", () => {
+  assert.throws(
+    () =>
+      calculatePricing({
+        ...baseInput,
+        desiredMarginBps: 0,
+        minimumMarginBps: 0,
+        ratesBps: {
+          taxes: 6000,
+          payment: 4000,
+          commission: 0,
+          other: 0,
+        },
+      }),
+    (error) =>
+      error instanceof PricingInputError &&
+      error.code === "VARIABLE_RATE_AT_OR_ABOVE_100"
+  );
+});
+
+test("handles zero and full discount boundaries", () => {
+  const zero = simulateDiscount(baseInput, 10000, 0);
+  assert.equal(zero.discountedPriceCents, 10000);
+  assert.equal(zero.status, "OK");
+  assert.equal(zero.evaluation.priceCents, 10000);
+
+  const full = simulateDiscount(baseInput, 10000, 10000);
+  assert.equal(full.discountedPriceCents, 0);
+  assert.equal(full.status, "ZERO_PRICE");
+  assert.equal(full.evaluation, null);
+});
+
+test("works with no monthly allocation and all variable rates at zero", () => {
+  const result = calculatePricing({
+    ...baseInput,
+    allocatedFixedCostCents: 0,
+    ratesBps: {
+      taxes: 0,
+      payment: 0,
+      commission: 0,
+      other: 0,
+    },
+  });
+
+  assert.equal(result.totalVariableRateBps, 0);
+  assert.equal(result.costBaseCents, 5000);
+  assert.equal(result.breakEven.priceCents, 5000);
+});
