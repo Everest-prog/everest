@@ -202,7 +202,7 @@ Correção de código: `ferramentas/precifica/app.mjs`, commit `040c655`. Uma se
 
 Revalidar no preview de staging:
 - [ ] Nova simulação → confirmar exclusão → atualizar a página → Etapa 1 sem aviso de retomada;
-- [ ] selecionar Produto → permanecer na Etapa 1, com Produto selecionado → Continuar leva à Etapa 2;
+- [x] selecionar Produto → permanecer na Etapa 1, com Produto selecionado → Continuar leva à Etapa 2;
 - [ ] voltar e selecionar Serviço → permanecer na Etapa 1, com Serviço selecionado → Continuar leva à Etapa 2;
 - [ ] atualizar a página estando apenas com o tipo selecionado, sem avançar → não abrir aviso de retomada;
 - [ ] preencher custo na Etapa 2, atualizar a página → oferecer retomada e preservar valores;
