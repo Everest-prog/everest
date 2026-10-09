@@ -414,3 +414,12 @@ Validado em 09/10/2026:
 - o acionador `Eventos Ever.Est — Analytics` reconheceu o evento;
 - a tag `GA4 — Eventos Ever.Est` disparou com sucesso;
 - validação de payload sem dados financeiros ainda pendente.
+
+
+### Evidência de Analytics — Payload
+
+Validado em 09/10/2026:
+- payload de `precifica_calculation_started` confirmado na camada de dados;
+- campos observados: `event`, metadados internos do GTM, `analytics_consent`, `event_source`, `page_path`, `page_title`, `occurred_at` e `stage`;
+- nenhum preço, custo, lucro, margem, desconto, imposto, taxa ou e-mail foi enviado;
+- `analytics_consent = granted` confirmado durante o teste.
