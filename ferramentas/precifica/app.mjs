@@ -68,23 +68,32 @@ function loadState() {
 
 const loaded = loadState();
 let state = loaded.state;
-let resumePending = loaded.resumed && hasMeaningfulData(state);
+let resumePending = loaded.resumed && hasResumableProgress(state);
 let resultViewTracked = false;
 let accessValidated = false;
 
-function hasMeaningfulData(s) {
+// A simple choice between Produto and Serviço is not a simulation to resume.
+// Keep the prompt for real progress and any previously entered numeric data.
+function hasResumableProgress(s) {
   return Boolean(
-    s.itemType ||
+    s.step > 1 ||
     s.directCostCents ||
     s.productLotCostCents ||
+    s.productLotUnits ||
     s.serviceHourlyCostCents ||
+    s.serviceMinutes ||
     s.additionalPrimaryCents ||
     s.deliveryCents ||
     s.fixedFeeCents ||
     s.monthlyFixedCostCents ||
+    s.expectedMonthlyUnits ||
+    s.monthlyBillableMinutes ||
+    s.allocatedFixedCostCents ||
     s.desiredMarginBps ||
+    s.minimumMarginBps ||
     s.currentPriceCents ||
-    s.step > 1
+    Object.values(s.ratesBps || {}).some((rate) => Number(rate) > 0) ||
+    (Array.isArray(s.customCosts) && s.customCosts.some((item) => Number(item?.amountCents) > 0))
   );
 }
 
@@ -272,6 +281,8 @@ function renderStep1() {
       clearTypeSpecificData();
     }
     state.itemType = nextType;
+    // The first choice starts a new flow; never show a stale resume prompt.
+    resumePending = false;
     saveState();
     render();
   }));
@@ -683,7 +694,8 @@ function bindNavigation() {
 }
 
 function render() {
-  if (resumePending) { renderResume(); return; }
+  if (resumePending && hasResumableProgress(state)) { renderResume(); return; }
+  resumePending = false;
   setProgress();
   const renderers=[null,renderStep1,renderStep2,renderStep3,renderStep4,renderStep5,renderStep6,renderStep7,renderStep8];
   renderers[state.step]();
