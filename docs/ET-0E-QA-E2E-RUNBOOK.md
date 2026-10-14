@@ -558,6 +558,19 @@ O acesso real deve usar uma ligação interna da Cloudflare ao Worker de staging
 
 Estes resultados validam o staging local com adaptador analítico e acesso sintético. Todos os testes manuais remotos, GTM/GA4 real e ciclo comercial abaixo continuam pendentes.
 
+### Confirmação GitHub e preservação dos ambientes
+
+Commit de implementação: `5bacf92976ad816d59207f32e0711d75bfe24e1c`. Em 14/10/2026, concluíram com sucesso nesse commit:
+
+- [Integrated Staging Tests — PR](https://github.com/Everest-prog/everest/actions/runs/38602616697);
+- [Integrated Staging Tests — push](https://github.com/Everest-prog/everest/actions/runs/38602609912);
+- [Engine Tests](https://github.com/Everest-prog/everest/actions/runs/38602616661);
+- [Worker Tests](https://github.com/Everest-prog/everest/actions/runs/38602616751).
+
+O pacote também foi gerado a partir desse commit limpo (`source_dirty=false`) e passou no dry-run. Após salvar a branch, produção, health do backend e preview antigo responderam HTTP 200. A comparação Git confirma ausência de alterações nos arquivos compartilhados de ferramenta, analytics e Worker existente.
+
+O check externo `Workers Builds: ever-tools-automation-staging` falhou novamente, build `ee8e781d-311f-48dd-815b-e34c3c273bb9`. O GitHub expõe apenas o link ao painel autenticado, sem mensagem da causa. Esse check é do Worker existente e não confirma implantação do novo `ever-precifica-integrated-staging`. Investigar na Cloudflare antes de encerrar QA; não anunciar deploy ou CI globalmente verde.
+
 ### Pré-condições para o teste manual remoto
 
 - [ ] identificar commit e configuração efetivamente implantados no novo Worker;
