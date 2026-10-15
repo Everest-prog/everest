@@ -28,6 +28,8 @@ npx wrangler deploy --config staging/precifica/wrangler.jsonc
 
 Não há deploy automático no workflow. Registre a URL retornada, versão do Worker e resposta de `/__qa__/health` antes de anunciar disponibilidade. O health informa presença do binding, sem afirmar que o banco ou acesso real foram validados. Gere o pacote a partir de commit limpo antes de publicar.
 
-Runbook: `docs/ET-0E-QA-E2E-RUNBOOK.md`, seções 14–16. Permanecem pendentes: deploy confirmado, acesso E2E real, backend de recuperação isolado e container/propriedade GTM/GA4 exclusivos de QA. A aprovação do adaptador local não encerra Analytics nem ET-0E-G.
+Publicado e verificado em 15/10/2026: https://ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev/ . Versão `db2fad83-3399-4733-b4a5-65b9b6c8366b`, fonte `75dab56b731f958e8597e12061a5b939ed0bdd5c`. Seis verificações remotas passaram, incluindo consentimento e rejeição de credencial fictícia pelo backend; acesso válido ainda precisa de ativação E2E.
+
+Runbook: `docs/ET-0E-QA-E2E-RUNBOOK.md`, seções 14–16. Permanecem pendentes: acesso E2E real, persistência com esse acesso no staging remoto, backend de recuperação isolado e container/propriedade GTM/GA4 exclusivos de QA. A aprovação do adaptador local não encerra Analytics nem ET-0E-G. O login oficial do Wrangler precisa de `workers_scripts:write`; `workers:write` sozinho não permite publicar este pacote.
 
 Referências: [Cloudflare Static Assets](https://developers.cloudflare.com/workers/static-assets/binding/) e [Service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/).

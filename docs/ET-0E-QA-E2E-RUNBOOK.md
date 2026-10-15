@@ -541,7 +541,7 @@ Neste primeiro estágio, o carregamento acionado pelo consentimento usa um **ada
 
 O acesso real deve usar uma ligação interna da Cloudflare ao Worker de staging existente, expondo somente ativação e validação na origem do novo frontend. A recuperação fica desabilitada até existir backend isolado com `SITE_URL` apontando para a origem correta. Não substituir o `SITE_URL`, os segredos, o D1 ou os webhooks do ambiente atual para viabilizar este teste.
 
-**Status operacional:** nenhum deploy deste novo Worker nem URL pública de staging integrado foi confirmado nesta auditoria. Preparação e testes locais não devem ser apresentados como publicação concluída. A URL só pode ser registrada abaixo após confirmação na Cloudflare e verificação HTTP do conteúdo publicado.
+**Status operacional atualizado em 15/10/2026:** novo Worker publicado e verificado em [ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev](https://ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev). A publicação e os testes remotos básicos estão confirmados. Acesso E2E válido, persistência financeira com esse acesso e integração real GTM/GA4 continuam pendentes; ver evidência abaixo.
 
 ### Implementação e evidências locais — 14/10/2026
 
@@ -573,14 +573,31 @@ O check externo `Workers Builds: ever-tools-automation-staging` falhou novamente
 
 ### Pré-condições para o teste manual remoto
 
-- [ ] identificar commit e configuração efetivamente implantados no novo Worker;
-- [ ] registrar URL pública confirmada e data/hora da verificação;
-- [ ] confirmar nome do novo Worker e ausência de rotas/domínios de produção;
-- [ ] confirmar ligação interna ao backend de staging esperado;
-- [ ] confirmar que o preview antigo e o site público continuam respondendo como antes;
+- [x] identificar commit e configuração efetivamente implantados no novo Worker;
+- [x] registrar URL pública confirmada e data/hora da verificação;
+- [x] confirmar nome do novo Worker e ausência de rotas/domínios de produção;
+- [x] confirmar ligação interna ao backend de staging esperado — validada com rejeição de sessão inexistente; acesso válido ainda pendente;
+- [x] confirmar que o preview antigo e o site público continuam respondendo como antes;
 - [ ] ter uma sessão ou ativação E2E válida, sem divulgar token em evidências;
 - [ ] usar valores financeiros fictícios e navegador/perfil dedicado ao teste;
-- [ ] registrar versão do navegador e viewport.
+- [x] registrar versão do navegador e viewport dos testes remotos básicos; repetir o registro no E2E com acesso válido.
+
+### Publicação e verificação remota — 15/10/2026
+
+- Worker: `ever-precifica-integrated-staging`, conta Cloudflare do projeto; nome inexistente antes do deploy (resposta `10007` após autorização correta).
+- URL inicial: https://ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev/ . Ferramenta: https://ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev/ferramentas/precifica/ .
+- Versão ativa confirmada por `wrangler deployments list`: `db2fad83-3399-4733-b4a5-65b9b6c8366b`, tráfego 100%, criada em `2026-10-15T19:47:27.082Z` (16:47 de Brasília).
+- Fonte implantada: `75dab56b731f958e8597e12061a5b939ed0bdd5c`, `source_dirty=false`. SHA-256 do pacote estático: `73dd9e0d1a8dadf9bb41b5386cd5f21980d423954c8fb74816f3a231aed3953c`.
+- Upload confirmado de 16 arquivos. Binding fixo `ACCESS_SERVICE → ever-tools-automation-staging`; nenhum banco, segredo, rota de produção ou configuração do backend existente foi alterado.
+- A autorização inicial não incluía `workers_scripts:write` e a Cloudflare recusou leitura/publicação. Após nova autorização pelo proprietário com esse escopo, o deploy concluiu. Não criar um OAuth Client próprio para repetir esse fluxo; usar a autorização oficial do Wrangler. Nenhuma credencial está neste runbook.
+- **6 verificações remotas passaram:** health e referência implantada; páginas/assets na mesma origem com CSP; comunicação com backend; recuperação desabilitada e caminhos privados ausentes; recusa/aceite entre página inicial e ferramenta; revogação após reload sem carga do adaptador ou requisições Google Analytics/GTM.
+- `POST /access/validate`, com uma credencial sintética inexistente e nenhum dado de comprador, retornou HTTP 401 e `{"ok":false,"valid":false}`. Isso prova encaminhamento ao backend e rejeição de acesso inválido, não acesso pago válido.
+- Navegador isolado: Chrome `155.0.8059.40`, viewport 1360×900. Nenhum erro de página. Requisições externas bloqueadas pelo harness; somente tentativa de fonte Google foi observada. A tela de acesso permaneceu bloqueada e a recuperação por e-mail desabilitada. Nenhuma compra, ativação válida ou envio de e-mail foi executado.
+- Após o deploy, `soueverest.com.br`, `/health` e `/preview/precifica/` do Worker anterior responderam HTTP 200; health anterior confirmou `database=connected`.
+
+**Teste manual disponível agora:** abrir a página inicial, recusar métricas, recarregar, aceitar nas preferências, abrir a ferramenta e revogar novamente. A escolha deve persistir entre as duas páginas, e a ferramenta deve solicitar ativação válida. Para testar números e manutenção do acesso, primeiro preparar uma ativação E2E válida; o preview antigo usava bypass e seu estado não migra automaticamente para esta nova origem.
+
+Os resultados locais de persistência com acesso sintético permanecem válidos como evidência local. Não marcar persistência financeira remota, acesso pago, recuperação ou GTM/GA4 real como concluídos com estes smoke tests. O erro do build automático do Worker antigo permanece separado e ainda deve ser investigado antes do fechamento de QA.
 
 ### Roteiro de consentimento e persistência na mesma origem
 
