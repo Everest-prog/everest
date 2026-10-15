@@ -597,6 +597,9 @@ O check externo `Workers Builds: ever-tools-automation-staging` falhou novamente
 
 **Teste manual disponível agora:** abrir a página inicial, recusar métricas, recarregar, aceitar nas preferências, abrir a ferramenta e revogar novamente. A escolha deve persistir entre as duas páginas, e a ferramenta deve solicitar ativação válida. Para testar números e manutenção do acesso, primeiro preparar uma ativação E2E válida; o preview antigo usava bypass e seu estado não migra automaticamente para esta nova origem.
 
+**Evidência de teste manual informada pelo usuário em 15/10/2026:** comportamento aprovado no staging remoto — recusa, persistência após atualização, aceite, nova recusa/revogação e tela de acesso solicitando ativação, conforme roteiro orientado. Registro baseado no retorno do usuário (`Funcionou`), sem capturas ou HAR adicionais; não demonstra acesso ativado, persistência financeira com credencial real, nem envio a GTM/GA4. Próximo bloqueio: preparar uma ativação E2E válida no backend de staging isolado.
+
+
 Os resultados locais de persistência com acesso sintético permanecem válidos como evidência local. Não marcar persistência financeira remota, acesso pago, recuperação ou GTM/GA4 real como concluídos com estes smoke tests. O erro do build automático do Worker antigo permanece separado e ainda deve ser investigado antes do fechamento de QA.
 
 ### Roteiro de consentimento e persistência na mesma origem
