@@ -100,3 +100,7 @@ details{margin-top:18px;border-top:1px solid rgba(255,255,255,.08);padding-top:1
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass-shell,.screen-panel,.glass-dialog{background:#0f172a}.ghost-button,.choice-card,.section-card,.kpi-card{background:#172033}}
 
 .qa-banner{position:fixed;z-index:50;top:8px;left:50%;transform:translateX(-50%);padding:7px 12px;border-radius:999px;background:rgba(251,191,36,.92);color:#111827;font-size:10px;font-weight:800;letter-spacing:.08em;box-shadow:0 8px 24px rgba(0,0,0,.22)}
+
+/* P0-1: commercial expiry is distinct from the local autosave notice. */
+.commercial-access-status{margin:10px 0 0;padding:8px 12px;border:1px solid rgba(153,197,220,.3);border-radius:10px;background:rgba(28,62,84,.32);color:#eaf6fe;font-size:12px;line-height:1.5}
+.commercial-access-status[hidden]{display:none!important}
