@@ -1,5 +1,5 @@
 # Ever.Precifica — Guia de primeiro uso
-**ET-0E-PRE-02 · Rascunho para aprovação · Não publicado**
+**ET-0E-PRE-02 · Conteúdo aprovado pelo proprietário em 16/10/2026 · Não publicado**
 
 > **Seu primeiro preço, explicado passo a passo.** Antes de abrir a ferramenta, reúna alguns dados simples do seu produto ou serviço. Não precisa dominar contabilidade: o Ever.Precifica mostra as perguntas e faz as contas a partir dos valores que você informar.
 
@@ -110,3 +110,8 @@ Leia nessa ordem:
 - [ ] As limitações de armazenamento local e acesso são explicadas sem promessas comerciais ainda não aprovadas.
 - [ ] Texto pode ser lido no celular e mantém contraste acessível, sem interferir no produto.
 - [ ] Não houve alteração de produção, staging ou checkout.
+
+
+## Registro de aprovação editorial — 16/10/2026
+
+O proprietário aprovou a primeira versão do Guia de Primeiro Uso no chat do projeto Ever.Est. A aprovação abrange **conteúdo e direção funcional** e autoriza a continuidade do planejamento comercial. Não comprova publicação, testes visuais em navegador, conclusão do workflow do GitHub Actions nem validação jurídica da oferta. Nenhuma condição de duração de acesso, política de suporte ou reembolso foi aprovada nesta etapa; esses itens seguem para ET-0E-PRE-03.
