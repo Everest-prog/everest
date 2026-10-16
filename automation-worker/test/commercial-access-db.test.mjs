@@ -46,7 +46,8 @@ test("one approved purchase creates a 12-month DB grant", async () => {
   const env = { DB };
   const accountId = await reconcileCommercialAccess(env, "test_email_hash", "ever_precifica");
   const grant = DB.raw.prepare("SELECT starts_at, ends_at FROM access_grants WHERE order_id=1").get();
-  assert.deepEqual(grant, { starts_at: "2026-10-16 12:26:00", ends_at: "2027-10-16 12:26:00" });
+  assert.equal(grant.starts_at, "2026-10-16 12:26:00");
+  assert.equal(grant.ends_at, "2027-10-16 12:26:00");
   assert.deepEqual(await commercialAccessForAccount(env, accountId), {
     active: true, expiresAt: "2027-10-16 12:26:00"
   });
@@ -79,7 +80,9 @@ test("refunding renewal removes only renewal and preserves first purchase", asyn
   DB.raw.prepare("UPDATE orders SET status='refunded' WHERE id=2").run();
   await reconcileCommercialAccess(env, "test_email_hash", "ever_precifica");
   const refund = DB.raw.prepare("SELECT status,starts_at,ends_at FROM access_grants WHERE order_id=2").get();
-  assert.deepEqual(refund, { status: "refunded", starts_at: null, ends_at: null });
+  assert.equal(refund.status, "refunded");
+  assert.equal(refund.starts_at, null);
+  assert.equal(refund.ends_at, null);
   assert.deepEqual(await commercialAccessForAccount(env, id), {
     active: true, expiresAt: "2027-10-16 12:26:00"
   });
