@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#081426">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Ever.Precifica · Demonstrações | Protótipo interno</title>
+  <meta name="description" content="Demonstração ilustrativa, sem cadastro e sem coleta de dados, das decisões apoiadas pelo Ever.Precifica.">
+  <link rel="stylesheet" href="./demo.css">
+  <script type="module" src="./demo.mjs"></script>
+</head>
+<body>
+  <div class="ambient ambient--one" aria-hidden="true"></div>
+  <div class="ambient ambient--two" aria-hidden="true"></div>
+  <div class="page">
+    <div class="prototype-banner"><span class="prototype-dot"></span> PROTÓTIPO DE DESENVOLVIMENTO <span class="banner-divider">/</span> Dados fictícios <span class="banner-divider">/</span> Não é uma oferta comercial</div>
+    <header class="site-header">
+      <div class="brand" aria-label="Ever.Precifica por Ever.Est">
+        <div class="brand-symbol" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M3 30.5 14.1 15l7.4 9L29 12l8 18.5H3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 15l3.6 4.3 3.9 4.7L29 12" stroke="#F7A76A" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="brand-name"><strong>ever<span>.precifica</span></strong><small>UMA FERRAMENTA EVER.EST</small></div>
+      </div>
+      <div class="header-right"><span class="header-chip">Demonstração gratuita</span><span class="header-sep"></span><span class="header-label">Sem cadastro</span></div>
+    </header>
+
+    <main>
+      <section class="intro-section" aria-labelledby="demo-heading">
+        <div>
+          <p class="section-eyebrow"><span class="eyebrow-line"></span> PRECIFICAÇÃO SEM ACHISMOS</p>
+          <h1 id="demo-heading">Seu preço conta <em>uma história.</em><br>Entenda cada número.</h1>
+          <p class="intro-text">Acompanhe dois negócios fictícios, dos custos ao preço sugerido. Você verá cada etapa e entenderá o que muda na decisão — antes de usar a ferramenta com os seus dados.</p>
+        </div>
+        <div class="summit-art" aria-hidden="true">
+          <svg viewBox="0 0 440 248" fill="none" preserveAspectRatio="xMidYMid meet">
+            <defs><linearGradient id="mountainA" x1="200" y1="50" x2="280" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#244A70"/><stop offset="1" stop-color="#0F253D"/></linearGradient></defs>
+            <path d="M5 218 107 122l54 47L252 38l92 121 43-46 48 105H5Z" fill="url(#mountainA)" fill-opacity=".85"/>
+            <path d="m154 218 98-180 92 121 43-46 48 105" stroke="#6B8FAE" stroke-opacity=".7" stroke-width="1.5"/>
+            <path d="m201 130 51-92 45 60-19-7-12 15-14-12-14 14-17-13Z" fill="#B2CADF" fill-opacity=".6"/>
+            <path d="M25 221c93-19 103-44 178-47 61-3 89-35 152-91" stroke="#F7A76A" stroke-dasharray="5 9" stroke-linecap="round" stroke-width="2.2"/>
+            <circle cx="355" cy="83" r="7" fill="#F7A76A"/><circle cx="355" cy="83" r="16" stroke="#F7A76A" stroke-opacity=".33"/>
+          </svg>
+          <span class="art-caption">CADA DECISÃO<br>É UMA ASCENSÃO.</span>
+        </div>
+      </section>
+
+      <section class="demo-section" aria-labelledby="choose-title">
+        <div class="section-head"><div><p class="section-kicker">EXPERIMENTE NA PRÁTICA</p><h2 id="choose-title">Escolha uma jornada</h2></div><p>Dois exemplos. O mesmo método.<br>Oito etapas até a clareza.</p></div>
+
+        <div class="demo-grid">
+          <aside class="case-panel" aria-label="Escolha do exemplo">
+            <button class="case-option is-selected" type="button" data-select="product" aria-pressed="true">
+              <span class="case-number">01 / PRODUTO</span>
+              <span class="case-icon" aria-hidden="true">◈</span>
+              <strong>Óleo finalizador<br>capilar</strong>
+              <span class="case-description">Revenda em salão de beleza</span>
+              <span class="case-action">Explorar exemplo <span aria-hidden="true">↗</span></span>
+            </button>
+            <button class="case-option" type="button" data-select="service" aria-pressed="false">
+              <span class="case-number">02 / SERVIÇO</span>
+              <span class="case-icon" aria-hidden="true">✧</span>
+              <strong>Escova com<br>hidratação</strong>
+              <span class="case-description">Atendimento em salão</span>
+              <span class="case-action">Explorar exemplo <span aria-hidden="true">↗</span></span>
+            </button>
+            <div class="privacy-small"><span aria-hidden="true">◇</span><p><strong>Exemplo seguro.</strong> Nenhum dado pessoal é solicitado ou enviado. Os números são fixos e fictícios.</p></div>
+          </aside>
+
+          <section class="workspace" aria-label="Demonstração da precificação">
+            <div class="workspace-head">
+              <div class="step-info"><span class="workspace-eyebrow" id="current-example">CASO 01 · PRODUTO</span><span class="stage-counter" id="stage-counter">Introdução</span></div>
+              <div class="progress-dots" id="progress-dots" aria-label="Progresso da demonstração"></div>
+            </div>
+            <div id="demo-screen" class="demo-screen" aria-live="polite" aria-atomic="true"></div>
+            <div class="workspace-footer">
+              <button type="button" class="btn btn-secondary" id="previous" disabled>← Voltar</button>
+              <span class="footer-hint" id="footer-hint">Leitura guiada</span>
+              <button type="button" class="btn btn-primary" id="next">Começar demonstração <span aria-hidden="true">→</span></button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="closing">
+        <div class="closing-symbol" aria-hidden="true">↗</div>
+        <div><p class="section-kicker">SEU NEGÓCIO, SUAS DECISÕES</p><h2>Entenda a lógica. Depois, use seus próprios números.</h2><p>Esta demonstração apenas ilustra o funcionamento. O Ever.Precifica completo permitirá preencher seus custos e metas e comparar cenários específicos do seu negócio.</p></div>
+        <div class="closing-tag">LANÇAMENTO EM PREPARAÇÃO</div>
+      </section>
+    </main>
+    <footer class="footer"><span>© Ever.Est · Conceito de demonstração ET-0E-PRE-01</span><span>Valores ilustrativos. Não é orientação tributária ou garantia de resultado.</span></footer>
+  </div>
+  <noscript><p>Ative JavaScript para percorrer as demonstrações.</p></noscript>
+</body>
+</html>
