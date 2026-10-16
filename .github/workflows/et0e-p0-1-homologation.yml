@@ -1,0 +1,46 @@
+name: Ever.Precifica P0-1 Isolated Homologation
+
+on:
+  push:
+    branches: [feat/et-0e-p0-1-homologation]
+    paths:
+      - 'automation-worker/src/**'
+      - 'automation-worker/test/commercial-*.test.mjs'
+      - 'automation-worker/test/fixtures/schema_pre_p0.sql'
+      - 'automation-worker/test/qa-wrangler-local.mjs'
+      - 'automation-worker/schema.sql'
+      - 'automation-worker/migrations/0002_commercial_entitlements.sql'
+      - '.github/workflows/et0e-p0-1-homologation.yml'
+  pull_request:
+    branches: [feat/et-0e-p0-1-commercial-access]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install Worker module dependency (without lifecycle scripts)
+        working-directory: automation-worker
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Static JS check
+        run: |
+          node --check automation-worker/test/commercial-worker-e2e.test.mjs
+          node --check automation-worker/src/index.js
+      - name: Real route-level E2E with disposable SQLite and fake email
+        run: |
+          node --test automation-worker/test/commercial-entitlements.test.mjs automation-worker/test/commercial-access-db.test.mjs automation-worker/test/commercial-worker-e2e.test.mjs
+      - name: Cloudflare Worker and D1 emulator (strictly local)
+        working-directory: automation-worker
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: node test/qa-wrangler-local.mjs
+      - name: No deployment
+        run: echo "HOMOLOGATION ISOLATED - NO D1 REMOTE - NO EMAIL - NO CHECKOUT - NO DEPLOY"
