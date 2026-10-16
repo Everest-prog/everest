@@ -7,6 +7,7 @@ on:
       - 'automation-worker/src/**'
       - 'automation-worker/test/commercial-*.test.mjs'
       - 'automation-worker/test/fixtures/schema_pre_p0.sql'
+      - 'automation-worker/test/qa-wrangler-local.mjs'
       - 'automation-worker/schema.sql'
       - 'automation-worker/migrations/0002_commercial_entitlements.sql'
       - '.github/workflows/et0e-p0-1-homologation.yml'
@@ -36,5 +37,10 @@ jobs:
       - name: Real route-level E2E with disposable SQLite and fake email
         run: |
           node --test automation-worker/test/commercial-entitlements.test.mjs automation-worker/test/commercial-access-db.test.mjs automation-worker/test/commercial-worker-e2e.test.mjs
+      - name: Cloudflare Worker and D1 emulator (strictly local)
+        working-directory: automation-worker
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: node test/qa-wrangler-local.mjs
       - name: No deployment
         run: echo "HOMOLOGATION ISOLATED - NO D1 REMOTE - NO EMAIL - NO CHECKOUT - NO DEPLOY"
