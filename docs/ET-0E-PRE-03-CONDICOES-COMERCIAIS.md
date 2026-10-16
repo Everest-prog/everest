@@ -1,6 +1,6 @@
 # ET-0E-PRE-03 — Condições comerciais do Ever.Precifica
 
-**Status: D1 (modelo A) APROVADA pelo proprietário em 16/10/2026; demais cláusulas e implementação PENDENTES · NÃO PUBLICADA.**
+**Status: decisões comerciais D1–D7 APROVADAS pelo proprietário em 16/10/2026; implementação, preço, dados oficiais, testes e revisão jurídica PENDENTES · NÃO PUBLICADA.**
 
 Produto objeto desta etapa: **Ever.Precifica individual**, não o Kit Gestão Financeira avaliado por personas fictícias a R$ 89,90. O preço comercial desta ferramenta individual permanece pendente.
 
@@ -16,7 +16,7 @@ Distinguir três conceitos: (a) **prazo de uso contratado**, (b) **validade téc
 
 **DECISÃO D1 APROVADA:** opção A, 12 meses de acesso mediante pagamento único; renovação voluntária e sem cobrança automática. A duração contratual não se confunde com a sessão técnica de 365 dias.
 
-## 2. Condições propostas para aprovação
+## 2. Condições aprovadas — implementação ainda pendente
 
 | Tema | Proposta | Pendências para cumprir |
 |---|---|---|
@@ -53,13 +53,18 @@ O prazo legal de 7 dias não elimina direitos relativos a vícios, falhas de ent
 
 Este texto é apenas um exemplo para discussão, não uma oferta vigente.
 
-## 6. Decisões necessárias
+## 6. Registro das decisões comerciais — aprovado em 16/10/2026
 
-- **D1 — Modelo de acesso [APROVADO]:** A — 12 meses, pagamento único, renovação opcional sem cobrança automática.
-- **D2 — Suporte:** primeira resposta em até 2 dias úteis, sem promessa de solucionar definitivamente nesse prazo.
-- **D3 — Atualizações:** correções/segurança durante período contratado; novos módulos e consultoria não incluídos.
-- **D4 — Reembolso:** 7 dias conforme direitos aplicáveis, e atendimento de garantias legais posteriores quando necessário; eventual prazo voluntário adicional somente após análise financeira.
-- **D5 — Informação pública:** definir preço específico, identidade do fornecedor, canal oficial, entrega e políticas antes da venda.
+O proprietário respondeu **"Sim"** à proposta para aprovação conjunta das seis condições D2–D7, somadas ao D1 anteriormente escolhido. **Aprovação da política não comprova entrega técnica, cumprimento operacional, revisão jurídica ou autorização de publicar.**
+
+- **D1 — Prazo e pagamento [APROVADO]:** pagamento único por 12 meses de acesso desde a confirmação de compra aprovada; renovação voluntária, sem cobrança automática.
+- **D2 — Suporte [APROVADO]:** atendimento por e-mail, confirmação automatizada de recebimento e meta de primeira resposta humana em até **2 dias úteis**; isso não equivale a promessa de solução integral no mesmo prazo. Definir endereço oficial, responsável, dias úteis, contingência e fluxo de exercício de direitos antes de anunciar.
+- **D3 — Atualizações [APROVADO]:** correções de erros, estabilidade e segurança durante os 12 meses, sem cobrança extra; novos produtos/módulos ou consultorias não incluídos automaticamente, respeitando deveres e garantias legais.
+- **D4 — Reembolso [APROVADO]:** direito de arrependimento de 7 dias nas hipóteses legais aplicáveis, sem justificativa e observando marco inicial legal; manter direitos por falhas, vícios e descumprimento de oferta além desse prazo. Nenhuma garantia voluntária adicional foi aprovada.
+- **D5 — Dispositivos e dados [APROVADO]:** uso pessoal; reativação por e-mail para troca de navegador/dispositivo, sem prometer sincronização ou backup dos números de simulação. Não anunciar limite quantitativo de dispositivos não implementado.
+- **D6 — Renovação [APROVADO]:** compra opcional de mais 12 meses, sem cobrança automática. Renovação antes do vencimento soma período ao prazo atual; renovação após o vencimento começa na nova aprovação. **Janela específica de venda (ex.: 30 dias antes), preço de renovação e cronograma de avisos ainda precisam ser operacionalizados/confirmados**.
+- **D7 — Disponibilidade [APROVADO]:** manutenção e suporte operacional, sem promessa de uptime 100%, SLA contínuo ou suporte humano 24 horas; indisponibilidades devem ser tratadas de acordo com a oferta e a lei.
+- **D8 — Preço, fornecedor e canais [PENDENTE]:** valor específico do Ever.Precifica individual, identificação legal do fornecedor, endereço/canal oficial de suporte, dados do checkout e políticas públicas. Não usar o preço de R$ 89,90 de outro kit sem decisão específica.
 
 **Critérios de encerramento:** decisões aprovadas, regras implementadas e testadas, canal de suporte confirmado, integração de compra/recuperação/reembolso validada, revisão jurídica e posterior autorização específica de publicação comercial.
 
