@@ -12,6 +12,26 @@ export default {
       return handleHealth(env);
     }
 
+    if (request.method === "GET" && url.pathname.startsWith("/preview/precifica")) {
+      return handlePrecificaPreview(request, env);
+    }
+
+    if (request.method === "OPTIONS" && url.pathname.startsWith("/access/")) {
+      return handleAccessOptions(request, env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/access/recover") {
+      return handleAccessRecover(request, env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/access/activate") {
+      return handleAccessActivate(request, env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/access/validate") {
+      return handleAccessValidate(request, env);
+    }
+
     if (request.method === "POST" && url.pathname === "/webhooks/resend") {
       return handleResendWebhook(request, env);
     }
@@ -23,6 +43,70 @@ export default {
     return json({ error: "not_found" }, 404);
   }
 };
+
+async function handlePrecificaPreview(request, env) {
+  if (env.ENVIRONMENT !== "staging") {
+    return json({ error: "not_found" }, 404);
+  }
+
+  const url = new URL(request.url);
+  const basePath = "/preview/precifica";
+  let relative = url.pathname.slice(basePath.length);
+
+  if (!relative || relative === "/") relative = "/preview.html";
+
+  const allowed = new Set([
+    "/preview.html",
+    "/styles.css",
+    "/app.mjs",
+    "/engine.mjs",
+    "/access.mjs"
+  ]);
+
+  if (!allowed.has(relative)) {
+    return json({ error: "not_found" }, 404);
+  }
+
+  const repoPath =
+    relative === "/preview.html"
+      ? "ferramentas/precifica/preview.html"
+      : "ferramentas/precifica" + relative;
+
+  const rawUrl =
+    "https://raw.githubusercontent.com/Everest-prog/everest/refs/heads/" +
+    "feat/et-0e-ever-precifica/" +
+    repoPath;
+
+  const upstream = await fetch(rawUrl, {
+    headers: { "user-agent": "Ever.Est-Precifica-QA" }
+  });
+
+  if (!upstream.ok) {
+    return json({ error: "preview_asset_unavailable" }, 502);
+  }
+
+  const contentType =
+    relative.endsWith(".html") ? "text/html; charset=utf-8" :
+    relative.endsWith(".css") ? "text/css; charset=utf-8" :
+    "text/javascript; charset=utf-8";
+
+  return new Response(await upstream.text(), {
+    status: 200,
+    headers: {
+      "content-type": contentType,
+      "cache-control": "no-store",
+      "x-robots-tag": "noindex, nofollow",
+      "content-security-policy":
+        "default-src 'self'; " +
+        "script-src 'self'; " +
+        "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
+        "font-src https://fonts.gstatic.com; " +
+        "img-src 'self' https://raw.githubusercontent.com data:; " +
+        "connect-src 'self'; " +
+        "base-uri 'none'; frame-ancestors 'none'"
+    }
+  });
+}
 
 async function handleHealth(env) {
   if (!env.DB) {
@@ -48,6 +132,291 @@ async function handleHealth(env) {
       database: "error"
     }, 503);
   }
+}
+
+async function handleAccessOptions(request, env) {
+  return new Response(null, {
+    status: 204,
+    headers: accessCorsHeaders(request, env)
+  });
+}
+
+async function handleAccessRecover(request, env) {
+  const generic = () => accessJson(
+    request,
+    env,
+    { ok: true, message: "Se encontrarmos uma compra válida para este e-mail, você receberá um novo link de acesso." }
+  );
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return generic();
+  }
+
+  const email = normalizeEmail(body?.email);
+  if (!email) return generic();
+
+  const emailHash = await sha256("email:" + email);
+  const order = await env.DB.prepare(
+    `SELECT id, product_code
+     FROM orders
+     WHERE provider = 'kiwify'
+       AND email_hash = ?1
+       AND status = 'approved'
+       AND product_code IN ('ever_precifica', 'ever_precifica_e2e')
+     ORDER BY COALESCE(approved_at, created_at) DESC
+     LIMIT 1`
+  ).bind(emailHash).first();
+
+  if (!order || !env.RESEND_API_KEY) return generic();
+
+  const recent = await env.DB.prepare(
+    `SELECT id
+     FROM access_activation_tokens
+     WHERE email_hash = ?1
+       AND product_code = ?2
+       AND created_at >= datetime('now', '-5 minutes')
+     ORDER BY created_at DESC
+     LIMIT 1`
+  ).bind(emailHash, order.product_code).first();
+
+  if (recent) return generic();
+
+  try {
+    await sendAccessActivation(env, {
+      orderId: order.id,
+      productCode: order.product_code,
+      email,
+      emailHash,
+      reason: "recovery"
+    });
+  } catch {
+    // Keep recovery response generic to avoid leaking account existence.
+  }
+
+  return generic();
+}
+
+async function handleAccessActivate(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return accessJson(request, env, { ok: false, error: "invalid_request" }, 400);
+  }
+
+  const token = String(body?.token || "").trim();
+  if (!token || token.length < 20) {
+    return accessJson(request, env, { ok: false, error: "invalid_or_expired" }, 401);
+  }
+
+  const tokenHash = await sha256("activation:" + token);
+  const activation = await env.DB.prepare(
+    `SELECT a.id, a.order_id, a.product_code
+     FROM access_activation_tokens a
+     JOIN orders o ON o.id = a.order_id
+     WHERE a.token_hash = ?1
+       AND a.used_at IS NULL
+       AND a.revoked_at IS NULL
+       AND a.expires_at > datetime('now')
+       AND o.status = 'approved'
+       AND o.product_code = a.product_code
+     LIMIT 1`
+  ).bind(tokenHash).first();
+
+  if (!activation) {
+    return accessJson(request, env, { ok: false, error: "invalid_or_expired" }, 401);
+  }
+
+  const used = await env.DB.prepare(
+    `UPDATE access_activation_tokens
+     SET used_at = datetime('now')
+     WHERE id = ?1
+       AND used_at IS NULL
+       AND revoked_at IS NULL`
+  ).bind(activation.id).run();
+
+  if (!used?.meta?.changes) {
+    return accessJson(request, env, { ok: false, error: "invalid_or_expired" }, 401);
+  }
+
+  const sessionToken = randomToken(32);
+  const sessionHash = await sha256("session:" + sessionToken);
+
+  await env.DB.prepare(
+    `INSERT INTO access_sessions
+      (token_hash, order_id, product_code, created_at, expires_at, last_seen_at)
+     VALUES (?1, ?2, ?3, datetime('now'), datetime('now', '+365 days'), datetime('now'))`
+  ).bind(sessionHash, activation.order_id, activation.product_code).run();
+
+  return accessJson(request, env, {
+    ok: true,
+    access_token: sessionToken,
+    product_code: activation.product_code
+  });
+}
+
+async function handleAccessValidate(request, env) {
+  let token = "";
+  const authorization = request.headers.get("authorization") || "";
+
+  if (/^Bearer\s+/i.test(authorization)) {
+    token = authorization.replace(/^Bearer\s+/i, "").trim();
+  } else {
+    try {
+      const body = await request.json();
+      token = String(body?.access_token || "").trim();
+    } catch {}
+  }
+
+  if (!token || token.length < 20) {
+    return accessJson(request, env, { ok: false, valid: false }, 401);
+  }
+
+  const tokenHash = await sha256("session:" + token);
+  const session = await env.DB.prepare(
+    `SELECT s.id, s.product_code
+     FROM access_sessions s
+     JOIN orders o ON o.id = s.order_id
+     WHERE s.token_hash = ?1
+       AND s.revoked_at IS NULL
+       AND s.expires_at > datetime('now')
+       AND o.status = 'approved'
+       AND o.product_code = s.product_code
+     LIMIT 1`
+  ).bind(tokenHash).first();
+
+  if (!session) {
+    return accessJson(request, env, { ok: false, valid: false }, 401);
+  }
+
+  await env.DB.prepare(
+    `UPDATE access_sessions
+     SET last_seen_at = datetime('now')
+     WHERE id = ?1`
+  ).bind(session.id).run();
+
+  return accessJson(request, env, {
+    ok: true,
+    valid: true,
+    product_code: session.product_code
+  });
+}
+
+async function sendAccessActivation(env, details) {
+  await env.DB.prepare(
+    `UPDATE access_activation_tokens
+     SET revoked_at = datetime('now')
+     WHERE order_id = ?1
+       AND product_code = ?2
+       AND used_at IS NULL
+       AND revoked_at IS NULL`
+  ).bind(details.orderId, details.productCode).run();
+
+  const rawToken = randomToken(32);
+  const tokenHash = await sha256("activation:" + rawToken);
+
+  await env.DB.prepare(
+    `INSERT INTO access_activation_tokens
+      (token_hash, order_id, email_hash, product_code, created_at, expires_at)
+     VALUES (?1, ?2, ?3, ?4, datetime('now'), datetime('now', '+30 minutes'))`
+  ).bind(
+    tokenHash,
+    details.orderId,
+    details.emailHash,
+    details.productCode
+  ).run();
+
+  const siteUrl = String(env.SITE_URL || "https://soueverest.com.br").replace(/\/$/, "");
+  const activationUrl =
+    siteUrl +
+    "/ferramentas/precifica/?activate=" +
+    encodeURIComponent(rawToken);
+
+  const response = await sendTransactionalEmail(env, {
+    to: details.email,
+    subject: "Ever.Precifica — seu acesso está pronto",
+    text:
+      "Olá!\n\n" +
+      "Seu acesso ao Ever.Precifica está pronto. Use o link abaixo para ativar este navegador:\n\n" +
+      activationUrl +
+      "\n\n" +
+      "O link é de uso único e expira em 30 minutos. Se precisar depois, você poderá solicitar um novo link pela opção Recuperar meu acesso.\n\n" +
+      "Ever.Est — Clareza para decidir. Estrutura para crescer.",
+    idempotencyKey:
+      "precifica-access:" +
+      details.orderId +
+      ":" +
+      details.reason +
+      ":" +
+      tokenHash.slice(0, 16)
+  });
+
+  if (!response.ok) {
+    await env.DB.prepare(
+      `UPDATE access_activation_tokens
+       SET revoked_at = datetime('now')
+       WHERE token_hash = ?1`
+    ).bind(tokenHash).run();
+    throw new Error("access_email_send_failed");
+  }
+
+  return activationUrl;
+}
+
+function normalizeEmail(value) {
+  const email = String(value || "").trim().toLowerCase();
+  if (!email || email.length > 320 || !email.includes("@")) return null;
+  return email;
+}
+
+function randomToken(size = 32) {
+  const bytes = new Uint8Array(size);
+  crypto.getRandomValues(bytes);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary)
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
+    .replace(/=+$/g, "");
+}
+
+function accessCorsHeaders(request, env) {
+  const origin = request.headers.get("origin");
+  const configured = String(env.SITE_URL || "https://soueverest.com.br");
+  let allowedOrigin = "";
+
+  try {
+    const expected = new URL(configured).origin;
+    if (origin === expected) allowedOrigin = origin;
+  } catch {}
+
+  if (
+    env.ENVIRONMENT === "staging" &&
+    ["http://localhost:8000", "http://127.0.0.1:8000", "http://localhost:8788"].includes(origin)
+  ) {
+    allowedOrigin = origin;
+  }
+
+  const headers = {
+    "content-type": "application/json; charset=utf-8",
+    "cache-control": "no-store",
+    "access-control-allow-methods": "POST, OPTIONS",
+    "access-control-allow-headers": "content-type, authorization",
+    "vary": "Origin"
+  };
+
+  if (allowedOrigin) headers["access-control-allow-origin"] = allowedOrigin;
+  return headers;
+}
+
+function accessJson(request, env, body, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: accessCorsHeaders(request, env)
+  });
 }
 
 async function handleResendWebhook(request, env) {
@@ -347,29 +716,24 @@ async function processKiwifyBusinessEvent(env, payload, eventType, providerEvent
 
     let emailSent = false;
 
-    if (rawEmail && env.RESEND_API_KEY) {
-      const firstName = String(
-        payload?.Customer?.first_name ||
-        payload?.customer?.first_name ||
-        ""
-      ).trim();
+    if (rawEmail && emailHash && env.RESEND_API_KEY) {
+      const orderRow = await env.DB.prepare(
+        `SELECT id
+         FROM orders
+         WHERE provider = 'kiwify' AND provider_order_id = ?1
+         LIMIT 1`
+      ).bind(orderId).first();
 
-      const response = await sendTransactionalEmail(env, {
-        to: rawEmail,
-        subject: "Ever.Precifica — compra de teste confirmada",
-        text:
-          (firstName ? "Olá, " + firstName + "!\n\n" : "Olá!\n\n") +
-          "Sua compra de teste do Ever.Precifica foi confirmada. " +
-          "Este e-mail valida o fluxo técnico Kiwify → Ever.Est → Resend.\n\n" +
-          "Nenhuma ação é necessária.",
-        idempotencyKey: "kiwify:" + orderId + ":purchase-approved:v1"
-      });
-
-      if (!response.ok) {
-        throw new Error("resend_send_failed");
+      if (orderRow?.id) {
+        await sendAccessActivation(env, {
+          orderId: orderRow.id,
+          productCode,
+          email: rawEmail,
+          emailHash,
+          reason: "purchase"
+        });
+        emailSent = true;
       }
-
-      emailSent = true;
     }
 
     return {
@@ -411,6 +775,28 @@ async function processKiwifyBusinessEvent(env, payload, eventType, providerEvent
       refundedAt
     ).run();
 
+    await env.DB.prepare(
+      `UPDATE access_activation_tokens
+       SET revoked_at = COALESCE(revoked_at, datetime('now'))
+       WHERE order_id = (
+         SELECT id FROM orders
+         WHERE provider = 'kiwify' AND provider_order_id = ?1
+         LIMIT 1
+       )
+       AND revoked_at IS NULL`
+    ).bind(orderId).run();
+
+    await env.DB.prepare(
+      `UPDATE access_sessions
+       SET revoked_at = COALESCE(revoked_at, datetime('now'))
+       WHERE order_id = (
+         SELECT id FROM orders
+         WHERE provider = 'kiwify' AND provider_order_id = ?1
+         LIMIT 1
+       )
+       AND revoked_at IS NULL`
+    ).bind(orderId).run();
+
     return {
       status: "processed",
       errorCode: null,
@@ -439,6 +825,14 @@ function mapKiwifyProductCode(payload, env) {
     payload?.product?.product_name ||
     ""
   ).trim();
+
+  if (
+    env.KIWIFY_PRECIFICA_PRODUCT_ID &&
+    productId &&
+    productId === String(env.KIWIFY_PRECIFICA_PRODUCT_ID)
+  ) {
+    return "ever_precifica";
+  }
 
   if (
     env.KIWIFY_E2E_PRODUCT_ID &&

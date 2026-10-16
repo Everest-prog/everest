@@ -1,0 +1,47 @@
+name: Ever.Precifica Integrated Staging Tests
+
+on:
+  push:
+    branches: [feat/et-0e-ever-precifica]
+    paths:
+      - "staging/precifica/**"
+      - "assets/js/consent.js"
+      - "ferramentas/precifica/**"
+      - ".github/workflows/et0e-staging-tests.yml"
+  pull_request:
+    paths:
+      - "staging/precifica/**"
+      - "assets/js/consent.js"
+      - "ferramentas/precifica/**"
+      - ".github/workflows/et0e-staging-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Existing pricing and webhook regression tests
+        run: node --test tests/ever-precifica-engine.test.mjs automation-worker/test/kiwify-idempotency.test.mjs
+      - name: Build isolated staging assets
+        run: node staging/precifica/build.mjs
+      - name: Verify staging isolation
+        run: node --test staging/precifica/test/*.test.mjs
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.62.1
+          npx playwright install --with-deps chromium
+      - name: Test consent and persistence in browser with synthetic access
+        run: node staging/precifica/browser/consent-persistence.test.mjs
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integrated-staging-browser-evidence
+          path: staging/precifica/browser/artifacts/
+          if-no-files-found: ignore

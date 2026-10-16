@@ -46,3 +46,35 @@ CREATE INDEX IF NOT EXISTS idx_webhook_events_provider_received
 
 CREATE INDEX IF NOT EXISTS idx_orders_status
   ON orders(status);
+
+
+CREATE TABLE IF NOT EXISTS access_activation_tokens (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  token_hash TEXT NOT NULL UNIQUE,
+  order_id INTEGER NOT NULL,
+  email_hash TEXT NOT NULL,
+  product_code TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  expires_at TEXT NOT NULL,
+  used_at TEXT,
+  revoked_at TEXT,
+  FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
+CREATE TABLE IF NOT EXISTS access_sessions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  token_hash TEXT NOT NULL UNIQUE,
+  order_id INTEGER NOT NULL,
+  product_code TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  expires_at TEXT NOT NULL,
+  last_seen_at TEXT,
+  revoked_at TEXT,
+  FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_access_activation_email
+  ON access_activation_tokens(email_hash, product_code, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_access_sessions_order
+  ON access_sessions(order_id, revoked_at, expires_at);

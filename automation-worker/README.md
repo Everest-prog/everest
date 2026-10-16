@@ -3,7 +3,8 @@
 Cloudflare Worker de staging das automações Ever.Tools.
 
 - Root directory: `automation-worker`
-- Branch de deploy: `main`
+- Branch de deploy padrão: `main`
+- Durante a QA da ET-0E, o Worker de staging pode apontar temporariamente para `feat/et-0e-ever-precifica`; após a validação, deve voltar para `main`.
 - Configuração: `wrangler.toml`
 - Banco: D1 `ever_tools_staging`
 
@@ -12,6 +13,9 @@ Cloudflare Worker de staging das automações Ever.Tools.
 - `GET /health` — apenas disponibilidade do Worker/D1, sem revelar estado de segredos.
 - `POST /webhooks/resend` — webhook autenticado do Resend.
 - `POST /webhooks/kiwify` — webhook autenticado da Kiwify.
+- `POST /access/recover` — recuperação de acesso por e-mail com resposta pública genérica.
+- `POST /access/activate` — troca de link de ativação de uso único por sessão local.
+- `POST /access/validate` — validação da sessão local do Ever.Precifica.
 
 Endpoints temporários de diagnóstico usados durante a ET-0D foram removidos após a validação E2E.
 
