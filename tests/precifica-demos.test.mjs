@@ -69,8 +69,8 @@ test("Demo records contain no purchaser identity, auth token or analytics bindin
 test("Visible action labels and selected options have accessible contrast on dark backgrounds", async () => {
   const { readFile } = await import("node:fs/promises");
   const css = await readFile(new URL("../demos/precifica/demo.css", import.meta.url), "utf8");
-  const primary = css.match(/\\.btn-primary\\{([^}]*)\\}/)?.[1];
-  const selected = css.match(/\\.discount-btn\\.is-selected\\{([^}]*)\\}/)?.[1];
+  const primary = css.match(/\.btn-primary\{([^}]*)\}/)?.[1];
+  const selected = css.match(/\.discount-btn\.is-selected\{([^}]*)\}/)?.[1];
   assert.ok(primary && selected, "Required action styles must exist");
 
   const getColor = (declarations) => declarations.match(/(?:^|;)color:(#[0-9a-fA-F]{6})/)?.[1];
