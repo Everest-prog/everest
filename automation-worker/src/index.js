@@ -256,8 +256,8 @@ async function handleAccessActivate(request, env) {
 async function handleAccessValidate(request, env) {
   let token = "";
   const authorization = request.headers.get("authorization") || "";
-  if (/^Bearer\\s+/i.test(authorization)) {
-    token = authorization.replace(/^Bearer\\s+/i, "").trim();
+  if (/^Bearer\s+/i.test(authorization)) {
+    token = authorization.replace(/^Bearer\s+/i, "").trim();
   } else {
     try { token = String((await request.json())?.access_token || "").trim(); } catch {}
   }
