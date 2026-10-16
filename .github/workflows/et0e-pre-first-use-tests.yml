@@ -1,0 +1,25 @@
+name: Ever.Precifica First Use Guide Tests
+
+on:
+  push:
+    branches:
+      - feat/et-0e-pre-02-first-use
+    paths:
+      - 'guides/precifica/**'
+      - 'tests/precifica-first-use.test.mjs'
+      - '.github/workflows/et0e-pre-first-use-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guide-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate guide against real product fields and security
+        run: node --test tests/precifica-first-use.test.mjs
