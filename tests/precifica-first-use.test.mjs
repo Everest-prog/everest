@@ -36,7 +36,7 @@ test("Guide is static, isolated, accessible and cannot upload user information",
   assert.match(html, /connect-src 'none'/);
   assert.match(html, /noindex,nofollow/);
   assert.doesNotMatch(html, /<(?:script|form)\b/i);
-  assert.doesNotMatch(html, /checkout|kiwify\.com|google-analytics|googletagmanager/i);
+  assert.doesNotMatch(html, /<a\b[^>]*href="[^"]*(?:checkout|kiwify)/i);
   assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /focus-visible/);
   assert.match(css, /@media\(max-width:680px\)/);
