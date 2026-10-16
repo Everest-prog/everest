@@ -678,7 +678,11 @@ Relatório sanitizado e captura com valores fictícios permanecem localmente for
 
 Usar outro pedido sintético; o token consumido na automação não serve para a ativação do usuário. A entrega ocorre em página temporária vinculada somente a `127.0.0.1`, no próprio computador da tarefa. O endereço local genérico pode ser informado no chat; o token fica apenas na memória do processo até o clique.
 
-Ativação manual preparada em 16/10/2026: registro `e2e-precifica-manual-255b9beb-5b9d-418e-a34d-066ba2300402` (ID 6), inicialmente aprovado e sem consumo. Prazo de ativação: `2026-10-16T11:33:51Z`, 08h33min51s de Brasília. O identificador de auditoria não é uma credencial e não permite ativar acesso. O uso manual ainda não foi confirmado neste registro.
+Ativação manual preparada em 16/10/2026: registro `e2e-precifica-manual-255b9beb-5b9d-418e-a34d-066ba2300402` (ID 6), inicialmente aprovado e sem consumo. Prazo original de ativação: `2026-10-16T11:33:51Z`, 08h33min51s de Brasília. O identificador de auditoria não é uma credencial e não permite ativar acesso.
+
+**Uso manual confirmado no banco em 16/10/2026 às 08h07 de Brasília:** pedido sintético aprovado, uma ativação consumida e uma sessão ativa. O auxiliar confirmou a redução do prazo dessa sessão para `2026-10-17T11:06:11Z` (17/10 às 08h06min11s de Brasília). O link de ativação já foi usado; a sessão é mantida no navegador que o consumiu.
+
+**Retorno do usuário:** informou “Pronto! Fiz isso” após receber o roteiro de ativação, custo fictício de R$ 75,50, reload/retomada e aceite/revogação de métricas, sem relatar erro. Registrar como execução manual informada pelo usuário, sem nova captura ou confirmação individual de cada resultado. A leitura do banco comprova ativação/sessão; os oito cenários automáticos acima fornecem a evidência observada de persistência e consentimento.
 
 1. Abrir a página local informada na tarefa, no navegador/perfil que será usado para o teste, antes do horário de expiração exibido.
 2. Clicar uma vez em **Ativar acesso de teste**. O formulário verifica origem e nonce; a resposta redireciona para a origem fixa do staging integrado. Apenas abrir a página local não consome a ativação.
@@ -688,4 +692,4 @@ Ativação manual preparada em 16/10/2026: registro `e2e-precifica-manual-255b9b
 
 O portal aceita uma entrega, encerra no vencimento e não registra credenciais. Após a ativação, o auxiliar verifica exclusivamente o registro manual e reduz sua sessão para um dia; essa redução só deve ser anunciada como concluída após confirmação no banco. Se a ativação não for usada, o auxiliar revoga somente o registro manual ao encerrar. Falhas de prazo/revogação ficam registradas para nova verificação, sem tocar pedidos existentes. Se o computador/processo for fechado, o link local deixa de funcionar; preparar nova ativação após revogar a anterior se necessário.
 
-O resultado manual ainda depende do retorno do usuário. Permanecem pendentes GTM/GA4 reais de QA, recuperação isolada, compra/webhook/e-mail/refund e fechamento ET-0E-G/ET-0E-H. O PR segue draft, sem merge em `main` ou publicação comercial.
+Ativação manual confirmada e execução do roteiro informada pelo usuário. Permanecem pendentes GTM/GA4 reais de QA, recuperação isolada, compra/webhook/e-mail/refund e fechamento ET-0E-G/ET-0E-H. O PR segue draft, sem merge em `main` ou publicação comercial.
