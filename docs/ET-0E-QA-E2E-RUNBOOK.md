@@ -541,7 +541,7 @@ Neste primeiro estágio, o carregamento acionado pelo consentimento usa um **ada
 
 O acesso real deve usar uma ligação interna da Cloudflare ao Worker de staging existente, expondo somente ativação e validação na origem do novo frontend. A recuperação fica desabilitada até existir backend isolado com `SITE_URL` apontando para a origem correta. Não substituir o `SITE_URL`, os segredos, o D1 ou os webhooks do ambiente atual para viabilizar este teste.
 
-**Status operacional atualizado em 15/10/2026:** novo Worker publicado e verificado em [ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev](https://ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev). A publicação e os testes remotos básicos estão confirmados. Acesso E2E válido, persistência financeira com esse acesso e integração real GTM/GA4 continuam pendentes; ver evidência abaixo.
+**Status operacional atualizado em 16/10/2026:** novo Worker publicado e verificado em [ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev](https://ever-precifica-integrated-staging.gabrielfelipegfrs.workers.dev). Ativação válida no backend/D1 de staging e persistência financeira com essa sessão foram verificadas usando pedido inteiramente fictício; ver seção 17. Compra comercial, recuperação, refund e integração real GTM/GA4 continuam pendentes.
 
 ### Implementação e evidências locais — 14/10/2026
 
@@ -576,10 +576,10 @@ O check externo `Workers Builds: ever-tools-automation-staging` falhou novamente
 - [x] identificar commit e configuração efetivamente implantados no novo Worker;
 - [x] registrar URL pública confirmada e data/hora da verificação;
 - [x] confirmar nome do novo Worker e ausência de rotas/domínios de produção;
-- [x] confirmar ligação interna ao backend de staging esperado — validada com rejeição de sessão inexistente; acesso válido ainda pendente;
+- [x] confirmar ligação interna ao backend de staging esperado — rejeição de sessão inexistente em 15/10 e ativação/sessão válidas em 16/10;
 - [x] confirmar que o preview antigo e o site público continuam respondendo como antes;
-- [ ] ter uma sessão ou ativação E2E válida, sem divulgar token em evidências;
-- [ ] usar valores financeiros fictícios e navegador/perfil dedicado ao teste;
+- [x] ter uma sessão ou ativação E2E válida, sem divulgar token em evidências — comprovado com fixture automática em 16/10; a ativação manual usa registro separado;
+- [x] usar valores financeiros fictícios e navegador/perfil dedicado ao teste — realizado na automação de 16/10; repetir no navegador do usuário;
 - [x] registrar versão do navegador e viewport dos testes remotos básicos; repetir o registro no E2E com acesso válido.
 
 ### Publicação e verificação remota — 15/10/2026
@@ -643,3 +643,49 @@ Após concluir o staging integrado e o teste real de Analytics isolado:
 7. **Preparar ET-0E-H:** revisar checkout e preço comercial, configuração de produção, plano de rollback, smoke tests e monitoramento inicial. Manter PR em draft e `main` sem merge/publicação até o aceite de QA e autorização de release.
 
 Nenhuma compra, envio de recuperação, reembolso, mudança de produção ou publicação comercial foi executada como parte desta auditoria de retomada.
+
+## 17. Ativação válida com dados fictícios no staging — 16/10/2026
+
+### Escopo e isolamento confirmados
+
+Esta etapa foi autorizada para preparar acesso de teste sem compra real. O registro sintético exercita o backend implantado, seu banco e a jornada de navegador; não simula evidência de pagamento, webhook ou entrega de e-mail.
+
+- Identidade remota do D1 confirmada: `ever_tools_staging`, ID `e0152bf8-1e59-450f-8fe5-b429c0931083`.
+- Versão ativa do backend consultada: `31bec9d4-63bb-4772-b6aa-395d865046df`, com `ENVIRONMENT=staging` e binding `DB` para esse mesmo ID. Schema das três tabelas consultado antes das inserções; nenhum registro de comprador foi lido.
+- Frontend integrado permanece na versão/fonte registrada na seção 15. Nenhum código, configuração, segredo ou domínio foi alterado nesta etapa; não foi solicitado novo deploy.
+- Pedido de teste: `provider=synthetic_qa`, `product_code=ever_precifica_e2e`, valor zero em BRL, `contact_ref=NULL`, endereço fictício sob `example.invalid` persistido somente como hash. O provider sintético não corresponde às buscas de recuperação/webhooks Kiwify.
+- Credencial de ativação aleatória de 32 bytes, uso único e prazo de 30 minutos. Somente hashes são gravados no D1; credenciais brutas não são salvas no repositório, nos relatórios ou no chat.
+- A autorização oficial do Wrangler foi ampliada pelo usuário para D1. Não foi criado OAuth Client próprio nem solicitado envio de senha ou API key.
+
+### Evidência automática com backend real
+
+Execução em 16/10/2026 por volta de 08h00 de Brasília, Chrome `155.0.8059.84`, perfil isolado, viewport 1360×1000. **Oito cenários passaram:**
+
+1. Ativação liberou a ferramenta, removeu o código da URL, armazenou sessão e recebeu validação HTTP 200 com produto E2E. Reutilizar a ativação recebeu HTTP 401.
+2. Com métricas recusadas, custo fictício Produto de R$ 75,50 persistiu e foi retomado após reload; sessão permaneceu válida.
+3. Aceite de métricas na página inicial valeu para a ferramenta na mesma origem e preservou números e acesso.
+4. Eventos do adaptador local mantiveram somente `event`, `event_source`, `item_name` e `stage`; valores financeiros, e-mail fictício e credenciais de ativação/sessão não apareceram nos eventos.
+5. Revogação do consentimento recarregou a página sem nova carga do adaptador e preservou simulação e acesso.
+6. Cancelar reset preservou números; confirmar reset limpou números e manteve acesso. Selecionar Serviço e recarregar manteve a escolha sem falso aviso de retomada.
+7. Nenhuma requisição GTM/Google Analytics ou payload financeiro de rede foi observado; nenhum erro de página. O harness bloqueou destinos externos e observou apenas tentativa de fonte Google.
+8. Revogar exclusivamente o registro automático fez a validação da sessão retornar HTTP 401; reload removeu acesso inválido e preservou o armazenamento financeiro.
+
+Registro automático identificável para auditoria: `e2e-precifica-auto-56a8af6e-673c-4e6f-8ccf-745de53f45f2` (ID de pedido 5). Ao terminar, pedido ficou `qa_revoked`, ativação/sessão revogadas e zero sessões ativas. Essa revogação administrativa de fixture **não é reembolso**. As alterações foram limitadas ao UUID/provedor/produto da fixture. A sessão sintética também teve prazo reduzido para um dia antes de ser revogada, sem mudar a regra geral do backend.
+
+Relatório sanitizado e captura com valores fictícios permanecem localmente fora do repositório em `.everest-tools/activation-evidence/`. Não salvar HAR, armazenamento do navegador, respostas de sessão ou URLs contendo credenciais como evidência.
+
+### Procedimento seguro para a ativação manual
+
+Usar outro pedido sintético; o token consumido na automação não serve para a ativação do usuário. A entrega ocorre em página temporária vinculada somente a `127.0.0.1`, no próprio computador da tarefa. O endereço local genérico pode ser informado no chat; o token fica apenas na memória do processo até o clique.
+
+Ativação manual preparada em 16/10/2026: registro `e2e-precifica-manual-255b9beb-5b9d-418e-a34d-066ba2300402` (ID 6), inicialmente aprovado e sem consumo. Prazo de ativação: `2026-10-16T11:33:51Z`, 08h33min51s de Brasília. O identificador de auditoria não é uma credencial e não permite ativar acesso. O uso manual ainda não foi confirmado neste registro.
+
+1. Abrir a página local informada na tarefa, no navegador/perfil que será usado para o teste, antes do horário de expiração exibido.
+2. Clicar uma vez em **Ativar acesso de teste**. O formulário verifica origem e nonce; a resposta redireciona para a origem fixa do staging integrado. Apenas abrir a página local não consome a ativação.
+3. Confirmar abertura da jornada Produto/Serviço. O código de ativação deve desaparecer da barra de endereços. Não copiar o endereço transitório nem compartilhar dados do armazenamento local.
+4. Selecionar Produto, avançar e preencher R$ 75,50 fictícios; recarregar e retomar. Aceitar e depois revogar métricas nas preferências; conferir que números e acesso continuam disponíveis.
+5. Usar **Nova simulação** para conferir limpeza dos números com preservação de acesso. Continuar no mesmo navegador/perfil e origem.
+
+O portal aceita uma entrega, encerra no vencimento e não registra credenciais. Após a ativação, o auxiliar verifica exclusivamente o registro manual e reduz sua sessão para um dia; essa redução só deve ser anunciada como concluída após confirmação no banco. Se a ativação não for usada, o auxiliar revoga somente o registro manual ao encerrar. Falhas de prazo/revogação ficam registradas para nova verificação, sem tocar pedidos existentes. Se o computador/processo for fechado, o link local deixa de funcionar; preparar nova ativação após revogar a anterior se necessário.
+
+O resultado manual ainda depende do retorno do usuário. Permanecem pendentes GTM/GA4 reais de QA, recuperação isolada, compra/webhook/e-mail/refund e fechamento ET-0E-G/ET-0E-H. O PR segue draft, sem merge em `main` ou publicação comercial.
