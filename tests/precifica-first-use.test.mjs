@@ -26,7 +26,7 @@ test("Guide contains approved cases but no fictitious access promises", () => {
   assert.match(guide, /escova com hidratação/i);
   assert.match(html, /Condições comerciais ainda em definição/);
   assert.match(guide, /não promete.*acesso vitalício/i);
-  assert.match(guide, /não use.*alíquota.*exemplos/i);
+  assert.match(guide, /(?:não copie|não use).*alíquota.*exemplos/i);
 });
 
 test("Guide is static, isolated, accessible and cannot upload user information", () => {
