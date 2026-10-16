@@ -64,3 +64,32 @@ test("Demo records contain no purchaser identity, auth token or analytics bindin
     assert.ok(!keys.some((key) => /email|password|token|entitlement|session/i.test(key)));
   }
 });
+
+
+test("Visible action labels and selected options have accessible contrast on dark backgrounds", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const css = await readFile(new URL("../demos/precifica/demo.css", import.meta.url), "utf8");
+  const primary = css.match(/\\.btn-primary\\{([^}]*)\\}/)?.[1];
+  const selected = css.match(/\\.discount-btn\\.is-selected\\{([^}]*)\\}/)?.[1];
+  assert.ok(primary && selected, "Required action styles must exist");
+
+  const getColor = (declarations) => declarations.match(/(?:^|;)color:(#[0-9a-fA-F]{6})/)?.[1];
+  const luminance = (hex) => {
+    const channels = hex.match(/[0-9a-fA-F]{2}/g).map((part) => {
+      const value = Number.parseInt(part, 16) / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+    return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+  };
+  const ratio = (foreground, background) => {
+    const a = luminance(foreground), b = luminance(background);
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  };
+  const primaryColors = primary.match(/#[0-9a-fA-F]{6}/g) || [];
+  const selectedColors = selected.match(/#[0-9a-fA-F]{6}/g) || [];
+  assert.equal(getColor(primary), "#f7fbff");
+  assert.equal(getColor(selected), "#f7fbff");
+  assert.ok(ratio(getColor(primary), primaryColors[0]) >= 7, "Primary action must meet AAA contrast");
+  assert.ok(ratio(getColor(primary), primaryColors[1]) >= 7, "Primary gradient end must meet AAA contrast");
+  assert.ok(ratio(getColor(selected), selectedColors[1]) >= 7, "Selected discount must meet AAA contrast");
+});
