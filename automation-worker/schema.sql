@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS access_sessions (
   token_hash TEXT NOT NULL UNIQUE,
   order_id INTEGER NOT NULL,
   product_code TEXT NOT NULL,
+  account_id INTEGER,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   expires_at TEXT NOT NULL,
   last_seen_at TEXT,
@@ -78,3 +79,34 @@ CREATE INDEX IF NOT EXISTS idx_access_activation_email
 
 CREATE INDEX IF NOT EXISTS idx_access_sessions_order
   ON access_sessions(order_id, revoked_at, expires_at);
+
+
+-- Commercial entitlements; the activation/session clock is NOT the contract.
+CREATE TABLE IF NOT EXISTS access_accounts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  product_code TEXT NOT NULL,
+  email_hash TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(product_code, email_hash)
+);
+
+CREATE TABLE IF NOT EXISTS access_grants (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  account_id INTEGER NOT NULL,
+  order_id INTEGER NOT NULL UNIQUE,
+  product_code TEXT NOT NULL,
+  approved_at TEXT NOT NULL,
+  starts_at TEXT,
+  ends_at TEXT,
+  status TEXT NOT NULL CHECK(status IN ('approved','refunded','chargeback')),
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY(account_id) REFERENCES access_accounts(id),
+  FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_access_grants_account
+  ON access_grants(account_id, status, starts_at, ends_at);
+
+CREATE INDEX IF NOT EXISTS idx_access_sessions_account
+  ON access_sessions(account_id, revoked_at, expires_at);

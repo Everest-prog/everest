@@ -1,0 +1,40 @@
+name: Ever.Precifica P0-1 Commercial Access
+
+on:
+  push:
+    branches: [feat/et-0e-p0-1-commercial-access]
+    paths:
+      - 'automation-worker/src/commercial-*.mjs'
+      - 'automation-worker/src/index.js'
+      - 'automation-worker/schema.sql'
+      - 'automation-worker/migrations/0002_commercial_entitlements.sql'
+      - 'automation-worker/test/commercial-*.test.mjs'
+      - 'ferramentas/precifica/access.mjs'
+      - 'ferramentas/precifica/app.mjs'
+      - 'ferramentas/precifica/index.html'
+      - 'ferramentas/precifica/styles.css'
+      - '.github/workflows/et0e-p0-1-commercial-access.yml'
+  pull_request:
+    branches: [feat/et-0e-pre-03-terms]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  commercial-access:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: JavaScript syntax
+        run: |
+          node --check automation-worker/src/commercial-entitlements.mjs
+          node --check automation-worker/src/commercial-access-db.mjs
+          node --check automation-worker/src/index.js
+          node --check ferramentas/precifica/access.mjs
+          node --check ferramentas/precifica/app.mjs
+      - name: Contract calendar and actual SQLite regression
+        run: node --test automation-worker/test/commercial-entitlements.test.mjs automation-worker/test/commercial-access-db.test.mjs

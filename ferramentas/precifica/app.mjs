@@ -14,6 +14,7 @@ const screen = document.getElementById("app-screen");
 const stepLabel = document.getElementById("step-label");
 const progressRoute = document.getElementById("progress-route");
 const autosaveStatus = document.getElementById("autosave-status");
+const commercialAccessStatus = document.getElementById("commercial-access-status");
 const helpDialog = document.getElementById("help-dialog");
 const resetDialog = document.getElementById("reset-dialog");
 
@@ -774,8 +775,28 @@ function renderAccessGate(accessState = {}) {
   document.getElementById("retry-access-button").addEventListener("click", () => bootstrap());
 }
 
+function reflectCommercialExpiry(expiresAt) {
+  if (!commercialAccessStatus) return;
+  const raw = String(expiresAt || "").trim();
+  const normalized = raw.includes("T") ? raw : raw.replace(" ", "T") + "Z";
+  const date = raw ? new Date(normalized) : null;
+  if (!date || !Number.isFinite(date.getTime())) {
+    commercialAccessStatus.hidden = true;
+    commercialAccessStatus.textContent = "";
+    return;
+  }
+  const formatter = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit", month: "2-digit", year: "numeric",
+    hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo"
+  });
+  commercialAccessStatus.textContent =
+    "Seu acesso contratado vai até " + formatter.format(date) + " (horário de Brasília).";
+  commercialAccessStatus.hidden = false;
+}
+
 async function bootstrap() {
   accessValidated = false;
+  reflectCommercialExpiry(null);
   stepLabel.textContent = "Validando acesso…";
   progressRoute.innerHTML = "";
   screen.innerHTML = document.getElementById("spinner-template").innerHTML;
@@ -797,8 +818,33 @@ async function bootstrap() {
   }
 
   accessValidated = true;
+  reflectCommercialExpiry(access.commercialExpiresAt);
   track("tool_activation",{stage:"open"});
   render();
 }
 
 bootstrap();
+
+// Refresh commercial eligibility when a buyer returns to the browser. Never
+// delete financial simulations here; their storage is independent of access.
+let commercialRefreshRunning = false;
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState !== "visible" || !accessValidated || commercialRefreshRunning) return;
+  const isLegacyQaPreview =
+    location.hostname === "ever-tools-automation-staging.gabrielfelipegfrs.workers.dev" &&
+    location.pathname.startsWith("/preview/precifica");
+  if (isLegacyQaPreview) return;
+  commercialRefreshRunning = true;
+  try {
+    const access = await ensureAccess();
+    if (!access.valid) {
+      accessValidated = false;
+      reflectCommercialExpiry(null);
+      renderAccessGate(access);
+    } else {
+      reflectCommercialExpiry(access.commercialExpiresAt);
+    }
+  } finally {
+    commercialRefreshRunning = false;
+  }
+});

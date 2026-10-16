@@ -3,6 +3,12 @@ import {
   isSupportedKiwifyEvent,
   decideKiwifyEvent
 } from "./kiwify-idempotency.mjs";
+import {
+  reconcileCommercialAccess,
+  commercialAccessForAccount,
+  accountForApprovedOrder,
+  revokeSessionsIfNoCommercialAccess
+} from "./commercial-access-db.mjs";
 
 export default {
   async fetch(request, env) {
@@ -160,14 +166,15 @@ async function handleAccessRecover(request, env) {
 
   const emailHash = await sha256("email:" + email);
   const order = await env.DB.prepare(
-    `SELECT id, product_code
-     FROM orders
-     WHERE provider = 'kiwify'
-       AND email_hash = ?1
-       AND status = 'approved'
-       AND product_code IN ('ever_precifica', 'ever_precifica_e2e')
-     ORDER BY COALESCE(approved_at, created_at) DESC
-     LIMIT 1`
+    "SELECT o.id, o.product_code FROM orders o " +
+    "JOIN access_grants g ON g.order_id=o.id " +
+    "WHERE o.provider='kiwify' AND o.email_hash=?1 AND o.status='approved' " +
+    "AND g.status='approved' " +
+    "AND o.product_code IN ('ever_precifica','ever_precifica_e2e') " +
+    "AND EXISTS (SELECT 1 FROM access_grants current " +
+    "WHERE current.account_id=g.account_id AND current.status='approved' " +
+    "AND current.starts_at<=datetime('now') AND current.ends_at>datetime('now')) " +
+    "ORDER BY o.approved_at DESC LIMIT 1"
   ).bind(emailHash).first();
 
   if (!order || !env.RESEND_API_KEY) return generic();
@@ -201,107 +208,82 @@ async function handleAccessRecover(request, env) {
 
 async function handleAccessActivate(request, env) {
   let body;
-  try {
-    body = await request.json();
-  } catch {
-    return accessJson(request, env, { ok: false, error: "invalid_request" }, 400);
-  }
+  try { body = await request.json(); }
+  catch { return accessJson(request, env, { ok: false, error: "invalid_request" }, 400); }
 
   const token = String(body?.token || "").trim();
-  if (!token || token.length < 20) {
+  if (token.length < 20) {
     return accessJson(request, env, { ok: false, error: "invalid_or_expired" }, 401);
   }
-
   const tokenHash = await sha256("activation:" + token);
   const activation = await env.DB.prepare(
-    `SELECT a.id, a.order_id, a.product_code
-     FROM access_activation_tokens a
-     JOIN orders o ON o.id = a.order_id
-     WHERE a.token_hash = ?1
-       AND a.used_at IS NULL
-       AND a.revoked_at IS NULL
-       AND a.expires_at > datetime('now')
-       AND o.status = 'approved'
-       AND o.product_code = a.product_code
-     LIMIT 1`
+    "SELECT a.id, a.order_id, a.product_code FROM access_activation_tokens a " +
+    "JOIN orders o ON o.id=a.order_id " +
+    "WHERE a.token_hash=?1 AND a.used_at IS NULL AND a.revoked_at IS NULL " +
+    "AND a.expires_at>datetime('now') AND o.status='approved' " +
+    "AND o.product_code=a.product_code LIMIT 1"
   ).bind(tokenHash).first();
-
   if (!activation) {
     return accessJson(request, env, { ok: false, error: "invalid_or_expired" }, 401);
   }
-
+  // Fail closed when the commercial entitlement has not been migrated.
+  const right = await accountForApprovedOrder(env, activation.order_id, activation.product_code);
+  if (!right) {
+    return accessJson(request, env, { ok: false, error: "no_active_entitlement" }, 401);
+  }
   const used = await env.DB.prepare(
-    `UPDATE access_activation_tokens
-     SET used_at = datetime('now')
-     WHERE id = ?1
-       AND used_at IS NULL
-       AND revoked_at IS NULL`
+    "UPDATE access_activation_tokens SET used_at=datetime('now') " +
+    "WHERE id=?1 AND used_at IS NULL AND revoked_at IS NULL"
   ).bind(activation.id).run();
-
   if (!used?.meta?.changes) {
     return accessJson(request, env, { ok: false, error: "invalid_or_expired" }, 401);
   }
-
   const sessionToken = randomToken(32);
   const sessionHash = await sha256("session:" + sessionToken);
-
   await env.DB.prepare(
-    `INSERT INTO access_sessions
-      (token_hash, order_id, product_code, created_at, expires_at, last_seen_at)
-     VALUES (?1, ?2, ?3, datetime('now'), datetime('now', '+365 days'), datetime('now'))`
-  ).bind(sessionHash, activation.order_id, activation.product_code).run();
-
+    "INSERT INTO access_sessions " +
+    "(token_hash, order_id, account_id, product_code, created_at, expires_at, last_seen_at) " +
+    "VALUES (?1, ?2, ?3, ?4, datetime('now'), datetime('now', '+365 days'), datetime('now'))"
+  ).bind(sessionHash, activation.order_id, right.id, activation.product_code).run();
   return accessJson(request, env, {
     ok: true,
     access_token: sessionToken,
-    product_code: activation.product_code
+    product_code: activation.product_code,
+    commercial_expires_at: right.expiresAt
   });
 }
 
 async function handleAccessValidate(request, env) {
   let token = "";
   const authorization = request.headers.get("authorization") || "";
-
   if (/^Bearer\s+/i.test(authorization)) {
     token = authorization.replace(/^Bearer\s+/i, "").trim();
   } else {
-    try {
-      const body = await request.json();
-      token = String(body?.access_token || "").trim();
-    } catch {}
+    try { token = String((await request.json())?.access_token || "").trim(); } catch {}
   }
-
-  if (!token || token.length < 20) {
+  if (token.length < 20) {
     return accessJson(request, env, { ok: false, valid: false }, 401);
   }
-
   const tokenHash = await sha256("session:" + token);
   const session = await env.DB.prepare(
-    `SELECT s.id, s.product_code
-     FROM access_sessions s
-     JOIN orders o ON o.id = s.order_id
-     WHERE s.token_hash = ?1
-       AND s.revoked_at IS NULL
-       AND s.expires_at > datetime('now')
-       AND o.status = 'approved'
-       AND o.product_code = s.product_code
-     LIMIT 1`
+    "SELECT s.id, s.account_id, s.product_code FROM access_sessions s " +
+    "JOIN access_accounts a ON a.id=s.account_id AND a.product_code=s.product_code " +
+    "WHERE s.token_hash=?1 AND s.revoked_at IS NULL " +
+    "AND s.expires_at>datetime('now') LIMIT 1"
   ).bind(tokenHash).first();
-
-  if (!session) {
+  if (!session?.account_id) {
     return accessJson(request, env, { ok: false, valid: false }, 401);
   }
-
+  const right = await commercialAccessForAccount(env, session.account_id);
+  if (!right.active) {
+    return accessJson(request, env, { ok: false, valid: false, reason: "commercial_expired" }, 401);
+  }
   await env.DB.prepare(
-    `UPDATE access_sessions
-     SET last_seen_at = datetime('now')
-     WHERE id = ?1`
+    "UPDATE access_sessions SET last_seen_at=datetime('now') WHERE id=?1"
   ).bind(session.id).run();
-
   return accessJson(request, env, {
-    ok: true,
-    valid: true,
-    product_code: session.product_code
+    ok: true, valid: true, product_code: session.product_code,
+    commercial_expires_at: right.expiresAt
   });
 }
 
@@ -714,6 +696,11 @@ async function processKiwifyBusinessEvent(env, payload, eventType, providerEvent
       approvedAt
     ).run();
 
+    // Grants are reconciled BEFORE any buyer link is issued.
+    // A replayed purchase event must not extend the grant twice.
+    if (emailHash) {
+      await reconcileCommercialAccess(env, emailHash, productCode);
+    }
     let emailSent = false;
 
     if (rawEmail && emailHash && env.RESEND_API_KEY) {
@@ -775,6 +762,15 @@ async function processKiwifyBusinessEvent(env, payload, eventType, providerEvent
       refundedAt
     ).run();
 
+    const persisted = await env.DB.prepare(
+      "SELECT id, email_hash FROM orders WHERE provider='kiwify' " +
+      "AND provider_order_id=?1 LIMIT 1"
+    ).bind(orderId).first();
+    const purchaserHash = persisted?.email_hash || emailHash;
+    // Refunding one term recomputes remaining valid terms for the same buyer.
+    const accountId = await reconcileCommercialAccess(env, purchaserHash, productCode);
+    if (accountId) await revokeSessionsIfNoCommercialAccess(env, accountId);
+
     await env.DB.prepare(
       `UPDATE access_activation_tokens
        SET revoked_at = COALESCE(revoked_at, datetime('now'))
@@ -794,7 +790,7 @@ async function processKiwifyBusinessEvent(env, payload, eventType, providerEvent
          WHERE provider = 'kiwify' AND provider_order_id = ?1
          LIMIT 1
        )
-       AND revoked_at IS NULL`
+       AND account_id IS NULL AND revoked_at IS NULL`
     ).bind(orderId).run();
 
     return {

@@ -54,7 +54,7 @@ export async function ensureAccess() {
 
       if (response.ok && data?.access_token) {
         storeToken(data.access_token);
-        return { valid: true, source: "activation", productCode: data.product_code || null };
+        return { valid: true, source: "activation", productCode: data.product_code || null, commercialExpiresAt: data.commercial_expires_at || null };
       }
 
       return { valid: false, activationError: true };
@@ -69,7 +69,7 @@ export async function ensureAccess() {
   try {
     const { response, data } = await post("/access/validate", {}, stored);
     if (response.ok && data?.valid) {
-      return { valid: true, source: "stored", productCode: data.product_code || null };
+      return { valid: true, source: "stored", productCode: data.product_code || null, commercialExpiresAt: data.commercial_expires_at || null };
     }
 
     clearAccessToken();
