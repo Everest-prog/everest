@@ -1,0 +1,31 @@
+name: Ever.Precifica Prelaunch Demos Tests
+
+on:
+  push:
+    branches:
+      - feat/et-0e-pre-01-demos
+    paths:
+      - 'demos/precifica/**'
+      - 'tests/precifica-demos.test.mjs'
+      - 'ferramentas/precifica/engine.mjs'
+      - '.github/workflows/et0e-pre-demos-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  demo-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate demo case values against core engine
+        run: node --test tests/precifica-demos.test.mjs
+      - name: Syntax check
+        run: |
+          node --check demos/precifica/cases.mjs
+          node --check demos/precifica/demo.mjs
+          node --check ferramentas/precifica/engine.mjs
